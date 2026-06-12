@@ -112,7 +112,7 @@ const CATEGORIES = [
     id: "utilities",
     to: "/utilities",
     title: "Instant Share",
-    description: "Share files, links and snippets instantly — no login, no storage.",
+    description: "Share files, links and snippets instantly  no login, no storage.",
     icon: <UtilIcon />,
     toolCount: 3,
     iconColor: "#d97706",

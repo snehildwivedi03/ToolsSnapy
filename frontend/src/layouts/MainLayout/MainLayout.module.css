@@ -28,6 +28,16 @@
   overflow: hidden;
 }
 
+/* On touch / coarse-pointer devices (phones, tablets) switch to
+   position:absolute so shapes don't jitter during iOS scroll */
+@media (hover: none), (pointer: coarse) {
+  .geoBg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+}
+
 /* Each shape wrapper   JS applies translate() for parallax */
 .geoWrap {
   position: absolute;

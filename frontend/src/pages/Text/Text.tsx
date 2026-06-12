@@ -98,7 +98,7 @@ const Text = () => (
       <h1 className={styles.title}>Text Tools</h1>
       <p className={styles.description}>
         Word counting, case conversion, JSON formatting and more.
-        Everything runs locally — nothing is sent anywhere.
+        Everything runs locally  nothing is sent anywhere.
       </p>
     </div>
 
