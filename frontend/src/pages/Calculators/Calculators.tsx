@@ -77,7 +77,7 @@ const Calculators = () => {
   return (
     <div className={s.page}>
       <div className={s.topBar}>
-        <Link to="/#tools" className={s.homeLink} aria-label="Go to home">
+        <Link to="/" state={{ scrollToTools: true }} className={s.homeLink} aria-label="Go to home">
           <svg
             width="15" height="15" viewBox="0 0 24 24"
             fill="none" stroke="currentColor"

@@ -58,7 +58,7 @@ const OTHER_CATEGORIES = [
 const Text = () => (
   <div className={styles.page}>
     <div className={styles.topBar}>
-      <Link to="/#tools" className={styles.homeLink} aria-label="Go to home">
+      <Link to="/" state={{ scrollToTools: true }} className={styles.homeLink} aria-label="Go to home">
         <svg
           width="15"
           height="15"

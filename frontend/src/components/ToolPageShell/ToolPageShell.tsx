@@ -42,7 +42,7 @@ const ToolPageShell = ({
         {backLabel}
       </Link>
 
-      <Link to="/#tools" className={styles.homeLink} aria-label="Go to home">
+      <Link to="/" state={{ scrollToTools: true }} className={styles.homeLink} aria-label="Go to home">
         <svg
           width="15"
           height="15"

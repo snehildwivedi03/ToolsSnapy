@@ -1,5 +1,5 @@
-﻿import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+﻿import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import CategoryCard from "../../components/CategoryCard/CategoryCard";
 import styles from "./Home.module.css";
 
@@ -134,14 +134,25 @@ const CATEGORIES = [
 
 /* ── Page component ──────────────────────────────────────── */
 const Home = () => {
-  const [showClock, setShowClock] = useState(false);
+  const location = useLocation();
+  const toolsRef = useRef<HTMLElement>(null);
   const [now, setNow] = useState(new Date());
 
+  /* Scroll to tools section when navigating home from a tool page */
   useEffect(() => {
-    if (!showClock) return;
+    if ((location.state as { scrollToTools?: boolean } | null)?.scrollToTools) {
+      requestAnimationFrame(() => {
+        toolsRef.current?.scrollIntoView({ behavior: "smooth" });
+      });
+      /* Clear the state so reload / back won’t re-trigger the scroll */
+      window.history.replaceState({}, "", location.pathname);
+    }
+  }, [location]);
+
+  useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
-  }, [showClock]);
+  }, []);
 
   const fmtIST = (opts: Intl.DateTimeFormatOptions) =>
     new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", ...opts }).format(now);
@@ -178,9 +189,12 @@ const Home = () => {
         </p>
 
         <div className={styles.heroActions}>
-          <a href="#tools" className={styles.ctaPrimary}>
+          <button
+            className={styles.ctaPrimary}
+            onClick={() => toolsRef.current?.scrollIntoView({ behavior: "smooth" })}
+          >
             Browse all tools
-          </a>
+          </button>
           <span className={styles.ctaNoAccount}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" strokeWidth="2.5"
@@ -190,36 +204,20 @@ const Home = () => {
             </svg>
             No account required
           </span>
-          <button
-            className={`${styles.clockBtn} ${showClock ? styles.clockBtnActive : ""}`}
-            onClick={() => setShowClock(v => !v)}
-            aria-expanded={showClock}
-            aria-controls="home-clock"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2.5"
-              strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            IST Clock
-          </button>
         </div>
 
-        {showClock && (
-          <div id="home-clock" className={styles.clockWidget} aria-live="polite">
-            <span className={styles.clockTime}>{timeStr}</span>
-            <span className={styles.clockSep} aria-hidden="true">&middot;</span>
-            <span className={styles.clockDate}>{dateStr}</span>
-            <Link to="/utilities/live-clock" className={styles.clockFull}>
-              Full clock
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <polyline points="9 18 15 12 9 6"/>
-              </svg>
-            </Link>
-          </div>
-        )}
+        <div className={styles.clockWidget} aria-live="polite">
+          <span className={styles.clockTime}>{timeStr}</span>
+          <span className={styles.clockSep} aria-hidden="true">&middot;</span>
+          <span className={styles.clockDate}>{dateStr}</span>
+          <Link to="/utilities/live-clock" className={styles.clockFull}>
+            Full clock
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </Link>
+        </div>
 
       </section>
 
@@ -287,6 +285,7 @@ const Home = () => {
 
       {/* ── Category grid ── */}
       <section
+        ref={toolsRef}
         id="tools"
         className={styles.categories}
         aria-labelledby="categories-title"
