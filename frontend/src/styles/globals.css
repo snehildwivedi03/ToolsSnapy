@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════
-   FUNKY GEOMETRIC NEON — Full Site CSS
+   FUNKY GEOMETRIC NEON   Full Site CSS
    Inspired by: deep indigo + cyan + hot pink geometry
    Font: Black Han Sans (display) + Nunito (body)
    ══════════════════════════════════════════════════ */
@@ -92,23 +92,23 @@ body::before {
   pointer-events: none;
 
   background-image:
-    /* ① Large cyan double-triangle — top right */
+    /* ① Large cyan double-triangle   top right */
     url("data:image/svg+xml,%3Csvg width='220' height='220' viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='110,18 200,195 20,195' fill='none' stroke='%2300f0ff' stroke-width='5' stroke-linejoin='round'/%3E%3Cpolygon points='110,60 158,162 62,162' fill='none' stroke='%2300f0ff' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E"),
-    /* ② Medium cyan double-triangle inverted — bottom center */
+    /* ② Medium cyan double-triangle inverted   bottom center */
     url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='110,18 200,195 20,195' fill='none' stroke='%2300f0ff' stroke-width='5' stroke-linejoin='round' transform='rotate(180 110 110)'/%3E%3Cpolygon points='110,60 158,162 62,162' fill='none' stroke='%2300f0ff' stroke-width='2.5' stroke-linejoin='round' transform='rotate(180 110 110)'/%3E%3C/svg%3E"),
-    /* ③ Small violet triangle — bottom right */
+    /* ③ Small violet triangle   bottom right */
     url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='110,18 200,195 20,195' fill='none' stroke='%237b5cff' stroke-width='4' stroke-linejoin='round'/%3E%3Cpolygon points='110,62 156,160 64,160' fill='none' stroke='%237b5cff' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E"),
-    /* ④ Large pink striped circle — center-left */
+    /* ④ Large pink striped circle   center-left */
     url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='s1' width='14' height='14' patternTransform='rotate(45)' patternUnits='userSpaceOnUse'%3E%3Crect width='7' height='14' fill='%23f941c6' opacity='.85'/%3E%3C/pattern%3E%3CclipPath id='c1'%3E%3Ccircle cx='100' cy='100' r='98'/%3E%3C/clipPath%3E%3C/defs%3E%3Ccircle cx='100' cy='100' r='98' fill='url(%23s1)' clip-path='url(%23c1)'/%3E%3C/svg%3E"),
-    /* ⑤ Small violet striped circle — bottom right */
+    /* ⑤ Small violet striped circle   bottom right */
     url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='s2' width='14' height='14' patternTransform='rotate(45)' patternUnits='userSpaceOnUse'%3E%3Crect width='7' height='14' fill='%237b5cff' opacity='.9'/%3E%3C/pattern%3E%3CclipPath id='c2'%3E%3Ccircle cx='100' cy='100' r='98'/%3E%3C/clipPath%3E%3C/defs%3E%3Ccircle cx='100' cy='100' r='98' fill='url(%23s2)' clip-path='url(%23c2)'/%3E%3C/svg%3E"),
-    /* ⑥ Pink dot matrix — top right cluster */
+    /* ⑥ Pink dot matrix   top right cluster */
     radial-gradient(circle, var(--color-neon-pink) 1.5px, transparent 2px),
-    /* ⑦ Cyan dot matrix — bottom left cluster */
+    /* ⑦ Cyan dot matrix   bottom left cluster */
     radial-gradient(circle, var(--color-neon-cyan) 1.5px, transparent 2px),
-    /* ⑧ Rotated diamond block — right middle */
+    /* ⑧ Rotated diamond block   right middle */
     url("data:image/svg+xml,%3Csvg width='180' height='180' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='30' y='30' width='120' height='120' rx='8' fill='%231f1c5c' transform='rotate(45 90 90)'/%3E%3C/svg%3E"),
-    /* ⑨ Rotated diamond block — right middle offset */
+    /* ⑨ Rotated diamond block   right middle offset */
     url("data:image/svg+xml,%3Csvg width='140' height='140' viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='30' y='30' width='120' height='120' rx='8' fill='%2316124a' transform='rotate(45 90 90)'/%3E%3C/svg%3E");
 
   background-position:
@@ -410,7 +410,7 @@ body > * {
   margin-top: 0.5rem;
 }
 
-/* Primary CTA — pill with gradient */
+/* Primary CTA   pill with gradient */
 .btnPrimary {
   font-family: "Black Han Sans", sans-serif;
   font-size: 0.95rem;
@@ -448,7 +448,7 @@ body > * {
   transform: translateX(4px);
 }
 
-/* Secondary — ghost */
+/* Secondary   ghost */
 .btnSecondary {
   font-family: "Nunito", sans-serif;
   font-weight: 800;
@@ -1034,7 +1034,7 @@ body > * {
 }
 
 /* ══════════════════════════════════════════════════
-   RESPONSIVE — TABLET  ≤ 900px
+   RESPONSIVE   TABLET  ≤ 900px
    ══════════════════════════════════════════════════ */
 
 @media (max-width: 900px) {
@@ -1094,7 +1094,7 @@ body > * {
 }
 
 /* ══════════════════════════════════════════════════
-   RESPONSIVE — MOBILE  ≤ 600px
+   RESPONSIVE   MOBILE  ≤ 600px
    ══════════════════════════════════════════════════ */
 
 @media (max-width: 600px) {

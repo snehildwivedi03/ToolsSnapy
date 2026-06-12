@@ -1,7 +1,7 @@
 ﻿import { NavLink } from "react-router-dom";
 import styles from "./Navbar.module.css";
 
-// Minimal centered header — just the brand, no nav links
+// Minimal centered header   just the brand, no nav links
 const Navbar = () => (
   <header className={styles.header}>
     <div className={styles.nav}>

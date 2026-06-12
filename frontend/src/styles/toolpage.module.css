@@ -1,6 +1,6 @@
 ﻿/* Shared layout + component styles for all text tool pages */
 
-/* Output panel header — label on left, copy button on right */
+/* Output panel header   label on left, copy button on right */
 .outputHeader {
   display: flex;
   align-items: center;

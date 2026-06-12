@@ -1,21 +1,21 @@
-﻿/* ToolSnapy — Global styles
+﻿/* ToolSnapy   Global styles
    Font: Nunito (rounded, friendly) · Theme: Lavender-purple, geometric */
 
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap");
 
 /* ── Design tokens ──────────────────────────────────────── */
 :root {
-  /* Backgrounds — soft lavender tint */
+  /* Backgrounds   soft lavender tint */
   --color-bg:             #F5F3FF;
   --color-bg-subtle:      #EDE9FE;
   --color-bg-muted:       #DDD6FE;
 
-  /* Text — warm dark purple-black */
+  /* Text   warm dark purple-black */
   --color-text:           #1A1523;
   --color-text-secondary: #6B5E7A;
   --color-text-muted:     #9B8EAA;
 
-  /* Accent — vibrant purple */
+  /* Accent   vibrant purple */
   --color-accent:         #7C3AED;
   --color-accent-hover:   #6D28D9;
   --color-accent-light:   #EDE9FE;

@@ -111,8 +111,8 @@ const CATEGORIES = [
   {
     id: "utilities",
     to: "/utilities",
-    title: "Utilities",
-    description: "QR codes, colour pickers, timestamps and extras.",
+    title: "Instant Share",
+    description: "Share files, links and snippets instantly — no login, no storage.",
     icon: <UtilIcon />,
     toolCount: 3,
     iconColor: "#d97706",
@@ -121,8 +121,8 @@ const CATEGORIES = [
   {
     id: "developer",
     to: "/developer",
-    title: "Developer Tools",
-    description: "JSON formatter, regex tester, base64, hash generators and more.",
+    title: "Utilities & Dev Tools",
+    description: "Base64, hash generators, regex tester, JSON formatter and more.",
     icon: <DevIcon />,
     toolCount: 3,
     iconColor: "#0891b2",
@@ -135,21 +135,25 @@ const Home = () => {
   return (
     <div className={styles.page}>
 
-      {/* ── Hero — centred, full-width ── */}
+      {/* ── Hero   centred, full-width ── */}
       <section className={styles.hero} aria-labelledby="hero-title">
 
         <div className={styles.heroBadge}>
-          <span className={styles.badgeDot} aria-hidden="true" />
-          Free forever &nbsp;&middot;&nbsp; In-browser
-          &nbsp;&middot;&nbsp; No sign-up
+          <span className={styles.badgeItem}>Free forever</span>
+          <span className={styles.badgeSep} aria-hidden="true">&middot;</span>
+          <span className={styles.badgeItem}>In-browser</span>
+          <span className={styles.badgeSep} aria-hidden="true">&middot;</span>
+          <span className={styles.badgeItem}>No sign-up</span>
         </div>
 
-        <h1 id="hero-title" className={styles.heroTitle}>
-          The tools you need.{" "}
-          <span className={styles.heroAccent}>
-            Nothing you don&apos;t.
-          </span>
-        </h1>
+       
+      <h1 id="hero-title" className={styles.heroTitle}>
+      Designed For Privacy.{" "}
+       <span className={styles.heroAccent}>
+       Nothing You Upload Stays Here.
+       </span>
+      </h1>
+
 
         <p className={styles.heroSub}>
           PDFs, images, text, calculators, and everyday utilities processed

@@ -73,7 +73,7 @@ const WeightConverter = () => {
           </div>
         ))}
 
-        <div className={s.hint}>Edit any field — all others update instantly.</div>
+        <div className={s.hint}>Edit any field   all others update instantly.</div>
       </div>
     </ToolPageShell>
   );

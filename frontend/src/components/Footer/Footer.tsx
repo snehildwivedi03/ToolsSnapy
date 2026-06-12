@@ -1,6 +1,6 @@
 import styles from "./Footer.module.css";
 
-// Static footer — brand, USP, and auto-updated copyright
+// Static footer   brand, USP, and auto-updated copyright
 const Footer = () => {
   const year = new Date().getFullYear();
 

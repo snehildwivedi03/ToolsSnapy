@@ -129,7 +129,7 @@ const CalorieCalculator = () => {
             <select className={s.select} value={activity}
               onChange={e => setActivity(parseInt(e.target.value))}>
               {ACTIVITY_LEVELS.map((l, i) => (
-                <option key={i} value={i}>{l.label} — {l.desc}</option>
+                <option key={i} value={i}>{l.label}   {l.desc}</option>
               ))}
             </select>
           </div>

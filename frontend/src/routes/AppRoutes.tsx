@@ -74,7 +74,7 @@ const AppRoutes = () => {
         <Route path="/calculators/temperature" element={<TemperatureConverter />} />
         <Route path="/calculators/discount"    element={<DiscountCalculator />} />
 
-        {/* Placeholders — swap in real pages as modules are built */}
+        {/* Placeholders   swap in real pages as modules are built */}
         <Route path="/pdf" element={<Placeholder label="PDF Tools" />} />
         <Route
           path="/images"

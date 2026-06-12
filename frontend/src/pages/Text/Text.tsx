@@ -43,9 +43,17 @@ const TEXT_TOOLS = [
     to: "/text/random-paragraph",
     title: "Random Paragraph Generator",
     description:
-      "Generate Lorem Ipsum placeholder paragraphs instantly. Choose 1 to 5 and copy.",
+      "Generate Lorem Ipsum placeholder paragraphs instantly. Choose 1 to 20 and copy.",
   },
 ] as const;
+
+const OTHER_CATEGORIES = [
+  { to: "/pdf",         label: "PDF Tools",             color: "#dc2626" },
+  { to: "/images",      label: "Image Tools",            color: "#7c3aed" },
+  { to: "/calculators", label: "Calculators",            color: "#059669" },
+  { to: "/utilities",   label: "Instant Share",          color: "#d97706" },
+  { to: "/developer",   label: "Utilities & Dev Tools",  color: "#0891b2" },
+];
 
 const Text = () => (
   <div className={styles.page}>
@@ -92,6 +100,19 @@ const Text = () => (
         Word counting, case conversion, JSON formatting and more.
         Everything runs locally — nothing is sent anywhere.
       </p>
+    </div>
+
+    {/* ── Browse other categories ── */}
+    <div className={styles.moreCats}>
+      <span className={styles.moreLabel}>Explore other tools</span>
+      <div className={styles.moreChips}>
+        {OTHER_CATEGORIES.map((cat) => (
+          <Link key={cat.to} to={cat.to} className={styles.moreChip}>
+            <span className={styles.moreDot} style={{ background: cat.color }} aria-hidden="true" />
+            {cat.label}
+          </Link>
+        ))}
+      </div>
     </div>
 
     <ul className={styles.grid} role="list">

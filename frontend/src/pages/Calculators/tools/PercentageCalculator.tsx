@@ -72,7 +72,7 @@ const PercentageCalculator = () => {
       iconColor="#059669"
       iconBg="#ecfdf5"
       title="Percentage Calculator"
-      description="Five percentage modes — find %, what %, % change, add/subtract % in one tool."
+      description="Five percentage modes   find %, what %, % change, add/subtract % in one tool."
     >
       <div className={s.workspace}>
         <div className={s.card}>

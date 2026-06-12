@@ -1,6 +1,6 @@
 import type { RandomParagraphResult } from "../../types/text.types.js";
 
-// Classic opening paragraph — always used when startWithClassic is true
+// Classic opening paragraph   always used when startWithClassic is true
 const CLASSIC =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
   "sed do eiusmod tempor incididunt ut labore et dolore magna " +

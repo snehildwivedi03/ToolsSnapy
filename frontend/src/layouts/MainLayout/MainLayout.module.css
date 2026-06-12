@@ -1,4 +1,4 @@
-﻿/* Shell fills the viewport — flex column, relative so geoBg is contained */
+﻿/* Shell fills the viewport   flex column, relative so geoBg is contained */
 .shell {
   display: flex;
   flex-direction: column;
@@ -28,13 +28,13 @@
   overflow: hidden;
 }
 
-/* Each shape wrapper — JS applies translate() for parallax */
+/* Each shape wrapper   JS applies translate() for parallax */
 .geoWrap {
   position: absolute;
   will-change: transform;
 }
 
-/* Shape itself — size/color/clip-path applied via inline style */
+/* Shape itself   size/color/clip-path applied via inline style */
 .geoShape {
   flex-shrink: 0;
 }

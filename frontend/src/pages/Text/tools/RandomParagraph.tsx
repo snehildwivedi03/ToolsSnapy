@@ -33,7 +33,7 @@ const RandomParagraph = () => {
   const [apiError, setApiError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
-  // Derived values — never mutate state just for these
+  // Derived values   never mutate state just for these
   const numericValue = parseInt(raw, 10);
   const isOverMax = !isNaN(numericValue) && numericValue > MAX;
   const isValid =

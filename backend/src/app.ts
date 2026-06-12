@@ -15,7 +15,7 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN ?? "*" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check — confirms the API is reachable
+// Health check   confirms the API is reachable
 app.get("/api/health", (_req: Request, res: Response) => {
   res.status(200).json({
     success: true,
@@ -26,7 +26,7 @@ app.get("/api/health", (_req: Request, res: Response) => {
 // Feature routes
 app.use("/api/text", textRouter);
 
-// Global error handler — must be last
+// Global error handler   must be last
 app.use(errorHandler);
 
 export default app;

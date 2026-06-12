@@ -123,7 +123,7 @@ const ScientificCalculator = () => {
   const [mode, setMode]       = useState<AngleMode>("DEG");
   const [evaluated, setEvaluated] = useState(false);
 
-  // Live preview — only show a result if the expression is valid and complete.
+  // Live preview   only show a result if the expression is valid and complete.
   // Never show "Error" while typing; errors only surface when = is pressed.
   useEffect(() => {
     if (!expr) { setResult(""); return; }

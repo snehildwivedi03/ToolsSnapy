@@ -2,6 +2,14 @@ import { Link } from "react-router-dom";
 import ToolCard from "../../components/ToolCard/ToolCard";
 import s from "./Calculators.module.css";
 
+const OTHER_CATEGORIES = [
+  { to: "/pdf",       label: "PDF Tools",            color: "#dc2626" },
+  { to: "/images",    label: "Image Tools",           color: "#7c3aed" },
+  { to: "/text",      label: "Text Tools",            color: "#2563eb" },
+  { to: "/utilities", label: "Instant Share",         color: "#d97706" },
+  { to: "/developer", label: "Utilities & Dev Tools", color: "#0891b2" },
+];
+
 const TOOLS = [
   {
     to:          "/calculators/scientific",
@@ -41,7 +49,7 @@ const TOOLS = [
   {
     to:          "/calculators/percentage",
     title:       "Percentage Calculator",
-    description: "Five percentage modes — X% of Y, what %, % change, add/subtract % in one tool.",
+    description: "Five percentage modes   X% of Y, what %, % change, add/subtract % in one tool.",
   },
   {
     to:          "/calculators/age",
@@ -86,9 +94,22 @@ const Calculators = () => {
       <header className={s.header}>
         <h1 className={s.title}>Calculators</h1>
         <p className={s.subtitle}>
-          {TOOLS.length} calculators — financial, scientific, health, unit conversion and more.
+          {TOOLS.length} calculators   financial, scientific, health, unit conversion and more.
         </p>
       </header>
+
+      {/* ── Browse other categories ── */}
+      <div className={s.moreCats}>
+        <span className={s.moreLabel}>Explore other tools</span>
+        <div className={s.moreChips}>
+          {OTHER_CATEGORIES.map((cat) => (
+            <Link key={cat.to} to={cat.to} className={s.moreChip}>
+              <span className={s.moreDot} style={{ background: cat.color }} aria-hidden="true" />
+              {cat.label}
+            </Link>
+          ))}
+        </div>
+      </div>
 
       <div className={s.grid}>
         {TOOLS.map(t => (

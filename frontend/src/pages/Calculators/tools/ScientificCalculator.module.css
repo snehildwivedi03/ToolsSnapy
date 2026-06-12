@@ -123,7 +123,7 @@
 }
 .btnNum:hover { background: #2f2445; }
 
-/* Operator buttons — vivid purple, larger font */
+/* Operator buttons   vivid purple, larger font */
 .btnOp {
   background: #4c1d95;
   color: #e9d5ff;
@@ -176,7 +176,7 @@
 }
 .btnUtil:hover { background: #232c3d; }
 
-/* Section separator — thick top border between scientific and normal */
+/* Section separator   thick top border between scientific and normal */
 .btnSep {
   border-top: 2.5px solid #3b2d55 !important;
 }
