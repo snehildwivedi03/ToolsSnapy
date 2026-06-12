@@ -1,0 +1,26 @@
+/* Shell fills the viewport and pushes footer to the bottom */
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+.content {
+  flex: 1;
+  width: 100%;
+  padding: 2rem 1rem;
+}
+
+/* Centered, max-width container — responsive by default */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .content {
+    padding: 2.5rem 2rem;
+  }
+}
