@@ -1,0 +1,281 @@
+/* ── Custom Date Picker ───────────────────────────────────── */
+.dp {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.dpTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.6875rem 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.dpTrigger:hover {
+  border-color: var(--color-accent-subtle);
+}
+
+.dpTrigger:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.dpTriggerOpen {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.dpValue {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.dpPlaceholder {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.dpPanel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13), 0 2px 8px rgba(124, 58, 237, 0.08);
+  padding: 1rem;
+  width: 284px;
+  max-width: calc(100vw - 2rem);
+}
+
+/* ── Header row ─────────────────────────────────────────── */
+.dpHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  gap: 0.125rem;
+}
+
+.dpNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.dpNav:hover {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.dpHeadBtn {
+  flex: 1;
+  padding: 0.25rem 0.375rem;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.dpHeadBtn:hover {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.dpHeadLabel {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--color-text);
+  padding: 0.25rem 0.375rem;
+}
+
+/* ── Day names row ──────────────────────────────────────── */
+.dpDayNames {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 0.125rem;
+}
+
+.dpDayName {
+  text-align: center;
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: var(--color-text-muted);
+  padding: 0.25rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Days grid ───────────────────────────────────────────── */
+.dpGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+
+.dpDay {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  line-height: 1;
+  padding: 0;
+}
+
+.dpDay:hover:not(:disabled) {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.dpDay:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.dpDayOther {
+  color: var(--color-text-muted);
+  opacity: 0.4;
+}
+
+.dpDayToday {
+  color: var(--color-accent);
+  font-weight: 900;
+  box-shadow: inset 0 0 0 1.5px var(--color-accent);
+}
+
+.dpDaySelected {
+  background: var(--color-accent) !important;
+  color: #fff !important;
+  font-weight: 800;
+}
+
+/* ── Today button ───────────────────────────────────────── */
+.dpTodayBtn {
+  display: block;
+  width: 100%;
+  margin-top: 0.625rem;
+  padding: 0.4375rem;
+  border: 1.5px solid var(--color-accent-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.dpTodayBtn:hover {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+/* ── Month picker ───────────────────────────────────────── */
+.dpMonthGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.375rem;
+}
+
+.dpMonthBtn {
+  padding: 0.5rem 0.25rem;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dpMonthBtn:hover {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.dpMonthActive {
+  background: var(--color-accent) !important;
+  color: #fff !important;
+  border-color: var(--color-accent) !important;
+}
+
+/* ── Year picker ────────────────────────────────────────── */
+.dpYearGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent-subtle) transparent;
+}
+
+.dpYearBtn {
+  padding: 0.4375rem 0.125rem;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.dpYearBtn:hover {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.dpYearActive {
+  background: var(--color-accent) !important;
+  color: #fff !important;
+  border-color: var(--color-accent) !important;
+  font-weight: 800;
+}

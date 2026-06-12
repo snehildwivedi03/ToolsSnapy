@@ -1,0 +1,177 @@
+.page {
+  min-height: calc(100vh - var(--navbar-height));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem var(--container-px) 4rem;
+  position: relative;
+}
+
+.topBar {
+  position: absolute;
+  top: 1.25rem;
+  right: var(--container-px);
+}
+
+.homeLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 0.3125rem 0.75rem;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.homeLink:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent-subtle);
+  background: var(--color-accent-light);
+}
+
+/* ── Clock card ─────────────────────────────────────────── */
+.card {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 40px rgba(124, 58, 237, 0.1), var(--shadow-md);
+  padding: 3rem 3.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+@media (max-width: 480px) {
+  .card { padding: 2rem 1.5rem 2rem; }
+}
+
+/* ── Timezone badge ─────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.875rem;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-accent-subtle);
+}
+
+.badgeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* ── Time display ───────────────────────────────────────── */
+.timeRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.125rem;
+  line-height: 1;
+}
+
+.digits {
+  font-size: clamp(3.5rem, 14vw, 6.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  min-width: 2ch;
+  text-align: center;
+}
+
+.colon {
+  font-size: clamp(2.5rem, 10vw, 5rem);
+  font-weight: 900;
+  color: var(--color-accent);
+  animation: blink 1s step-start infinite;
+  line-height: 1;
+  padding-bottom: 0.15em;
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.25; }
+}
+
+.seconds {
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  min-width: 2ch;
+  text-align: center;
+  align-self: flex-end;
+  padding-bottom: 0.15em;
+}
+
+.ampm {
+  font-size: clamp(1.25rem, 4vw, 2rem);
+  font-weight: 800;
+  color: var(--color-accent);
+  align-self: flex-end;
+  padding-bottom: 0.2em;
+  margin-left: 0.25rem;
+}
+
+/* ── Date display ───────────────────────────────────────── */
+.date {
+  font-size: clamp(0.95rem, 3vw, 1.1875rem);
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.01em;
+}
+
+/* ── Divider ────────────────────────────────────────────── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* ── Toggle button ──────────────────────────────────────── */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  padding: 0.5rem 1.125rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.toggle:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}

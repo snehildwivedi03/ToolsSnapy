@@ -1,4 +1,6 @@
-﻿import CategoryCard from "../../components/CategoryCard/CategoryCard";
+﻿import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import CategoryCard from "../../components/CategoryCard/CategoryCard";
 import styles from "./Home.module.css";
 
 /* ── Category icon components ────────────────────────────── */
@@ -132,6 +134,21 @@ const CATEGORIES = [
 
 /* ── Page component ──────────────────────────────────────── */
 const Home = () => {
+  const [showClock, setShowClock] = useState(false);
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    if (!showClock) return;
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, [showClock]);
+
+  const fmtIST = (opts: Intl.DateTimeFormatOptions) =>
+    new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", ...opts }).format(now);
+
+  const timeStr = fmtIST({ hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+  const dateStr = fmtIST({ weekday: "short", day: "numeric", month: "short", year: "numeric" });
+
   return (
     <div className={styles.page}>
 
@@ -173,7 +190,36 @@ const Home = () => {
             </svg>
             No account required
           </span>
+          <button
+            className={`${styles.clockBtn} ${showClock ? styles.clockBtnActive : ""}`}
+            onClick={() => setShowClock(v => !v)}
+            aria-expanded={showClock}
+            aria-controls="home-clock"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2.5"
+              strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            IST Clock
+          </button>
         </div>
+
+        {showClock && (
+          <div id="home-clock" className={styles.clockWidget} aria-live="polite">
+            <span className={styles.clockTime}>{timeStr}</span>
+            <span className={styles.clockSep} aria-hidden="true">&middot;</span>
+            <span className={styles.clockDate}>{dateStr}</span>
+            <Link to="/utilities/live-clock" className={styles.clockFull}>
+              Full clock
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </Link>
+          </div>
+        )}
 
       </section>
 

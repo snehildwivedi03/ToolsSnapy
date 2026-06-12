@@ -21,6 +21,7 @@ import AgeCalculator from "../pages/Calculators/tools/AgeCalculator";
 import TipCalculator from "../pages/Calculators/tools/TipCalculator";
 import TemperatureConverter from "../pages/Calculators/tools/TemperatureConverter";
 import DiscountCalculator from "../pages/Calculators/tools/DiscountCalculator";
+import LiveClock from "../pages/Utilities/LiveClock";
 
 // Placeholder for modules not yet implemented
 const Placeholder = ({ label }: { label: string }) => (
@@ -84,6 +85,7 @@ const AppRoutes = () => {
           path="/utilities"
           element={<Placeholder label="Utilities" />}
         />
+        <Route path="/utilities/live-clock" element={<LiveClock />} />
         <Route
           path="/developer"
           element={<Placeholder label="Developer Tools" />}
