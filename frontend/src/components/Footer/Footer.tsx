@@ -1,15 +1,23 @@
 import styles from "./Footer.module.css";
 
-// Static footer — brand, tagline, and auto-updated year
+// Static footer — brand, USP, and auto-updated copyright
 const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
-        <span className={styles.brand}>ToolSnapy</span>
-        <p className={styles.tagline}>No accounts. No tracking. No clutter.</p>
-        <p className={styles.copy}>&copy; {year} ToolSnapy</p>
+        <div className={styles.brand}>
+          <img src="/favicon.png" alt="" className={styles.brandMark} aria-hidden="true" />
+          <span className={styles.brandName}>ToolSnapy</span>
+        </div>
+        <p className={styles.tagline}>
+          No tracking &nbsp;&middot;&nbsp; No history &nbsp;&middot;&nbsp;
+          No saves. You exit, we exit.
+        </p>
+        <p className={styles.copy}>
+          &copy; {year} ToolSnapy. Built for speed, built for privacy.
+        </p>
       </div>
     </footer>
   );

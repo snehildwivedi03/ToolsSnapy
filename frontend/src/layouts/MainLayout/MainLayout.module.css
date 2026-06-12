@@ -1,26 +1,40 @@
-/* Shell fills the viewport and pushes footer to the bottom */
+﻿/* Shell fills the viewport — flex column, relative so geoBg is contained */
 .shell {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background-color: var(--color-bg);
+  position: relative;
 }
 
+/* Page content sits above the background layer */
 .content {
   flex: 1;
   width: 100%;
-  padding: 2rem 1rem;
+  position: relative;
+  z-index: 1;
 }
 
-/* Centered, max-width container — responsive by default */
 .container {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
-@media (min-width: 768px) {
-  .content {
-    padding: 2.5rem 2rem;
-  }
+/* ── Fixed floating background ───────────────────────────── */
+.geoBg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Each shape wrapper — JS applies translate() for parallax */
+.geoWrap {
+  position: absolute;
+  will-change: transform;
+}
+
+/* Shape itself — size/color/clip-path applied via inline style */
+.geoShape {
+  flex-shrink: 0;
 }

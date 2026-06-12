@@ -1,7 +1,10 @@
-import express, { Application, Request, Response } from "express";
+import express from "express";
+import type { Application, Request, Response } from "express";
 import helmet from "helmet";
 import compression from "compression";
 import cors from "cors";
+import textRouter from "./routes/text.routes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 const app: Application = express();
 
@@ -19,5 +22,11 @@ app.get("/api/health", (_req: Request, res: Response) => {
     message: "ToolSnapy API is running",
   });
 });
+
+// Feature routes
+app.use("/api/text", textRouter);
+
+// Global error handler — must be last
+app.use(errorHandler);
 
 export default app;

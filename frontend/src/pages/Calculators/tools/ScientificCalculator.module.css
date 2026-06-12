@@ -1,0 +1,189 @@
+/* Scientific Calculator */
+
+.wrapper {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1.5px solid var(--color-border);
+}
+
+@media (max-width: 520px) {
+  .wrapper { border-radius: var(--radius-lg); }
+  .btn { height: 46px; }
+}
+
+/* ── Display ────────────────────────────────────────────── */
+.display {
+  background: #150f1e;
+  padding: 1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-height: 120px;
+  position: relative;
+}
+
+.displayTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.modeToggle {
+  background: rgba(124, 58, 237, 0.25);
+  border: 1px solid rgba(124, 58, 237, 0.5);
+  color: #c4b5fd;
+  font-family: inherit;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.625rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--transition-fast);
+}
+
+.modeToggle:hover { background: rgba(124, 58, 237, 0.45); }
+
+.memLabel {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #a78bfa;
+  letter-spacing: 0.06em;
+}
+
+.exprLine {
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: #f5f3ff;
+  font-family: "Nunito", sans-serif;
+  letter-spacing: -0.01em;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+  min-height: 2.25rem;
+  line-height: 1.35;
+}
+
+.exprLine::-webkit-scrollbar { display: none; }
+
+.resultLine {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #a78bfa;
+  min-height: 1.4rem;
+}
+
+.errorLine {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f87171;
+}
+
+/* ── Button Grid ────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: #1e1530;
+}
+
+.btn {
+  height: 54px;
+  padding: 0;
+  font-family: "Nunito", sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: filter var(--transition-fast);
+  line-height: 1;
+}
+
+.btn:active { filter: brightness(1.3); transform: scale(0.96); }
+
+/* Number buttons */
+.btnNum {
+  background: #261d38;
+  color: #f5f3ff;
+  font-size: 1.0625rem;
+  font-weight: 800;
+}
+.btnNum:hover { background: #2f2445; }
+
+/* Operator buttons — vivid purple, larger font */
+.btnOp {
+  background: #4c1d95;
+  color: #e9d5ff;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+.btnOp:hover { background: #5b21b6; }
+
+/* Equals */
+.btnEq {
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 1.375rem;
+  font-weight: 900;
+}
+.btnEq:hover { background: var(--color-accent-hover); }
+
+/* Scientific functions */
+.btnSci {
+  background: #162237;
+  color: #7dd3fc;
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+.btnSci:hover { background: #1d2d47; }
+
+/* Memory */
+.btnMem {
+  background: #1c2230;
+  color: #94a3b8;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.btnMem:hover { background: #232c3d; }
+
+/* Clear */
+.btnClear {
+  background: #3d1818;
+  color: #fca5a5;
+  font-weight: 800;
+}
+.btnClear:hover { background: #501f1f; }
+
+/* Utility (±, ⌫) */
+.btnUtil {
+  background: #1c2230;
+  color: #94a3b8;
+  font-weight: 800;
+  font-size: 1rem;
+}
+.btnUtil:hover { background: #232c3d; }
+
+/* Section separator — thick top border between scientific and normal */
+.btnSep {
+  border-top: 2.5px solid #3b2d55 !important;
+}
+
+@media (max-width: 500px) {
+  .btn { height: 48px; font-size: 0.875rem; }
+  .btnSci { font-size: 0.75rem; }
+  .btnMem { font-size: 0.75rem; }
+  .exprLine { font-size: 1.375rem; }
+}

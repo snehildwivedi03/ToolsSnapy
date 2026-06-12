@@ -1,94 +1,49 @@
+﻿/* Sticky header — centered logo only, no nav links */
 .header {
   position: sticky;
   top: 0;
-  background-color: rgba(15, 12, 41, 0.7);
+  z-index: 100;
+  background-color: rgba(245, 243, 255, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-glass-border);
-  z-index: 1000;
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xs);
 }
 
 .nav {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  max-width: 1200px;
+  justify-content: center;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 1rem 1.5rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.nav::-webkit-scrollbar {
-  display: none;
+  padding: 0 var(--container-px);
+  height: var(--navbar-height);
 }
 
 .brand {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  flex-shrink: 0;
+  gap: 0.625rem;
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.brand:hover {
+  opacity: 0.82;
 }
 
 .brandMark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(
-    135deg,
-    var(--color-neon-pink),
-    var(--color-neon-cyan)
-  );
-  color: #fff;
-  padding: 0.25rem 0.5rem;
-  font-weight: 900;
-  font-size: 1.5rem;
-  border-radius: 8px;
+  display: block;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
 }
 
 .brandName {
-  font-weight: 900;
-  font-size: 1.5rem;
-  letter-spacing: 0.05em;
-  color: var(--color-text-primary);
-}
-
-.links {
-  display: flex;
-  list-style: none;
-  gap: 1.5rem;
-  margin: 0;
-  padding: 0;
-}
-
-.link {
-  font-weight: 500;
-  font-size: 0.95rem;
-  padding: 0.5rem 0;
-  color: var(--color-text-secondary);
-  transition: var(--transition);
-  position: relative;
-  white-space: nowrap;
-}
-
-.link::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background-color: var(--color-neon-cyan);
-  transition: var(--transition);
-}
-
-.link:hover,
-.linkActive {
-  color: var(--color-text-primary);
-}
-
-.link:hover::after,
-.linkActive::after {
-  width: 100%;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
 }
