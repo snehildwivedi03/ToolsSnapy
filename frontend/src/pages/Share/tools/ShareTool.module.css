@@ -1,0 +1,269 @@
+/* ── Drop Zone ──────────────────────────────────────────── */
+.dropZone {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+  cursor: pointer;
+  transition: border-color var(--transition-fast),
+    background var(--transition-fast);
+  text-align: center;
+}
+
+.dropZone:hover,
+.dropZoneActive {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.dropZoneIcon {
+  color: var(--color-text-muted);
+}
+
+.dropZoneActive .dropZoneIcon {
+  color: var(--color-accent);
+}
+
+.dropZoneTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.dropZoneSub {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.browseBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+  border: 1.5px solid var(--color-accent-subtle);
+  border-radius: var(--radius-full);
+  padding: 0.5rem 1.25rem;
+  cursor: pointer;
+  transition: background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.browseBtn:hover {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+/* ── File list ───────────────────────────────────────────── */
+.fileList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  max-height: 240px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 0.625rem;
+}
+
+.fileItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+.fileName {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.fileSize {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.fileRemove {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0.1rem;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.fileRemove:hover {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+/* ── Progress bar ────────────────────────────────────────── */
+.progressWrap {
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 99px;
+  transition: width 0.2s linear;
+}
+
+/* ── Success state (share code result) ───────────────────── */
+.successBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 1.5rem;
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.successTitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #15803d;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.codeDisplay {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  color: var(--color-text);
+  font-family: "Courier New", monospace;
+  background: var(--color-surface);
+  padding: 0.625rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-border);
+  user-select: all;
+}
+
+.successMeta {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.countdown {
+  font-weight: 700;
+  color: #d97706;
+}
+
+.copyCodeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 0.5625rem 1.375rem;
+  cursor: pointer;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.copyCodeBtn:hover {
+  background: #6d28d9;
+  box-shadow: 0 2px 10px rgba(124, 58, 237, 0.35);
+}
+
+.shareAgainBtn {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-fast);
+}
+
+.shareAgainBtn:hover { color: var(--color-accent); }
+
+/* ── Error list ──────────────────────────────────────────── */
+.errorList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.875rem 1rem;
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: var(--radius-lg);
+}
+
+.errorItem {
+  font-size: 0.8125rem;
+  color: #b91c1c;
+  font-weight: 500;
+}
+
+/* ── Limits row ──────────────────────────────────────────── */
+.limitsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.limitChip {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 0.25rem 0.625rem;
+}
+
+/* ── Misc ────────────────────────────────────────────────── */
+.orDivider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.orDivider::before,
+.orDivider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}

@@ -31,6 +31,12 @@ import Base64Tool from "../pages/Utilities/tools/Base64Tool";
 import Sha256 from "../pages/Utilities/tools/Sha256";
 import UrlEncoderDecoder from "../pages/Utilities/tools/UrlEncoderDecoder";
 import UnixTimestamp from "../pages/Utilities/tools/UnixTimestamp";
+import SharePage from "../pages/Share/Share";
+import ShareText from "../pages/Share/tools/ShareText";
+import ShareFiles from "../pages/Share/tools/ShareFiles";
+import ShareImages from "../pages/Share/tools/ShareImages";
+import SharePdfs from "../pages/Share/tools/SharePdfs";
+import ReceiveContent from "../pages/Share/tools/ReceiveContent";
 
 // Placeholder for modules not yet implemented
 const Placeholder = ({ label }: { label: string }) => (
@@ -90,10 +96,17 @@ const AppRoutes = () => {
         {/* Legacy /developer route — redirect to unified page */}
         <Route path="/developer" element={<Utilities />} />
 
+        {/* Instant Share */}
+        <Route path="/share"         element={<SharePage />} />
+        <Route path="/share/text"    element={<ShareText />} />
+        <Route path="/share/files"   element={<ShareFiles />} />
+        <Route path="/share/images"  element={<ShareImages />} />
+        <Route path="/share/pdfs"    element={<SharePdfs />} />
+        <Route path="/share/receive" element={<ReceiveContent />} />
+
         {/* Placeholders */}
         <Route path="/pdf"    element={<Placeholder label="PDF Tools" />} />
         <Route path="/images" element={<Placeholder label="Image Tools" />} />
-        <Route path="/share"  element={<Placeholder label="Instant Share" />} />
       </Route>
     </Routes>
   );

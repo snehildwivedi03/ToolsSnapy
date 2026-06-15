@@ -53,7 +53,7 @@ const JwtDecoder = () => {
       iconColor="#7c3aed"
       iconBg="#f5f3ff"
       title="JWT Decoder"
-      description="Decode JSON Web Tokens — inspect the header, payload and signature. Nothing is sent to a server."
+      description="Decode JSON Web Tokens. Inspect the header, payload and signature. Nothing is sent to a server."
     >
       <div className={s.card}>
         <span className={s.cardTitle}>JWT Token</span>

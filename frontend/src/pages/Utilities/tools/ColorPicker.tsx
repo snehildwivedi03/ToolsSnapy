@@ -130,7 +130,7 @@ const ColorPicker = () => {
         {rgb && (
           <div className={ls.preview} style={{ background: hex }}>
             <span className={ls.previewText} style={{ color: contrastColor(hex) }}>
-              Preview — {hex.toUpperCase()}
+              Preview: {hex.toUpperCase()}
             </span>
           </div>
         )}

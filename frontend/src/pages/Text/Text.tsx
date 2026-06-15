@@ -1,6 +1,7 @@
 ﻿import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ToolCard from "../../components/ToolCard/ToolCard";
+import Masonry from "../../components/Masonry/Masonry";
 import styles from "./Text.module.css";
 
 const SCROLL_KEY = "text-scroll-pos";
@@ -142,17 +143,17 @@ const Text = () => {
       </div>
     </div>
 
-    <ul className={styles.grid} role="list">
+    <Masonry>
       {TEXT_TOOLS.map((tool) => (
-        <li key={tool.id} onClick={saveScroll}>
+        <div key={tool.id} onClick={saveScroll}>
           <ToolCard
             to={tool.to}
             title={tool.title}
             description={tool.description}
           />
-        </li>
+        </div>
       ))}
-    </ul>
+    </Masonry>
   </div>
   );
 };

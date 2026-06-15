@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import ToolCard from "../../components/ToolCard/ToolCard";
+import Masonry from "../../components/Masonry/Masonry";
 import s from "./Calculators.module.css";
 
 const OTHER_CATEGORIES = [
@@ -13,7 +14,7 @@ const TOOLS = [
   {
     to:          "/calculators/age",
     title:       "Age & Date Calculator",
-    description: "Calculate exact age in years, months and days — or find the duration between any two dates with a live time counter.",
+    description: "Calculate exact age in years, months and days. Or find the duration between any two dates with a live time counter.",
   },
   {
     to:          "/calculators/scientific",
@@ -107,11 +108,11 @@ const Calculators = () => {
         </div>
       </div>
 
-      <div className={s.grid}>
+      <Masonry>
         {TOOLS.map(t => (
           <ToolCard key={t.to} to={t.to} title={t.title} description={t.description} />
         ))}
-      </div>
+      </Masonry>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import CategoryCard from "../../components/CategoryCard/CategoryCard";
+import ToolSearch from "../../components/ToolSearch/ToolSearch";
 import styles from "./Home.module.css";
 
 /* ── Category icon components ────────────────────────────── */
@@ -95,9 +96,9 @@ const CATEGORIES = [
     id: "share",
     to: "/share",
     title: "Instant Share",
-    description: "Share files, links and snippets instantly — no login, no storage.",
+    description: "Share files, links and snippets instantly. No login, no storage.",
     icon: <ShareIcon />,
-    toolCount: 0,
+    toolCount: 5,
     iconColor: "#d97706",
     iconBg: "#fffbeb",
   },
@@ -298,6 +299,10 @@ const Home = () => {
           <p className={styles.sectionSub}>
             Pick the category that matches your task.
           </p>
+        </div>
+
+        <div className={styles.searchWrap}>
+          <ToolSearch placeholder="Search all tools…" />
         </div>
 
         <ul className={styles.grid} role="list">

@@ -34,7 +34,7 @@ export const UTIL_TOOLS: ToolMeta[] = [
     id: "uuid-generator",
     to: "/utilities/uuid-generator",
     title: "UUID Generator",
-    description: "Generate v4 UUIDs (RFC 4122) in bulk — copy one or all at once.",
+    description: "Generate v4 UUIDs (RFC 4122) in bulk. Copy one or all at once.",
     section: "utilities",
   },
   {

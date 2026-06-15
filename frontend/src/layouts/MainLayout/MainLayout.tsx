@@ -164,7 +164,7 @@ const GeoBg = () => {
             className={styles.toolImg}
             style={{
               width:  img.size,
-              height: img.size,
+              height: "auto",
               transform: `rotate(${img.rotate}deg)`,
             }}
             loading="eager"

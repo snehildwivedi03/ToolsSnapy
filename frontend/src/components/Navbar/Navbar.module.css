@@ -13,11 +13,42 @@
 .nav {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 1rem;
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--container-px);
   height: var(--navbar-height);
+}
+
+.search {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+  max-width: 280px;
+}
+
+@media (max-width: 540px) {
+  .search {
+    max-width: 170px;
+  }
+  .brandName {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .search {
+    max-width: 140px;
+  }
+  .brandName {
+    font-size: 0.9375rem;
+  }
+  .brandMark {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .brand {
@@ -25,6 +56,7 @@
   align-items: center;
   gap: 0.625rem;
   text-decoration: none;
+  flex-shrink: 0;
   transition: opacity var(--transition-fast);
 }
 

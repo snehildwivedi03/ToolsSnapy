@@ -1,9 +1,13 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./QrGenerator.module.css";
+import tp from "../../../styles/toolpage.module.css";
+import { shareFiles } from "../../../services/shareApi";
+import { incrementFiles } from "../../../services/shareCounter";
 
 const Icon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -24,8 +28,13 @@ const QrGenerator = () => {
   const [bgColor,   setBgColor]   = useState("#ffffff");
   const [generated, setGenerated] = useState<string | null>(null);
   const [success,   setSuccess]   = useState(false);
+  const [sharing,   setSharing]   = useState(false);
+  const [shareCode, setShareCode] = useState<string | null>(null);
+  const [shareErr,  setShareErr]  = useState("");
+  const [copied,    setCopied]    = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+  const navigate  = useNavigate();
 
   const generate = () => {
     const val = text.trim();
@@ -46,6 +55,39 @@ const QrGenerator = () => {
     link.href = canvas.toDataURL("image/png");
     link.click();
   };
+
+  const shareQR = async () => {
+    const canvas = canvasRef.current?.querySelector("canvas");
+    if (!canvas) return;
+    setShareErr("");
+    setShareCode(null);
+    setSharing(true);
+    try {
+      const blob = await new Promise<Blob>((resolve, reject) =>
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Canvas empty"))), "image/png"),
+      );
+      const file = new File([blob], "qrcode.png", { type: "image/png" });
+      const res  = await shareFiles([file], "images");
+      if (res.success && res.code) {
+        setShareCode(res.code);
+        incrementFiles();
+      } else {
+        setShareErr(res.message ?? "Share failed. Try again.");
+      }
+    } catch {
+      setShareErr("Could not share. Try again.");
+    } finally {
+      setSharing(false);
+    }
+  };
+
+  const copyCode = async () => {
+    if (!shareCode) return;
+    try { await navigator.clipboard.writeText(shareCode); setCopied(true); setTimeout(() => setCopied(false), 2000); }
+    catch {/* ignore */}
+  };
+
+  const goReceive = () => navigate("/share/receive");
 
   return (
     <ToolPageShell
@@ -134,9 +176,59 @@ const QrGenerator = () => {
               marginSize={2}
             />
           </div>
-          <button type="button" className={`${s.calcBtn} ${ls.dlBtn}`} onClick={download}>
-            Download PNG
-          </button>
+
+          <div className={ls.actionRow}>
+            <button type="button" className={`${s.calcBtn} ${ls.dlBtn}`} onClick={download}>
+              Download PNG
+            </button>
+            <button
+              type="button"
+              className={ls.shareBtn}
+              onClick={shareQR}
+              disabled={sharing}
+            >
+              {sharing ? (
+                <>
+                  <span className={ls.spinner} aria-hidden="true" />
+                  Sharing…
+                </>
+              ) : (
+                <>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                    aria-hidden="true">
+                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                  </svg>
+                  Share via ToolsSnapy
+                </>
+              )}
+            </button>
+          </div>
+
+          {shareErr && (
+            <p className={ls.shareErr}>{shareErr}</p>
+          )}
+
+          {shareCode && (
+            <div className={ls.shareResult}>
+              <span className={ls.shareCodeLabel}>Share Code</span>
+              <span className={ls.shareCodeValue}>{shareCode}</span>
+              <div className={ls.shareActions}>
+                <button
+                  className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary}
+                  onClick={copyCode}
+                >
+                  {copied ? "Copied!" : "Copy Code"}
+                </button>
+                <button className={ls.receiveBtn} onClick={goReceive}>
+                  Open Receive Page →
+                </button>
+              </div>
+              <span className={ls.shareExpiry}>Expires in 15 minutes</span>
+            </div>
+          )}
         </div>
       )}
 

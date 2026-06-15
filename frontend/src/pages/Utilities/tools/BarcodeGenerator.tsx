@@ -1,9 +1,13 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Barcode from "react-barcode";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./BarcodeGenerator.module.css";
+import tp from "../../../styles/toolpage.module.css";
+import { shareFiles } from "../../../services/shareApi";
+import { incrementFiles } from "../../../services/shareCounter";
 
 type BarcodeFormat = "CODE128" | "EAN13" | "EAN8" | "UPC" | "CODE39" | "ITF14";
 
@@ -24,15 +28,22 @@ const Icon = () => (
 );
 
 const BarcodeGenerator = () => {
-  const [text,    setText]    = useState("1234567890");
-  const [format,  setFormat]  = useState<BarcodeFormat>("CODE128");
-  const [showTxt, setShowTxt] = useState(true);
-  const [error,   setError]   = useState<string | null>(null);
-  const svgRef = useRef<HTMLDivElement>(null);
+  const [text,      setText]      = useState("1234567890");
+  const [format,    setFormat]    = useState<BarcodeFormat>("CODE128");
+  const [showTxt,   setShowTxt]   = useState(true);
+  const [error,     setError]     = useState<string | null>(null);
+  const [sharing,   setSharing]   = useState(false);
+  const [shareCode, setShareCode] = useState<string | null>(null);
+  const [shareErr,  setShareErr]  = useState("");
+  const [copied,    setCopied]    = useState(false);
+  const svgRef   = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const handleChange = (val: string) => {
     setText(val);
     setError(null);
+    setShareCode(null);
+    setShareErr("");
   };
 
   const download = () => {
@@ -44,6 +55,59 @@ const BarcodeGenerator = () => {
     link.href = URL.createObjectURL(blob);
     link.click();
     URL.revokeObjectURL(link.href);
+  };
+
+  /** Convert the SVG barcode to a PNG blob via an off-screen canvas */
+  const svgToPngBlob = (): Promise<Blob> =>
+    new Promise((resolve, reject) => {
+      const svg = svgRef.current?.querySelector("svg");
+      if (!svg) { reject(new Error("No SVG")); return; }
+
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(svgBlob);
+
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width  = img.naturalWidth  || svg.clientWidth  || 400;
+        canvas.height = img.naturalHeight || svg.clientHeight || 160;
+        const ctx = canvas.getContext("2d")!;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Canvas empty"))), "image/png");
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("SVG load failed")); };
+      img.src = url;
+    });
+
+  const shareBarcode = async () => {
+    setShareErr("");
+    setShareCode(null);
+    setSharing(true);
+    try {
+      const blob = await svgToPngBlob();
+      const file = new File([blob], "barcode.png", { type: "image/png" });
+      const res  = await shareFiles([file], "images");
+      if (res.success && res.code) {
+        setShareCode(res.code);
+        incrementFiles();
+      } else {
+        setShareErr(res.message ?? "Share failed. Try again.");
+      }
+    } catch {
+      setShareErr("Could not share. Try again.");
+    } finally {
+      setSharing(false);
+    }
+  };
+
+  const copyCode = async () => {
+    if (!shareCode) return;
+    try { await navigator.clipboard.writeText(shareCode); setCopied(true); setTimeout(() => setCopied(false), 2000); }
+    catch {/* ignore */}
   };
 
   const hasContent = text.trim().length > 0;
@@ -116,9 +180,58 @@ const BarcodeGenerator = () => {
             </div>
           )}
           {!error && (
-            <button type="button" className={`${s.calcBtn} ${ls.dlBtn}`} onClick={download}>
-              Download SVG
-            </button>
+            <>
+              <div className={ls.actionRow}>
+                <button type="button" className={`${s.calcBtn} ${ls.dlBtn}`} onClick={download}>
+                  Download SVG
+                </button>
+                <button
+                  type="button"
+                  className={ls.shareBtn}
+                  onClick={shareBarcode}
+                  disabled={sharing}
+                >
+                  {sharing ? (
+                    <>
+                      <span className={ls.spinner} aria-hidden="true" />
+                      Sharing…
+                    </>
+                  ) : (
+                    <>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                        aria-hidden="true">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                      </svg>
+                      Share via ToolsSnapy
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {shareErr && <p className={ls.shareErr}>{shareErr}</p>}
+
+              {shareCode && (
+                <div className={ls.shareResult}>
+                  <span className={ls.shareCodeLabel}>Share Code</span>
+                  <span className={ls.shareCodeValue}>{shareCode}</span>
+                  <div className={ls.shareActions}>
+                    <button
+                      className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary}
+                      onClick={copyCode}
+                    >
+                      {copied ? "Copied!" : "Copy Code"}
+                    </button>
+                    <button className={ls.receiveBtn} onClick={() => navigate("/share/receive")}>
+                      Open Receive Page →
+                    </button>
+                  </div>
+                  <span className={ls.shareExpiry}>Expires in 15 minutes</span>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}

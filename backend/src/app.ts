@@ -4,12 +4,15 @@ import helmet from "helmet";
 import compression from "compression";
 import cors from "cors";
 import textRouter from "./routes/text.routes.js";
+import shareRouter from "./routes/share.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const app: Application = express();
 
 // Security and performance middleware
-app.use(helmet());
+// Allow cross-origin resource loading so the frontend (different port) can
+// embed shared images/PDFs via <img>/<embed>.
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 app.use(compression());
 app.use(cors({ origin: process.env.CLIENT_ORIGIN ?? "*" }));
 app.use(express.json());
@@ -25,6 +28,7 @@ app.get("/api/health", (_req: Request, res: Response) => {
 
 // Feature routes
 app.use("/api/text", textRouter);
+app.use("/api/share", shareRouter);
 
 // Global error handler   must be last
 app.use(errorHandler);

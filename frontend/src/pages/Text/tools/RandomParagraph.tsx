@@ -46,6 +46,12 @@ const RandomParagraph = () => {
     setRaw(val === "" ? "" : val);
   };
 
+  const step = (delta: number) => {
+    const current = isNaN(numericValue) ? 0 : numericValue;
+    const next = Math.min(MAX, Math.max(1, current + delta));
+    setRaw(String(next));
+  };
+
   const handleGenerate = async () => {
     if (!isValid) return;
     setLoading(true);
@@ -85,21 +91,49 @@ const RandomParagraph = () => {
           </span>
 
           <div className={s.numberInputRow}>
-            <input
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              value={raw}
-              onChange={handleInput}
-              placeholder="3"
-              aria-label="Number of paragraphs"
-              aria-invalid={isOverMax}
-              className={
-                isOverMax
-                  ? `${s.numberInput} ${s.numberInputError}`
-                  : s.numberInput
-              }
-            />
+            <div className={s.stepper}>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                value={raw}
+                onChange={handleInput}
+                placeholder="3"
+                aria-label="Number of paragraphs"
+                aria-invalid={isOverMax}
+                className={
+                  isOverMax
+                    ? `${s.numberInput} ${s.numberInputError}`
+                    : s.numberInput
+                }
+              />
+              <div className={s.stepperBtns}>
+                <button
+                  type="button"
+                  className={s.stepperBtn}
+                  onClick={() => step(1)}
+                  disabled={!isNaN(numericValue) && numericValue >= MAX}
+                  aria-label="Increase"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="18 15 12 9 6 15" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  className={s.stepperBtn}
+                  onClick={() => step(-1)}
+                  disabled={isNaN(numericValue) || numericValue <= 1}
+                  aria-label="Decrease"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+              </div>
+            </div>
             <span className={s.numberHint}>
               {isOverMax
                 ? "⚠ Maximum 20 paragraphs"

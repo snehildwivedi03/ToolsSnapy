@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import ToolCard from "../../components/ToolCard/ToolCard";
+import Masonry from "../../components/Masonry/Masonry";
 import styles from "./Utilities.module.css";
 import { UTIL_TOOLS, DEV_TOOLS } from "./utilitiesData";
 
@@ -47,7 +48,7 @@ const Utilities = () => (
       </div>
       <h1 className={styles.title}>Utilities & Dev Tools</h1>
       <p className={styles.description}>
-        13 handy tools — converters, generators, encoders and developer helpers.
+        13 handy tools: converters, generators, encoders and developer helpers.
         Everything runs in your browser, nothing stored.
       </p>
     </div>
@@ -71,13 +72,13 @@ const Utilities = () => (
         <h2 className={styles.sectionTitle} id="utils-heading">Utilities</h2>
         <span className={styles.sectionCount}>{UTIL_TOOLS.length} tools</span>
       </div>
-      <ul className={styles.grid} role="list">
+      <Masonry>
         {UTIL_TOOLS.map((tool) => (
-          <li key={tool.id}>
+          <div key={tool.id}>
             <ToolCard to={tool.to} title={tool.title} description={tool.description} />
-          </li>
+          </div>
         ))}
-      </ul>
+      </Masonry>
     </section>
 
     {/* ── Developer Tools section ── */}
@@ -86,13 +87,13 @@ const Utilities = () => (
         <h2 className={styles.sectionTitle} id="dev-heading">Developer Tools</h2>
         <span className={styles.sectionCount}>{DEV_TOOLS.length} tools</span>
       </div>
-      <ul className={styles.grid} role="list">
+      <Masonry>
         {DEV_TOOLS.map((tool) => (
-          <li key={tool.id}>
+          <div key={tool.id}>
             <ToolCard to={tool.to} title={tool.title} description={tool.description} />
-          </li>
+          </div>
         ))}
-      </ul>
+      </Masonry>
     </section>
   </div>
 );
