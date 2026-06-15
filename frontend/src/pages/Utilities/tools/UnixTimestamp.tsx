@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
-import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./DevTool.module.css";
 import ts from "./UnixTimestamp.module.css";
@@ -123,7 +122,6 @@ const UnixTimestamp = () => {
         )}
       </div>
 
-      <RelatedTools currentId="unix-timestamp" section="developer" />
     </ToolPageShell>
   );
 };

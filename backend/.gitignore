@@ -152,4 +152,6 @@ Session.vim
 # auto-generated tag files
 tags
 
+temp/
+
 # End of https://www.gitignore.io/api/node,vim,git,macos,linux,sublimetext

@@ -19,6 +19,7 @@ export const ALL_TOOLS: ToolEntry[] = [
 
   // ── Image Tools ─────────────────────────────────────────
   { id: "image-resize", title: "Resize to Target Size", description: "Compress an image to an exact file size like 200 KB.", to: "/images/resize", category: "Image Tools", keywords: ["compress", "reduce", "kb", "mb", "file size", "shrink", "optimize"] },
+  { id: "image-resizer", title: "Image Resizer", description: "Resize an image to exact pixel dimensions with aspect-ratio lock.", to: "/images/resizer", category: "Image Tools", keywords: ["resize", "dimensions", "width", "height", "pixels", "scale", "px"] },
   { id: "background-remover", title: "Background Remover", description: "Automatically erase the background from any photo.", to: "/images/background-remover", category: "Image Tools", keywords: ["remove background", "transparent", "cutout", "png", "erase"] },
   { id: "image-converter", title: "Image Converter", description: "Convert images between PNG, JPG, WebP, AVIF and SVG.", to: "/images/converter", category: "Image Tools", keywords: ["convert", "png", "jpg", "jpeg", "webp", "avif", "svg", "format"] },
 

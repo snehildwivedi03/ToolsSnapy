@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
-import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./UnitConverter.module.css";
 
@@ -279,7 +278,6 @@ const UnitConverter = () => {
         </div>
       )}
 
-      <RelatedTools currentId="unit-converter" section="utilities" />
     </ToolPageShell>
   );
 };

@@ -15,6 +15,13 @@ const IMAGE_TOOLS = [
       "Compress an image to an exact file size  type 200 KB and get a 200 KB file. Perfect for uploads with size limits.",
   },
   {
+    id: "image-resize-dimensions",
+    to: "/images/resizer",
+    title: "Image Resizer",
+    description:
+      "Resize an image to exact pixel dimensions with an optional aspect-ratio lock and quick scale presets.",
+  },
+  {
     id: "background-remover",
     to: "/images/background-remover",
     title: "Background Remover",
@@ -26,7 +33,7 @@ const IMAGE_TOOLS = [
     to: "/images/converter",
     title: "Image Converter",
     description:
-      "Convert images between PNG, JPG and WebP with adjustable quality. Fast and fully in-browser.",
+      "Convert images between PNG, JPG, WebP, AVIF and SVG with adjustable quality. Fast and fully in-browser.",
   },
 ] as const;
 
@@ -117,17 +124,23 @@ const Images = () => {
         </div>
       </div>
 
-      <Masonry>
-        {IMAGE_TOOLS.map((tool) => (
-          <div key={tool.id} onClick={saveScroll}>
-            <ToolCard
-              to={tool.to}
-              title={tool.title}
-              description={tool.description}
-            />
-          </div>
-        ))}
-      </Masonry>
+      <section aria-labelledby="image-tools-heading">
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle} id="image-tools-heading">Image Tools</h2>
+          <span className={styles.sectionCount}>{IMAGE_TOOLS.length} tools</span>
+        </div>
+        <Masonry>
+          {IMAGE_TOOLS.map((tool) => (
+            <div key={tool.id} onClick={saveScroll}>
+              <ToolCard
+                to={tool.to}
+                title={tool.title}
+                description={tool.description}
+              />
+            </div>
+          ))}
+        </Masonry>
+      </section>
     </div>
   );
 };

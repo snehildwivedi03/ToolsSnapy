@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Barcode from "react-barcode";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
-import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./BarcodeGenerator.module.css";
 import tp from "../../../styles/toolpage.module.css";
@@ -236,7 +235,6 @@ const BarcodeGenerator = () => {
         </div>
       )}
 
-      <RelatedTools currentId="barcode-generator" section="utilities" />
     </ToolPageShell>
   );
 };

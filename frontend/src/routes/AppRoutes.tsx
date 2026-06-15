@@ -10,6 +10,7 @@ import JsonValidator from "../pages/Text/tools/JsonValidator";
 import RandomParagraph from "../pages/Text/tools/RandomParagraph";
 import Images from "../pages/Images/Images";
 import ImageResize from "../pages/Images/tools/ImageResize";
+import ImageResizeDimensions from "../pages/Images/tools/ImageResizeDimensions";
 import BackgroundRemove from "../pages/Images/tools/BackgroundRemove";
 import ImageConverter from "../pages/Images/tools/ImageConverter";
 import Calculators from "../pages/Calculators/Calculators";
@@ -111,6 +112,7 @@ const AppRoutes = () => {
         {/* Image Tools */}
         <Route path="/images"                    element={<Images />} />
         <Route path="/images/resize"             element={<ImageResize />} />
+        <Route path="/images/resizer"            element={<ImageResizeDimensions />} />
         <Route path="/images/background-remover" element={<BackgroundRemove />} />
         <Route path="/images/converter"          element={<ImageConverter />} />
 

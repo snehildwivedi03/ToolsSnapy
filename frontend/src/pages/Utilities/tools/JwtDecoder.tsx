@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
-import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./DevTool.module.css";
 
@@ -115,7 +114,6 @@ const JwtDecoder = () => {
         </div>
       )}
 
-      <RelatedTools currentId="jwt-decoder" section="developer" />
     </ToolPageShell>
   );
 };

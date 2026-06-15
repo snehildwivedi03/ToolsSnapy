@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
-import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./UuidGenerator.module.css";
 
@@ -108,7 +107,6 @@ const UuidGenerator = () => {
         </ul>
       </div>
 
-      <RelatedTools currentId="uuid-generator" section="utilities" />
     </ToolPageShell>
   );
 };

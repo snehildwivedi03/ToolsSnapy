@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
-import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./ColorPicker.module.css";
 
@@ -158,7 +157,6 @@ const ColorPicker = () => {
         </div>
       )}
 
-      <RelatedTools currentId="color-picker" section="utilities" />
     </ToolPageShell>
   );
 };

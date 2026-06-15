@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
-import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./PasswordGenerator.module.css";
 
@@ -216,7 +215,6 @@ const PasswordGenerator = () => {
         )}
       </div>
 
-      <RelatedTools currentId="password-generator" section="utilities" />
     </ToolPageShell>
   );
 };

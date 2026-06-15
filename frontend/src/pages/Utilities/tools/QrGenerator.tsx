@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
-import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./QrGenerator.module.css";
 import tp from "../../../styles/toolpage.module.css";
@@ -232,7 +231,6 @@ const QrGenerator = () => {
         </div>
       )}
 
-      <RelatedTools currentId="qr-generator" section="utilities" />
     </ToolPageShell>
   );
 };

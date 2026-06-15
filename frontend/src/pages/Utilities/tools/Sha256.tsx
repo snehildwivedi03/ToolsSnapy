@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
-import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./DevTool.module.css";
 
@@ -85,7 +84,6 @@ const Sha256 = () => {
         </div>
       )}
 
-      <RelatedTools currentId="sha256" section="developer" />
     </ToolPageShell>
   );
 };

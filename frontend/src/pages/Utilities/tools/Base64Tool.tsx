@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
-import RelatedTools from "../../../components/RelatedTools/RelatedTools";
 import s from "../../../styles/calc.module.css";
 import ls from "./DevTool.module.css";
 
@@ -108,7 +107,6 @@ const Base64Tool = () => {
         </button>
       </div>
 
-      <RelatedTools currentId={mode === "encode" ? "base64-encoder" : "base64-decoder"} section="developer" />
     </ToolPageShell>
   );
 };
