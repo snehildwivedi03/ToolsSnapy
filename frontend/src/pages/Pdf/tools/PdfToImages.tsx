@@ -246,7 +246,7 @@ const PdfToImages = () => {
                     <polyline points="17 8 12 3 7 8" />
                     <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
-                  Start over
+                  Upload more
                 </button>
               </div>
 
