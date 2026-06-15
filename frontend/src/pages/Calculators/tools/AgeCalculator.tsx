@@ -230,6 +230,9 @@ const AgeCalculator = () => {
 
   const [mode, setMode] = useState<"age"|"diff">("age");
 
+  /* Live tick for diff mode when dateB is today */
+  const [nowMs, setNowMs] = useState(() => Date.now());
+
   /* Age mode */
   const [dob,    setDob]    = useState("");
   const [toDate, setToDate] = useState(todayStr);
@@ -282,15 +285,23 @@ const AgeCalculator = () => {
       if (dow === 0 || dow === 6) weekends++; else weekdays++;
       cur.setDate(cur.getDate() + 1);
     }
+    setNowMs(Date.now());
     setDiffResult({ totalDays, years, months, days, weeks: Math.floor(totalDays / 7), weekdays, weekends });
   };
+
+  /* Start/stop live tick when diff result is showing and dateB is today */
+  useEffect(() => {
+    if (mode !== "diff" || !diffResult || dateB !== todayStr) return;
+    const id = setInterval(() => setNowMs(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [mode, diffResult, dateB, todayStr]);
 
   return (
     <ToolPageShell
       backTo="/calculators" backLabel="Calculators"
       icon={<Icon />} iconColor="#059669" iconBg="#ecfdf5"
-      title="Age Calculator"
-      description="Calculate exact age or days between any two dates, with weekday breakdown."
+      title="Age & Date Calculator"
+      description="Calculate exact age or find the live duration between any two dates."
     >
       <div className={s.workspace}>
         <div className={s.card}>
@@ -356,9 +367,18 @@ const AgeCalculator = () => {
           </div>
         )}
 
-        {mode === "diff" && diffResult && (
+        {mode === "diff" && diffResult && (() => {
+          /* Compute live elapsed ms: tick in real-time if dateB is today */
+          const startMs = dateA ? new Date(dateA + "T00:00:00").getTime() : 0;
+          const endMs   = dateB === todayStr ? nowMs : new Date(dateB + "T00:00:00").getTime();
+          const liveMs  = Math.max(0, endMs - startMs);
+          const liveH   = Math.floor(liveMs / 3600000);
+          const liveM   = Math.floor((liveMs % 3600000) / 60000);
+          const liveS   = Math.floor((liveMs % 60000) / 1000);
+          const isLive  = dateB === todayStr;
+          return (
           <div className={s.card}>
-            <span className={s.cardTitle}>Difference</span>
+            <span className={s.cardTitle}>Duration</span>
             <div className={`${s.resultCard} ${s.resultCardPrimary}`}>
               <div className={`${s.resultValue} ${s.resultValueLg}`}>{diffResult.totalDays.toLocaleString()}</div>
               <div className={s.resultLabel}>Total Days</div>
@@ -377,6 +397,33 @@ const AgeCalculator = () => {
                 <div className={s.resultLabel}>Rem. Days</div>
               </div>
             </div>
+
+            {/* Live H : M : S counter */}
+            <div className={s.cardTitle} style={{ marginTop: "0.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              {isLive && (
+                <span style={{
+                  display: "inline-block", width: 8, height: 8,
+                  borderRadius: "50%", background: "#059669",
+                  boxShadow: "0 0 6px #059669", flexShrink: 0,
+                }} />
+              )}
+              {isLive ? "Live Duration" : "Duration in Time"}
+            </div>
+            <div className={`${s.resultGrid} ${s.resultGrid3}`}>
+              <div className={`${s.resultCard} ${s.resultCardBlue}`}>
+                <div className={s.resultValue}>{liveH.toLocaleString()}</div>
+                <div className={s.resultLabel}>Hours</div>
+              </div>
+              <div className={`${s.resultCard} ${s.resultCardGreen}`}>
+                <div className={s.resultValue}>{liveM}</div>
+                <div className={s.resultLabel}>Minutes</div>
+              </div>
+              <div className={`${s.resultCard} ${s.resultCardOrange}`}>
+                <div className={s.resultValue}>{liveS}</div>
+                <div className={s.resultLabel}>Seconds</div>
+              </div>
+            </div>
+
             <div className={`${s.resultGrid} ${s.resultGrid3}`}>
               <div className={`${s.resultCard} ${s.resultCardBlue}`}>
                 <div className={s.resultValue}>{diffResult.weeks.toLocaleString()}</div>
@@ -392,7 +439,8 @@ const AgeCalculator = () => {
               </div>
             </div>
           </div>
-        )}
+          );
+        })()}
       </div>
     </ToolPageShell>
   );

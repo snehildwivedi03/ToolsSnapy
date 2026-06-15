@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import CurrencyPicker from "../../../components/CurrencyPicker/CurrencyPicker";
 import s from "../../../styles/calc.module.css";
 
 const Icon = () => (
@@ -25,6 +26,8 @@ const EmiCalculator = () => {
   const [tenureUnit, setTenureUnit] = useState<"months" | "years">("years");
   const [result, setResult]       = useState<Result | null>(null);
   const [showTable, setShowTable] = useState(false);
+  const [currCode, setCurrCode]     = useState("INR");
+  const [currSymbol, setCurrSymbol] = useState("₹");
 
   const calculate = () => {
     const P = parseFloat(principal);
@@ -68,6 +71,8 @@ const EmiCalculator = () => {
   const fmt = (n: number) =>
     n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+  const money = (n: number) => `${currSymbol} ${fmt(n)}`;
+
   return (
     <ToolPageShell
       backTo="/calculators"
@@ -83,8 +88,13 @@ const EmiCalculator = () => {
         <div className={s.card}>
           <span className={s.cardTitle}>Loan Details</span>
 
+          <CurrencyPicker
+            value={currCode}
+            onChange={(code, symbol) => { setCurrCode(code); setCurrSymbol(symbol); }}
+          />
+
           <div className={s.inputGroup}>
-            <label className={s.label}>Loan Amount (₹)</label>
+            <label className={s.label}>Loan Amount</label>
             <input className={s.input} type="number" placeholder="e.g. 500000"
               value={principal} onChange={e => setPrincipal(e.target.value)} />
           </div>
@@ -120,23 +130,23 @@ const EmiCalculator = () => {
             <span className={s.cardTitle}>Breakdown</span>
 
             <div className={`${s.resultCard} ${s.resultCardPrimary}`}>
-              <div className={`${s.resultValue} ${s.resultValueLg}`}>₹ {fmt(result.emi)}</div>
+              <div className={`${s.resultValue} ${s.resultValueLg}`}>{money(result.emi)}</div>
               <div className={s.resultLabel}>Monthly EMI</div>
             </div>
 
             <div className={`${s.resultGrid} ${s.resultGrid2}`}>
               <div className={`${s.resultCard} ${s.resultCardGreen}`}>
-                <div className={s.resultValue}>₹ {fmt(result.principal)}</div>
+                <div className={s.resultValue}>{money(result.principal)}</div>
                 <div className={s.resultLabel}>Principal</div>
               </div>
               <div className={`${s.resultCard} ${s.resultCardOrange}`}>
-                <div className={s.resultValue}>₹ {fmt(result.totalInterest)}</div>
+                <div className={s.resultValue}>{money(result.totalInterest)}</div>
                 <div className={s.resultLabel}>Total Interest</div>
               </div>
             </div>
 
             <div className={s.resultCard}>
-              <div className={s.resultValue}>₹ {fmt(result.totalPayment)}</div>
+              <div className={s.resultValue}>{money(result.totalPayment)}</div>
               <div className={s.resultLabel}>Total Payment</div>
             </div>
 
@@ -150,8 +160,8 @@ const EmiCalculator = () => {
                 <table className={s.table}>
                   <thead>
                     <tr>
-                      <th>Month</th><th>EMI (₹)</th><th>Principal (₹)</th>
-                      <th>Interest (₹)</th><th>Balance (₹)</th>
+                      <th>Month</th><th>EMI</th><th>Principal</th>
+                      <th>Interest</th><th>Balance</th>
                     </tr>
                   </thead>
                   <tbody>

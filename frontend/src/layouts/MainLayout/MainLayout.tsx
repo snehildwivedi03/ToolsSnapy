@@ -38,6 +38,35 @@ const GEO_SHAPES: GeoShape[] = [
   { id: 9, type: "tridown", size: 190, top: 18,  left: 87,  color: "#7c3aed", opacity: 0.07,  depth: 1.6, blur: 0   },
 ];
 
+/* ── Tool icon image data ────────────────────────────────── */
+interface ToolImg {
+  id: number;
+  src: string;
+  size: number;   // px
+  top: number;    // %
+  left: number;   // %
+  depth: number;  // parallax depth multiplier
+  rotate: number; // deg
+}
+
+// Each image is placed near its thematic category area
+const IMG_ITEMS: ToolImg[] = [
+  // PDF tools  – upper-left
+  { id: 101, src: "/pdf.png",        size: 200, top: 6,   left: 16,  depth: 1.4, rotate: -14 },
+  // Text tools – mid-left (pen)
+  { id: 102, src: "/pen.png",        size: 170, top: 50,  left: 7,   depth: 2.3, rotate: 18  },
+  // Calculators – lower-right
+  { id: 103, src: "/calculator.png", size: 210, top: 70,  left: 80,  depth: 2.0, rotate: 8   },
+  // Instant Share / general – upper-right
+  { id: 104, src: "/laptop.png",     size: 230, top: 22,  left: 70,  depth: 1.6, rotate: -9  },
+  // Images category – lower-left
+  { id: 105, src: "/image.png",      size: 165, top: 78,  left: 18,  depth: 2.4, rotate: 7   },
+  // Dev tools / code – right edge
+  { id: 106, src: "/code.png",       size: 185, top: 14,  left: 89,  depth: 1.9, rotate: -6  },
+  // Utilities – bottom center
+  { id: 107, src: "/clock.png",      size: 175, top: 88,  left: 55,  depth: 2.1, rotate: 12  },
+];
+
 const CLIP: Record<GeoShape["type"], string | undefined> = {
   circle:  undefined,
   tri:     "polygon(50% 0%, 0% 100%, 100% 100%)",
@@ -51,7 +80,8 @@ const CLIP: Record<GeoShape["type"], string | undefined> = {
 // Shapes animate with cursor on hover-capable devices only.
 // On touch-only devices (mobile) shapes render static.
 const GeoBg = () => {
-  const wrapRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const wrapRefs    = useRef<(HTMLDivElement | null)[]>([]);
+  const imgWrapRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const canHover = window.matchMedia(
@@ -75,6 +105,12 @@ const GeoBg = () => {
       wrapRefs.current.forEach((el, i) => {
         if (!el) return;
         const mag = GEO_SHAPES[i].depth * 15;
+        el.style.transform = `translate(${cx * mag}px, ${cy * mag}px)`;
+      });
+
+      imgWrapRefs.current.forEach((el, i) => {
+        if (!el) return;
+        const mag = IMG_ITEMS[i].depth * 15;
         el.style.transform = `translate(${cx * mag}px, ${cy * mag}px)`;
       });
 
@@ -111,6 +147,29 @@ const GeoBg = () => {
               filter:          shape.blur > 0 ? `blur(${shape.blur}px)` : undefined,
               transform:       shape.type === "square" ? "rotate(14deg)" : undefined,
             }}
+          />
+        </div>
+      ))}
+
+      {IMG_ITEMS.map((img, i) => (
+        <div
+          key={img.id}
+          ref={(el) => { imgWrapRefs.current[i] = el; }}
+          className={styles.imgWrap}
+          style={{ top: `${img.top}%`, left: `${img.left}%` }}
+        >
+          <img
+            src={img.src}
+            alt=""
+            className={styles.toolImg}
+            style={{
+              width:  img.size,
+              height: img.size,
+              transform: `rotate(${img.rotate}deg)`,
+            }}
+            loading="eager"
+            fetchPriority="high"
+            draggable={false}
           />
         </div>
       ))}

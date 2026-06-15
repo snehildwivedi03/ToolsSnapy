@@ -1,0 +1,83 @@
+.rowWrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.nowBtn {
+  flex-shrink: 0;
+  height: 2.75rem;
+  padding: 0 1.25rem;
+  border: 1.5px solid var(--color-accent-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.nowBtn:hover {
+  background: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+}
+
+.resultList {
+  list-style: none;
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.resultRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.resultRow:last-child { border-bottom: none; }
+
+.resultLabel {
+  min-width: 9rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.resultVal {
+  flex: 1;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  word-break: break-all;
+}
+
+/* ── Date → Unix ─────────────────────────────────────── */
+.unixResult {
+  margin-top: 0.75rem;
+}
+
+.unixDisplay {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.375rem;
+}
+
+.unixCode {
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(1.125rem, 3vw, 1.5rem);
+  font-weight: 800;
+  color: var(--color-accent);
+  letter-spacing: 0.05em;
+}

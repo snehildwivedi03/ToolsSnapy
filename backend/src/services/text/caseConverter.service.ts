@@ -54,6 +54,31 @@ function toKebabCase(text: string): string {
     .join("-");
 }
 
+function toToggleCase(text: string): string {
+  return text
+    .split("")
+    .map((c) => (c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()))
+    .join("");
+}
+
+function toScreamingSnakeCase(text: string): string {
+  return extractWords(text)
+    .map((w) => w.toUpperCase())
+    .join("_");
+}
+
+function toTrainCase(text: string): string {
+  return extractWords(text)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join("-");
+}
+
+function toDotCase(text: string): string {
+  return extractWords(text)
+    .map((w) => w.toLowerCase())
+    .join(".");
+}
+
 export function convertCase(
   text: string,
   caseType: CaseType,
@@ -61,12 +86,16 @@ export function convertCase(
   const converters: Record<CaseType, (t: string) => string> = {
     uppercase: (t) => t.toUpperCase(),
     lowercase: (t) => t.toLowerCase(),
-    titlecase: toTitleCase,
     sentencecase: toSentenceCase,
+    titlecase: toTitleCase,
+    togglecase: toToggleCase,
     camelcase: toCamelCase,
     pascalcase: toPascalCase,
     snakecase: toSnakeCase,
+    screamingsnakecase: toScreamingSnakeCase,
     kebabcase: toKebabCase,
+    traincase: toTrainCase,
+    dotcase: toDotCase,
   };
 
   const fn = converters[caseType];

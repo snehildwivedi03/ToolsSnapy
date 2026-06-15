@@ -59,15 +59,6 @@ const UtilIcon = () => (
   </svg>
 );
 
-const DevIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2"
-    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <polyline points="16 18 22 12 16 6"/>
-    <polyline points="8 6 2 12 8 18"/>
-  </svg>
-);
-
 /* ── Static data ─────────────────────────────────────────── */
 const CATEGORIES = [
   {
@@ -104,29 +95,19 @@ const CATEGORIES = [
     id: "calculators",
     to: "/calculators",
     title: "Calculators",
-    description: "Finance, maths, unit conversion and more.",
+    description: "Finance, maths, scientific and health calculators.",
     icon: <CalcIcon />,
-    toolCount: 12,
+    toolCount: 9,
     iconColor: "#059669",
     iconBg: "#ecfdf5",
   },
   {
     id: "utilities",
     to: "/utilities",
-    title: "Instant Share",
-    description: "Share files, links and snippets instantly  no login, no storage.",
-    icon: <UtilIcon />,
-    toolCount: 3,
-    iconColor: "#d97706",
-    iconBg: "#fffbeb",
-  },
-  {
-    id: "developer",
-    to: "/developer",
     title: "Utilities & Dev Tools",
-    description: "Base64, hash generators, regex tester, JSON formatter and more.",
-    icon: <DevIcon />,
-    toolCount: 3,
+    description: "Converters, generators, encoders and developer helpers.",
+    icon: <UtilIcon />,
+    toolCount: 13,
     iconColor: "#0891b2",
     iconBg: "#ecfeff",
   },

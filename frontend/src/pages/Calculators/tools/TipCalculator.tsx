@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import CurrencyPicker from "../../../components/CurrencyPicker/CurrencyPicker";
 import s from "../../../styles/calc.module.css";
 
 const Icon = () => (
@@ -26,6 +27,8 @@ const TipCalculator = () => {
   const [tipPct, setTipPct]   = useState("15");
   const [people, setPeople]   = useState("1");
   const [result, setResult]   = useState<Result | null>(null);
+  const [currCode, setCurrCode]     = useState("USD");
+  const [currSymbol, setCurrSymbol] = useState("$");
 
   const calculate = () => {
     const b = parseFloat(bill);
@@ -44,6 +47,8 @@ const TipCalculator = () => {
   const fmt = (n: number) =>
     n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+  const money = (n: number) => `${currSymbol}${fmt(n)}`;
+
   return (
     <ToolPageShell
       backTo="/calculators"
@@ -58,8 +63,13 @@ const TipCalculator = () => {
         <div className={s.card}>
           <span className={s.cardTitle}>Bill Details</span>
 
+          <CurrencyPicker
+            value={currCode}
+            onChange={(code, symbol) => { setCurrCode(code); setCurrSymbol(symbol); }}
+          />
+
           <div className={s.inputGroup}>
-            <label className={s.label}>Bill Amount ($)</label>
+            <label className={s.label}>Bill Amount</label>
             <input className={s.input} type="number" placeholder="e.g. 75.50" step="0.01"
               value={bill} onChange={e => setBill(e.target.value)} />
           </div>
@@ -94,25 +104,25 @@ const TipCalculator = () => {
             <span className={s.cardTitle}>Summary</span>
 
             <div className={`${s.resultCard} ${s.resultCardPrimary}`}>
-              <div className={`${s.resultValue} ${s.resultValueLg}`}>${fmt(result.perPerson)}</div>
+              <div className={`${s.resultValue} ${s.resultValueLg}`}>{money(result.perPerson)}</div>
               <div className={s.resultLabel}>Per Person</div>
               <div className={s.resultSub}>Split between {parseInt(people) || 1} people</div>
             </div>
 
             <div className={`${s.resultGrid} ${s.resultGrid2}`}>
               <div className={`${s.resultCard} ${s.resultCardGreen}`}>
-                <div className={s.resultValue}>${fmt(result.tipAmount)}</div>
+                <div className={s.resultValue}>{money(result.tipAmount)}</div>
                 <div className={s.resultLabel}>Total Tip ({tipPct}%)</div>
               </div>
               <div className={`${s.resultCard} ${s.resultCardBlue}`}>
-                <div className={s.resultValue}>${fmt(result.totalBill)}</div>
+                <div className={s.resultValue}>{money(result.totalBill)}</div>
                 <div className={s.resultLabel}>Total Bill</div>
               </div>
             </div>
 
             {parseInt(people) > 1 && (
               <div className={`${s.resultCard} ${s.resultCardYellow}`}>
-                <div className={s.resultValue}>${fmt(result.tipPerPerson)}</div>
+                <div className={s.resultValue}>{money(result.tipPerPerson)}</div>
                 <div className={s.resultLabel}>Tip Per Person</div>
               </div>
             )}

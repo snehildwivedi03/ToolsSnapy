@@ -23,12 +23,16 @@ export interface CharCountData {
 export type CaseType =
   | "uppercase"
   | "lowercase"
-  | "titlecase"
   | "sentencecase"
+  | "titlecase"
+  | "togglecase"
   | "camelcase"
   | "pascalcase"
   | "snakecase"
-  | "kebabcase";
+  | "screamingsnakecase"
+  | "kebabcase"
+  | "traincase"
+  | "dotcase";
 
 export interface CaseConverterData {
   result: string;
@@ -41,6 +45,7 @@ export interface JsonFormatterData {
 export interface JsonValidatorData {
   valid: boolean;
   error?: string;
+  line?: number;
 }
 
 export interface RandomParagraphData {

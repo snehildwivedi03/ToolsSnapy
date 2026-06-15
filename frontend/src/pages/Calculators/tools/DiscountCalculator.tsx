@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import CurrencyPicker from "../../../components/CurrencyPicker/CurrencyPicker";
 import s from "../../../styles/calc.module.css";
 
 const Icon = () => (
@@ -24,6 +25,8 @@ interface Result {
 
 const DiscountCalculator = () => {
   const [mode, setMode]     = useState<CalcMode>("forward");
+  const [currCode, setCurrCode]     = useState("USD");
+  const [currSymbol, setCurrSymbol] = useState("$");
   // Forward: original + discount%
   const [original, setOriginal] = useState("");
   const [discountPct, setDiscountPct] = useState("");
@@ -55,6 +58,8 @@ const DiscountCalculator = () => {
   const fmt = (n: number) =>
     n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+  const money = (n: number) => `${currSymbol}${fmt(n)}`;
+
   return (
     <ToolPageShell
       backTo="/calculators"
@@ -69,6 +74,11 @@ const DiscountCalculator = () => {
         <div className={s.card}>
           <span className={s.cardTitle}>Calculation Mode</span>
 
+          <CurrencyPicker
+            value={currCode}
+            onChange={(code, symbol) => { setCurrCode(code); setCurrSymbol(symbol); }}
+          />
+
           <div className={s.radioGroup}>
             <button className={`${s.radioBtn} ${mode === "forward" ? s.radioBtnActive : ""}`}
               onClick={() => { setMode("forward"); setResult(null); }}>
@@ -81,7 +91,7 @@ const DiscountCalculator = () => {
           </div>
 
           <div className={s.inputGroup}>
-            <label className={s.label}>Original Price ($)</label>
+            <label className={s.label}>Original Price</label>
             <input className={s.input} type="number" placeholder="e.g. 120.00" step="0.01"
               value={original} onChange={e => setOriginal(e.target.value)} />
           </div>
@@ -104,7 +114,7 @@ const DiscountCalculator = () => {
             </div>
           ) : (
             <div className={s.inputGroup}>
-              <label className={s.label}>Final / Sale Price ($)</label>
+            <label className={s.label}>Final / Sale Price</label>
               <input className={s.input} type="number" placeholder="e.g. 84.00" step="0.01"
                 value={finalInput} onChange={e => setFinalInput(e.target.value)} />
             </div>
@@ -118,13 +128,13 @@ const DiscountCalculator = () => {
             <span className={s.cardTitle}>Savings Breakdown</span>
 
             <div className={`${s.resultCard} ${s.resultCardPrimary}`}>
-              <div className={`${s.resultValue} ${s.resultValueLg}`}>${fmt(result.finalPrice)}</div>
+              <div className={`${s.resultValue} ${s.resultValueLg}`}>{money(result.finalPrice)}</div>
               <div className={s.resultLabel}>Final Price</div>
             </div>
 
             <div className={`${s.resultGrid} ${s.resultGrid2}`}>
               <div className={`${s.resultCard} ${s.resultCardGreen}`}>
-                <div className={s.resultValue}>${fmt(result.savings)}</div>
+                <div className={s.resultValue}>{money(result.savings)}</div>
                 <div className={s.resultLabel}>You Save</div>
               </div>
               <div className={`${s.resultCard} ${s.resultCardOrange}`}>
@@ -134,7 +144,7 @@ const DiscountCalculator = () => {
             </div>
 
             <div className={s.resultCard}>
-              <div className={s.resultValue}>${fmt(parseFloat(original))}</div>
+              <div className={s.resultValue}>{money(parseFloat(original))}</div>
               <div className={s.resultLabel}>Original Price</div>
             </div>
           </div>

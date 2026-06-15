@@ -1,0 +1,88 @@
+.select {
+  width: 100%;
+  padding: 0.6875rem 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239B8EAA' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+  padding-right: 2.25rem;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.toggleRow {
+  margin-top: 0.25rem;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  user-select: none;
+}
+
+.toggleInput {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleTrack {
+  position: relative;
+  display: inline-block;
+  width: 2.25rem;
+  height: 1.25rem;
+  background: var(--color-border);
+  border-radius: 99px;
+  transition: background 200ms;
+  flex-shrink: 0;
+}
+
+.toggleTrack::after {
+  content: "";
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 14px; height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 200ms;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+
+.toggleInput:checked ~ .toggleTrack { background: var(--color-accent); }
+.toggleInput:checked ~ .toggleTrack::after { transform: translateX(1rem); }
+
+.barcodeWrap {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 0.5rem 0 1rem;
+}
+
+.barcodeWrap svg { max-width: 100%; }
+
+.error {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ef4444;
+  padding: 0.5rem 0 1rem;
+}
+
+.dlBtn { width: 100%; }

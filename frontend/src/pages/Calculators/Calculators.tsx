@@ -3,23 +3,47 @@ import ToolCard from "../../components/ToolCard/ToolCard";
 import s from "./Calculators.module.css";
 
 const OTHER_CATEGORIES = [
-  { to: "/pdf",       label: "PDF Tools",            color: "#dc2626" },
-  { to: "/images",    label: "Image Tools",           color: "#7c3aed" },
-  { to: "/text",      label: "Text Tools",            color: "#2563eb" },
-  { to: "/utilities", label: "Instant Share",         color: "#d97706" },
-  { to: "/developer", label: "Utilities & Dev Tools", color: "#0891b2" },
+  { to: "/pdf",       label: "PDF Tools",          color: "#dc2626" },
+  { to: "/images",    label: "Image Tools",         color: "#7c3aed" },
+  { to: "/text",      label: "Text Tools",          color: "#2563eb" },
+  { to: "/utilities", label: "Utilities & Dev Tools", color: "#0891b2" },
 ];
 
 const TOOLS = [
+  {
+    to:          "/calculators/age",
+    title:       "Age & Date Calculator",
+    description: "Calculate exact age in years, months and days — or find the duration between any two dates with a live time counter.",
+  },
   {
     to:          "/calculators/scientific",
     title:       "Scientific Calculator",
     description: "Full scientific calc with sin, cos, tan, log, powers, roots, memory and keyboard support.",
   },
   {
+    to:          "/calculators/percentage",
+    title:       "Percentage Calculator",
+    description: "Five percentage modes   X% of Y, what %, % change, add/subtract % in one tool.",
+  },
+  {
+    to:          "/calculators/discount",
+    title:       "Discount Calculator",
+    description: "Find the final price after a discount, or reverse-calculate the discount percentage.",
+  },
+  {
+    to:          "/calculators/tip",
+    title:       "Tip & Bill Splitter",
+    description: "Calculate tip amount with preset rates and split the total bill between any number of people.",
+  },
+  {
     to:          "/calculators/bmi",
     title:       "BMI Calculator",
     description: "Calculate your Body Mass Index with metric or imperial units and get your healthy weight range.",
+  },
+  {
+    to:          "/calculators/calories",
+    title:       "Calorie Calculator",
+    description: "Find daily calories for maintenance, mild deficit, moderate deficit, and muscle gain.",
   },
   {
     to:          "/calculators/emi",
@@ -31,52 +55,24 @@ const TOOLS = [
     title:       "SIP Calculator",
     description: "Estimate your Systematic Investment Plan returns and projected wealth over time.",
   },
-  {
-    to:          "/calculators/calories",
-    title:       "Calorie Calculator",
-    description: "Find daily calories for maintenance, mild deficit, moderate deficit, and muscle gain.",
-  },
-  {
-    to:          "/calculators/height",
-    title:       "Height Converter",
-    description: "Convert height between cm, metres, feet & inches and inches instantly.",
-  },
-  {
-    to:          "/calculators/weight",
-    title:       "Weight Converter",
-    description: "Convert weight between kg, lbs, grams, ounces and stone with live updates.",
-  },
-  {
-    to:          "/calculators/percentage",
-    title:       "Percentage Calculator",
-    description: "Five percentage modes   X% of Y, what %, % change, add/subtract % in one tool.",
-  },
-  {
-    to:          "/calculators/age",
-    title:       "Age Calculator",
-    description: "Find exact age in years, months and days, plus total days lived and next birthday countdown.",
-  },
-  {
-    to:          "/calculators/tip",
-    title:       "Tip & Bill Splitter",
-    description: "Calculate tip amount with preset rates and split the total bill between any number of people.",
-  },
-  {
-    to:          "/calculators/temperature",
-    title:       "Temperature Converter",
-    description: "Instantly convert between Celsius, Fahrenheit, Kelvin and Rankine.",
-  },
-  {
-    to:          "/calculators/discount",
-    title:       "Discount Calculator",
-    description: "Find the final price after a discount, or reverse-calculate the discount percentage.",
-  },
 ];
 
 const Calculators = () => {
   return (
     <div className={s.page}>
       <div className={s.topBar}>
+        <Link to="/" state={{ scrollToTools: true }} className={s.backLink}>
+          <svg
+            width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor"
+            strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+          Home
+        </Link>
         <Link to="/" state={{ scrollToTools: true }} className={s.homeLink} aria-label="Go to home">
           <svg
             width="15" height="15" viewBox="0 0 24 24"

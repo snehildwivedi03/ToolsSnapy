@@ -1,0 +1,143 @@
+/* Shared styles for developer tool pages */
+
+.ioGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .ioGrid { grid-template-columns: 1fr 1fr; }
+}
+
+.textarea {
+  width: 100%;
+  min-height: 9rem;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.textareaReadonly {
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: default;
+}
+
+.outputBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.outputLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.copyBtn {
+  padding: 0.25rem 0.75rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: border-color var(--transition-fast),
+    color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.copyBtn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.copyDone {
+  border-color: #22c55e;
+  color: #15803d;
+  background: #dcfce7;
+}
+
+.error {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ef4444;
+  padding: 0.5rem 0;
+}
+
+.jwtGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.jwtSection {
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.jwtSectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.875rem;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.jwtSectionTitle {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.headerColor { color: #dc2626; }
+.payloadColor { color: #7c3aed; }
+.sigColor     { color: #059669; }
+
+.jwtPre {
+  margin: 0;
+  padding: 0.875rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--color-text);
+  background: var(--color-surface);
+  line-height: 1.6;
+}
+
+.hashDisplay {
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  font-weight: 600;
+  word-break: break-all;
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 0.875rem 1rem;
+  color: var(--color-text);
+  line-height: 1.6;
+}

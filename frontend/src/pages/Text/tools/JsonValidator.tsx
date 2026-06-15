@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import {
   jsonValidatorApi,
@@ -26,11 +26,21 @@ const JsonIcon = () => (
 
 const JsonValidator = () => {
   const [text, setText] = useState("");
-  const [result, setResult] = useState<JsonValidatorData | null>(
-    null,
-  );
+  const [result, setResult] = useState<JsonValidatorData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const taRef = useRef<HTMLTextAreaElement>(null);
+  const gutterRef = useRef<HTMLDivElement>(null);
+
+  const lines = text === "" ? [""] : text.split("\n");
+  const errorLine = result?.line;
+
+  const handleScroll = useCallback(() => {
+    if (taRef.current && gutterRef.current) {
+      gutterRef.current.scrollTop = taRef.current.scrollTop;
+    }
+  }, []);
 
   const handleValidate = async () => {
     if (!text.trim()) return;
@@ -52,6 +62,15 @@ const JsonValidator = () => {
     setError(null);
   };
 
+  const jumpToError = () => {
+    if (!taRef.current || !errorLine) return;
+    const el = taRef.current;
+    const lineH = el.scrollHeight / lines.length;
+    const targetTop = Math.max(0, (errorLine - 1) * lineH - el.clientHeight / 3);
+    el.scrollTo({ top: targetTop, behavior: "smooth" });
+    gutterRef.current?.scrollTo({ top: targetTop, behavior: "smooth" });
+  };
+
   return (
     <ToolPageShell
       backTo="/text"
@@ -66,15 +85,40 @@ const JsonValidator = () => {
         {/* Input */}
         <div className={s.panel}>
           <span className={s.panelLabel}>Input JSON</span>
-          <textarea
-            className={`${s.textarea} ${s.textareaCode}`}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder='{"name":"Alice","valid":true}'
-            aria-label="Input JSON"
-            spellCheck={false}
-            rows={10}
-          />
+
+          {/* Line-number gutter + textarea */}
+          <div className={s.lineNumContainer}>
+            <div className={s.lineGutter} ref={gutterRef} aria-hidden="true">
+              {lines.map((_, i) => (
+                <div
+                  key={i}
+                  className={
+                    errorLine === i + 1
+                      ? `${s.lineNum} ${s.lineNumError}`
+                      : s.lineNum
+                  }
+                >
+                  {i + 1}
+                </div>
+              ))}
+            </div>
+            <textarea
+              ref={taRef}
+              className={s.lineGutterTextarea}
+              value={text}
+              onChange={(e) => {
+                setText(e.target.value);
+                setResult(null);
+                setError(null);
+              }}
+              onScroll={handleScroll}
+              placeholder='{"name":"Alice","valid":true}'
+              aria-label="Input JSON"
+              spellCheck={false}
+              rows={10}
+            />
+          </div>
+
           <div className={s.actions}>
             <button
               className={s.btnPrimary}
@@ -142,6 +186,25 @@ const JsonValidator = () => {
                 </div>
                 {result.error !== undefined && (
                   <pre className={s.resultError}>{result.error}</pre>
+                )}
+                {errorLine !== undefined && (
+                  <button className={s.jumpToErrorBtn} onClick={jumpToError}>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <line x1="12" y1="5" x2="12" y2="19" />
+                      <polyline points="19 12 12 19 5 12" />
+                    </svg>
+                    Jump to line {errorLine}
+                  </button>
                 )}
               </div>
             )}

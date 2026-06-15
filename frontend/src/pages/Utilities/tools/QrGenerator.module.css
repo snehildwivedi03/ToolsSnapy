@@ -1,0 +1,53 @@
+.textarea {
+  resize: vertical;
+  min-height: 5rem;
+}
+
+.optGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 480px) {
+  .optGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.colorRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.colorPatch {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  padding: 2px;
+  background: none;
+}
+
+.colorCode {
+  font-family: "Courier New", monospace;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.qrWrap {
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0 1rem;
+}
+
+.qrWrap canvas {
+  border-radius: var(--radius-lg);
+  max-width: 100%;
+  height: auto;
+}
+
+.dlBtn {
+  width: 100%;
+}

@@ -1,6 +1,9 @@
-﻿import { Link } from "react-router-dom";
+﻿import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import ToolCard from "../../components/ToolCard/ToolCard";
 import styles from "./Text.module.css";
+
+const SCROLL_KEY = "text-scroll-pos";
 
 const TEXT_TOOLS = [
   {
@@ -55,19 +58,43 @@ const OTHER_CATEGORIES = [
   { to: "/developer",   label: "Utilities & Dev Tools",  color: "#0891b2" },
 ];
 
-const Text = () => (
+const Text = () => {
+  const didRestore = useRef(false);
+
+  useEffect(() => {
+    if (didRestore.current) return;
+    didRestore.current = true;
+    const saved = sessionStorage.getItem(SCROLL_KEY);
+    if (saved !== null) {
+      sessionStorage.removeItem(SCROLL_KEY);
+      window.scrollTo({ top: Number(saved), behavior: "instant" as ScrollBehavior });
+    }
+  }, []);
+
+  const saveScroll = () => {
+    sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+  };
+
+  return (
   <div className={styles.page}>
     <div className={styles.topBar}>
+      <Link to="/" state={{ scrollToTools: true }} className={styles.backLink}>
+        <svg
+          width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor"
+          strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </svg>
+        Home
+      </Link>
       <Link to="/" state={{ scrollToTools: true }} className={styles.homeLink} aria-label="Go to home">
         <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+          width="15" height="15" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor"
+          strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
           aria-hidden="true"
         >
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -117,7 +144,7 @@ const Text = () => (
 
     <ul className={styles.grid} role="list">
       {TEXT_TOOLS.map((tool) => (
-        <li key={tool.id}>
+        <li key={tool.id} onClick={saveScroll}>
           <ToolCard
             to={tool.to}
             title={tool.title}
@@ -127,6 +154,7 @@ const Text = () => (
       ))}
     </ul>
   </div>
-);
+  );
+};
 
 export default Text;

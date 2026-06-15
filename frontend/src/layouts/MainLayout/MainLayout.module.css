@@ -48,3 +48,27 @@
 .geoShape {
   flex-shrink: 0;
 }
+
+/* ── Tool icon images in the background ─────────────────── */
+.imgWrap {
+  position: absolute;
+  will-change: transform;
+}
+
+/* Purple-tinted, visible but non-distracting icons —
+   natural colors preserved at 40% saturation, slight purple hue shift,
+   with a strong glow to make them pop against the soft background. */
+.toolImg {
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  opacity: 0.08;
+  filter:
+    saturate(0.45)
+    brightness(1.1)
+    hue-rotate(200deg)
+    drop-shadow(0 0 22px rgba(124, 58, 237, 0.6));
+}
+
+/* On touch devices keep images fully static (no parallax, no extra rules needed \u2014
+   the JS already skips on non-hover devices) */

@@ -190,11 +190,12 @@
 }
 
 .statValue {
-  font-size: 2.125rem;
+  font-size: clamp(1.375rem, 5vw, 2.125rem);
   font-weight: 900;
   color: var(--color-accent);
   line-height: 1;
   letter-spacing: -0.035em;
+  word-break: break-all;
 }
 
 .statLabel {
@@ -228,7 +229,7 @@
 }
 
 @media (min-width: 480px) {
-  .caseGrid { grid-template-columns: repeat(4, 1fr); }
+  .caseGrid { grid-template-columns: repeat(3, 1fr); }
 }
 
 .caseBtn {
@@ -287,10 +288,12 @@
 
 .indentBtn:hover {
   border-color: var(--color-accent-subtle);
+  background: var(--color-accent-light);
   color: var(--color-accent);
 }
 
-.indentBtnActive {
+.indentBtnActive,
+.indentBtnActive:hover {
   border-color: var(--color-accent);
   background: var(--color-accent);
   color: #fff;
@@ -309,6 +312,96 @@
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.5;
+}
+
+/* ── JSON Validator line-number gutter ───────────────────── */
+.lineNumContainer {
+  display: flex;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.lineNumContainer:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.lineGutter {
+  min-width: 46px;
+  padding: 0.875rem 0.5rem;
+  background: var(--color-bg);
+  border-right: 1.5px solid var(--color-border);
+  overflow: hidden;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  font-family: "Cascadia Code", "Fira Mono", "Consolas", monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.lineNum {
+  line-height: 1.6;
+  padding-right: 2px;
+  border-radius: 2px;
+}
+
+.lineNumError {
+  color: #dc2626;
+  font-weight: 700;
+  background: rgba(220, 38, 38, 0.12);
+}
+
+.lineGutterTextarea {
+  flex: 1;
+  min-height: 224px;
+  padding: 0.875rem 1rem;
+  border: none;
+  border-radius: 0;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: "Cascadia Code", "Fira Mono", "Consolas", monospace;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.6;
+  resize: vertical;
+  width: 100%;
+}
+
+.lineGutterTextarea:focus {
+  outline: none;
+}
+
+.lineGutterTextarea::placeholder {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.jumpToErrorBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  align-self: flex-start;
+  padding: 0.4375rem 0.875rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid #dc2626;
+  background: rgba(220, 38, 38, 0.06);
+  color: #dc2626;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.jumpToErrorBtn:hover {
+  background: rgba(220, 38, 38, 0.14);
 }
 
 /* ── JSON Validator result cards ─────────────────────────── */

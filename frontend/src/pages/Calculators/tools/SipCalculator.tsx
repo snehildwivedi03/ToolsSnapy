@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import CurrencyPicker from "../../../components/CurrencyPicker/CurrencyPicker";
 import s from "../../../styles/calc.module.css";
 
 const Icon = () => (
@@ -22,6 +23,8 @@ const SipCalculator = () => {
   const [rate, setRate]       = useState("");
   const [years, setYears]     = useState("");
   const [result, setResult]   = useState<Result | null>(null);
+  const [currCode, setCurrCode]     = useState("INR");
+  const [currSymbol, setCurrSymbol] = useState("₹");
 
   const calculate = () => {
     const P = parseFloat(monthly);
@@ -42,12 +45,16 @@ const SipCalculator = () => {
     });
   };
 
-  const fmt = (n: number) =>
-    n >= 10000000
-      ? `₹ ${(n / 10000000).toFixed(2)} Cr`
-      : n >= 100000
-        ? `₹ ${(n / 100000).toFixed(2)} L`
-        : `₹ ${n.toLocaleString("en-IN")}`;
+  const fmt = (n: number) => {
+    if (currCode === "INR") {
+      return n >= 10000000
+        ? `${currSymbol} ${(n / 10000000).toFixed(2)} Cr`
+        : n >= 100000
+          ? `${currSymbol} ${(n / 100000).toFixed(2)} L`
+          : `${currSymbol} ${n.toLocaleString("en-IN")}`;
+    }
+    return `${currSymbol}${n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  };
 
   const pct = (a: number, total: number) =>
     total > 0 ? Math.round((a / total) * 100) : 0;
@@ -67,8 +74,13 @@ const SipCalculator = () => {
         <div className={s.card}>
           <span className={s.cardTitle}>Investment Details</span>
 
+          <CurrencyPicker
+            value={currCode}
+            onChange={(code, symbol) => { setCurrCode(code); setCurrSymbol(symbol); }}
+          />
+
           <div className={s.inputGroup}>
-            <label className={s.label}>Monthly SIP Amount (₹)</label>
+            <label className={s.label}>Monthly SIP Amount</label>
             <input className={s.input} type="number" placeholder="e.g. 5000"
               value={monthly} onChange={e => setMonthly(e.target.value)} />
           </div>

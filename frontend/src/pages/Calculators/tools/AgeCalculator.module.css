@@ -207,9 +207,9 @@
 }
 
 .dpTodayBtn:hover {
-  background: var(--color-accent);
-  color: #fff;
+  background: var(--color-accent-subtle);
   border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 /* ── Month picker ───────────────────────────────────────── */

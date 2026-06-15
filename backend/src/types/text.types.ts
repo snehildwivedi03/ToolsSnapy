@@ -3,12 +3,16 @@
 export const CASE_TYPES = [
   "uppercase",
   "lowercase",
-  "titlecase",
   "sentencecase",
+  "titlecase",
+  "togglecase",
   "camelcase",
   "pascalcase",
   "snakecase",
+  "screamingsnakecase",
   "kebabcase",
+  "traincase",
+  "dotcase",
 ] as const;
 
 export type CaseType = (typeof CASE_TYPES)[number];
@@ -40,6 +44,7 @@ export interface JsonFormatterResult {
 export interface JsonValidatorResult {
   valid: boolean;
   error?: string;
+  line?: number;
 }
 
 export interface RandomParagraphResult {

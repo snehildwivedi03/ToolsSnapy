@@ -14,15 +14,23 @@ import BmiCalculator from "../pages/Calculators/tools/BmiCalculator";
 import EmiCalculator from "../pages/Calculators/tools/EmiCalculator";
 import SipCalculator from "../pages/Calculators/tools/SipCalculator";
 import CalorieCalculator from "../pages/Calculators/tools/CalorieCalculator";
-import HeightConverter from "../pages/Calculators/tools/HeightConverter";
-import WeightConverter from "../pages/Calculators/tools/WeightConverter";
 import PercentageCalculator from "../pages/Calculators/tools/PercentageCalculator";
 import AgeCalculator from "../pages/Calculators/tools/AgeCalculator";
 import TipCalculator from "../pages/Calculators/tools/TipCalculator";
-import TemperatureConverter from "../pages/Calculators/tools/TemperatureConverter";
 import DiscountCalculator from "../pages/Calculators/tools/DiscountCalculator";
-import LiveClock from "../pages/Utilities/LiveClock";
 import Utilities from "../pages/Utilities/Utilities";
+import LiveClock from "../pages/Utilities/LiveClock";
+import UnitConverter from "../pages/Utilities/tools/UnitConverter";
+import PasswordGenerator from "../pages/Utilities/tools/PasswordGenerator";
+import UuidGenerator from "../pages/Utilities/tools/UuidGenerator";
+import ColorPicker from "../pages/Utilities/tools/ColorPicker";
+import QrGenerator from "../pages/Utilities/tools/QrGenerator";
+import BarcodeGenerator from "../pages/Utilities/tools/BarcodeGenerator";
+import JwtDecoder from "../pages/Utilities/tools/JwtDecoder";
+import Base64Tool from "../pages/Utilities/tools/Base64Tool";
+import Sha256 from "../pages/Utilities/tools/Sha256";
+import UrlEncoderDecoder from "../pages/Utilities/tools/UrlEncoderDecoder";
+import UnixTimestamp from "../pages/Utilities/tools/UnixTimestamp";
 
 // Placeholder for modules not yet implemented
 const Placeholder = ({ label }: { label: string }) => (
@@ -40,54 +48,51 @@ const AppRoutes = () => {
         {/* Text Tools */}
         <Route path="/text" element={<Text />} />
         <Route path="/text/word-counter" element={<WordCounter />} />
-        <Route
-          path="/text/character-counter"
-          element={<CharacterCounter />}
-        />
-        <Route
-          path="/text/case-converter"
-          element={<CaseConverter />}
-        />
-        <Route
-          path="/text/json-formatter"
-          element={<JsonFormatter />}
-        />
-        <Route
-          path="/text/json-validator"
-          element={<JsonValidator />}
-        />
-        <Route
-          path="/text/random-paragraph"
-          element={<RandomParagraph />}
-        />
+        <Route path="/text/character-counter" element={<CharacterCounter />} />
+        <Route path="/text/case-converter" element={<CaseConverter />} />
+        <Route path="/text/json-formatter" element={<JsonFormatter />} />
+        <Route path="/text/json-validator" element={<JsonValidator />} />
+        <Route path="/text/random-paragraph" element={<RandomParagraph />} />
 
-        {/* Calculator routes */}
+        {/* Calculator routes (9 tools — converters moved to Unit Converter) */}
         <Route path="/calculators" element={<Calculators />} />
         <Route path="/calculators/scientific"  element={<ScientificCalculator />} />
         <Route path="/calculators/bmi"         element={<BmiCalculator />} />
         <Route path="/calculators/emi"         element={<EmiCalculator />} />
         <Route path="/calculators/sip"         element={<SipCalculator />} />
         <Route path="/calculators/calories"    element={<CalorieCalculator />} />
-        <Route path="/calculators/height"      element={<HeightConverter />} />
-        <Route path="/calculators/weight"      element={<WeightConverter />} />
         <Route path="/calculators/percentage"  element={<PercentageCalculator />} />
         <Route path="/calculators/age"         element={<AgeCalculator />} />
         <Route path="/calculators/tip"         element={<TipCalculator />} />
-        <Route path="/calculators/temperature" element={<TemperatureConverter />} />
         <Route path="/calculators/discount"    element={<DiscountCalculator />} />
 
-        {/* Placeholders   swap in real pages as modules are built */}
-        <Route path="/pdf" element={<Placeholder label="PDF Tools" />} />
-        <Route
-          path="/images"
-          element={<Placeholder label="Image Tools" />}
-        />
-        <Route path="/utilities" element={<Utilities />} />
-        <Route path="/utilities/live-clock" element={<LiveClock />} />
-        <Route
-          path="/developer"
-          element={<Placeholder label="Developer Tools" />}
-        />
+        {/* Legacy converter routes — redirect to Unit Converter */}
+        <Route path="/calculators/height"      element={<UnitConverter />} />
+        <Route path="/calculators/weight"      element={<UnitConverter />} />
+        <Route path="/calculators/temperature" element={<UnitConverter />} />
+
+        {/* Utilities & Dev Tools */}
+        <Route path="/utilities"                    element={<Utilities />} />
+        <Route path="/utilities/live-clock"         element={<LiveClock />} />
+        <Route path="/utilities/unit-converter"     element={<UnitConverter />} />
+        <Route path="/utilities/password-generator" element={<PasswordGenerator />} />
+        <Route path="/utilities/uuid-generator"     element={<UuidGenerator />} />
+        <Route path="/utilities/color-picker"       element={<ColorPicker />} />
+        <Route path="/utilities/qr-generator"       element={<QrGenerator />} />
+        <Route path="/utilities/barcode-generator"  element={<BarcodeGenerator />} />
+        <Route path="/utilities/jwt-decoder"        element={<JwtDecoder />} />
+        <Route path="/utilities/base64-encoder"     element={<Base64Tool />} />
+        <Route path="/utilities/base64-decoder"     element={<Base64Tool />} />
+        <Route path="/utilities/sha256"             element={<Sha256 />} />
+        <Route path="/utilities/url-encoder"        element={<UrlEncoderDecoder />} />
+        <Route path="/utilities/unix-timestamp"     element={<UnixTimestamp />} />
+
+        {/* Legacy /developer route — redirect to unified page */}
+        <Route path="/developer" element={<Utilities />} />
+
+        {/* Placeholders */}
+        <Route path="/pdf"    element={<Placeholder label="PDF Tools" />} />
+        <Route path="/images" element={<Placeholder label="Image Tools" />} />
       </Route>
     </Routes>
   );

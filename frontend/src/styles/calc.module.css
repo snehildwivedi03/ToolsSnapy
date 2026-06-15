@@ -157,12 +157,14 @@
 
 .radioBtn:hover {
   border-color: var(--color-accent-subtle);
-  background: var(--color-accent-light);
+  color: var(--color-accent);
 }
 
-.radioBtnActive {
+/* Active state locked — hover must not override it */
+.radioBtnActive,
+.radioBtnActive:hover {
   border-color: var(--color-accent);
-  background: var(--color-accent-light);
+  background: var(--color-accent-subtle);
   color: var(--color-accent);
 }
 
@@ -191,7 +193,9 @@
   color: var(--color-accent);
 }
 
-.chipActive {
+/* Active chip locked — keeps solid fill on hover */
+.chipActive,
+.chipActive:hover {
   border-color: var(--color-accent);
   background: var(--color-accent);
   color: #fff;
@@ -280,15 +284,16 @@
 }
 
 .resultValue {
-  font-size: 1.625rem;
+  font-size: clamp(1.125rem, 3.5vw, 1.625rem);
   font-weight: 900;
   color: var(--color-text);
   letter-spacing: -0.03em;
   line-height: 1.1;
+  word-break: break-all;
 }
 
 .resultValueLg {
-  font-size: 2.25rem;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
 }
 
 .resultLabel {

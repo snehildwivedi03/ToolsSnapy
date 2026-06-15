@@ -31,18 +31,18 @@ interface CaseOption {
 }
 
 const CASE_OPTIONS: CaseOption[] = [
-  { value: "uppercase", label: "UPPER", preview: "HELLO WORLD" },
-  { value: "lowercase", label: "lower", preview: "hello world" },
-  { value: "titlecase", label: "Title", preview: "Hello World" },
-  {
-    value: "sentencecase",
-    label: "Sentence",
-    preview: "Hello world",
-  },
-  { value: "camelcase", label: "camel", preview: "helloWorld" },
-  { value: "pascalcase", label: "Pascal", preview: "HelloWorld" },
-  { value: "snakecase", label: "snake", preview: "hello_world" },
-  { value: "kebabcase", label: "kebab", preview: "hello-world" },
+  { value: "uppercase",          label: "UPPERCASE",            preview: "HELLO WORLD" },
+  { value: "lowercase",          label: "lowercase",            preview: "hello world" },
+  { value: "sentencecase",       label: "Sentence case",        preview: "Hello world" },
+  { value: "titlecase",          label: "Title Case",           preview: "Hello World" },
+  { value: "togglecase",         label: "Toggle Case",          preview: "hElLo WoRlD" },
+  { value: "camelcase",          label: "camelCase",            preview: "helloWorld" },
+  { value: "pascalcase",         label: "PascalCase",           preview: "HelloWorld" },
+  { value: "snakecase",          label: "snake_case",           preview: "hello_world" },
+  { value: "screamingsnakecase", label: "SCREAMING_SNAKE_CASE", preview: "HELLO_WORLD" },
+  { value: "kebabcase",          label: "kebab-case",           preview: "hello-world" },
+  { value: "traincase",          label: "Train-Case",           preview: "Hello-World" },
+  { value: "dotcase",            label: "dot.case",             preview: "hello.world" },
 ];
 
 const CaseConverter = () => {
