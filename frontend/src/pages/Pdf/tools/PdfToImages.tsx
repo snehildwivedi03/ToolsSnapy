@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./pdfTools.module.css";
 import { baseName, downloadBlob, formatBytes, readArrayBuffer } from "./pdfUtils";
@@ -221,15 +222,11 @@ const PdfToImages = () => {
 
           {busy && progress.total > 0 && (
             <div className={ls.processing}>
-              <div className={ls.processingBar}>
-                <div
-                  className={ls.processingFill}
-                  style={{ width: `${(progress.current / progress.total) * 100}%` }}
-                />
-              </div>
-              <span className={ls.processingText}>
-                Rendering page {progress.current} of {progress.total}…
-              </span>
+              <ProgressBar
+                value={(progress.current / progress.total) * 100}
+                tone="red"
+                label={`Rendering page ${progress.current} of ${progress.total}…`}
+              />
             </div>
           )}
 

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./pdfTools.module.css";
 import ShareViaToolSnapy from "../../Images/tools/ShareViaToolSnapy";
@@ -29,6 +30,7 @@ interface ResultState {
 const MergePdf = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -92,13 +94,15 @@ const MergePdf = () => {
     }
     setBusy(true);
     setError("");
+    setProgress(0);
     try {
       const out = await PDFDocument.create();
-      for (const { file } of items) {
-        const bytes = await readArrayBuffer(file);
+      for (let i = 0; i < items.length; i++) {
+        const bytes = await readArrayBuffer(items[i].file);
         const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
         const copied = await out.copyPages(doc, doc.getPageIndices());
         copied.forEach((p) => out.addPage(p));
+        setProgress(Math.round(((i + 1) / items.length) * 100));
       }
       const mergedBytes = await out.save();
       const blob = new Blob([mergedBytes as BlobPart], { type: "application/pdf" });
@@ -234,6 +238,8 @@ const MergePdf = () => {
               "Merge PDFs"
             )}
           </button>
+
+          {busy && <ProgressBar value={progress} tone="red" label="Merging PDFs…" />}
 
           {error && <p className={ls.errorMsg}>{error}</p>}
 

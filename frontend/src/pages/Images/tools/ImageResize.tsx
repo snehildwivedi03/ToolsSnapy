@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./imageTools.module.css";
 import ShareViaToolSnapy from "./ShareViaToolSnapy";
@@ -201,6 +202,8 @@ const ImageResize = () => {
           >
             {busy ? "Resizing…" : "Resize Image"}
           </button>
+
+          {busy && <ProgressBar tone="purple" label="Compressing to target size…" />}
 
           {error && <p className={ls.errorMsg}>{error}</p>}
 

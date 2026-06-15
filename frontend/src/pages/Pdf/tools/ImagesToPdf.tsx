@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./pdfTools.module.css";
 import ShareViaToolSnapy from "../../Images/tools/ShareViaToolSnapy";
@@ -50,6 +51,7 @@ async function getEmbeddableBytes(
 const ImagesToPdf = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -117,10 +119,11 @@ const ImagesToPdf = () => {
     if (items.length === 0) return;
     setBusy(true);
     setError("");
+    setProgress(0);
     try {
       const pdf = await PDFDocument.create();
-      for (const { file } of items) {
-        const { bytes, kind } = await getEmbeddableBytes(file);
+      for (let i = 0; i < items.length; i++) {
+        const { bytes, kind } = await getEmbeddableBytes(items[i].file);
         const embedded =
           kind === "jpg" ? await pdf.embedJpg(bytes) : await pdf.embedPng(bytes);
         const page = pdf.addPage([embedded.width, embedded.height]);
@@ -130,6 +133,7 @@ const ImagesToPdf = () => {
           width: embedded.width,
           height: embedded.height,
         });
+        setProgress(Math.round(((i + 1) / items.length) * 100));
       }
       const outBytes = await pdf.save();
       const blob = new Blob([outBytes as BlobPart], { type: "application/pdf" });
@@ -266,6 +270,8 @@ const ImagesToPdf = () => {
               "Create PDF"
             )}
           </button>
+
+          {busy && <ProgressBar value={progress} tone="red" label="Building PDF…" />}
 
           {error && <p className={ls.errorMsg}>{error}</p>}
 

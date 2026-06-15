@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { shareFiles } from "../../../services/shareApi";
 import { incrementFiles } from "../../../services/shareCounter";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import tp from "../../../styles/toolpage.module.css";
 import ls from "./imageTools.module.css";
 
@@ -16,6 +17,7 @@ interface Props {
 /** "Share via ToolsSnapy" button + result card, reused across image and PDF tools. */
 const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
   const [sharing, setSharing] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [code, setCode] = useState<string | null>(null);
   const [err, setErr] = useState("");
   const [copied, setCopied] = useState(false);
@@ -24,10 +26,11 @@ const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
   const share = async () => {
     setErr("");
     setCode(null);
+    setProgress(0);
     setSharing(true);
     try {
       const file = await getFile();
-      const res = await shareFiles([file], kind);
+      const res = await shareFiles([file], kind, undefined, setProgress);
       if (res.success && res.code) {
         setCode(res.code);
         incrementFiles();
@@ -82,6 +85,10 @@ const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
           </>
         )}
       </button>
+
+      {sharing && (
+        <ProgressBar value={progress} tone="amber" label="Uploading…" />
+      )}
 
       {err && <p className={ls.errorMsg}>{err}</p>}
 

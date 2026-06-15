@@ -135,6 +135,61 @@
   gap: 0.5rem;
 }
 
+/* ── Scanning gradient sweep (background remover, while processing) ── */
+.scanWrap {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.scanWrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    rgba(124, 58, 237, 0) 30%,
+    rgba(124, 58, 237, 0.16) 44%,
+    rgba(168, 85, 247, 0.5) 50%,
+    rgba(124, 58, 237, 0.16) 56%,
+    rgba(124, 58, 237, 0) 70%
+  );
+  background-size: 250% 100%;
+  animation: scanSweep 1.5s linear infinite;
+}
+
+/* soft animated tint so the subject "glows" while the AI works */
+.scanWrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(236, 72, 153, 0.12));
+  animation: scanPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes scanSweep {
+  0%   { background-position: 150% 0; }
+  100% { background-position: -150% 0; }
+}
+
+@keyframes scanPulse {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.75; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanWrap::after { animation-duration: 3s; }
+  .scanWrap::before { animation: none; opacity: 0.4; }
+}
+
+
 .compareLabel {
   font-size: 0.75rem;
   font-weight: 800;

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { removeBackground } from "@imgly/background-removal";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./imageTools.module.css";
 import ShareViaToolSnapy from "./ShareViaToolSnapy";
@@ -156,18 +157,16 @@ const BackgroundRemove = () => {
             <div className={ls.comparison}>
               <div className={ls.compareCol}>
                 <span className={ls.compareLabel}>Original</span>
-                <img src={src.url} alt="Original" className={ls.preview} />
+                <div className={busy ? ls.scanWrap : undefined}>
+                  <img src={src.url} alt="Original" className={ls.preview} />
+                </div>
               </div>
             </div>
           )}
 
           {busy ? (
             <div className={ls.processing}>
-              <span className={ls.spinner} aria-hidden="true" style={{ width: 24, height: 24 }} />
-              <div className={ls.processingBar}>
-                <div className={ls.processingFill} style={{ width: `${progress}%` }} />
-              </div>
-              <span className={ls.processingText}>{stage} {progress > 0 ? `${progress}%` : ""}</span>
+              <ProgressBar value={progress} tone="purple" label={stage || "Working…"} />
               <span className={ls.dropHint}>First run downloads the AI model (one time).</span>
             </div>
           ) : (

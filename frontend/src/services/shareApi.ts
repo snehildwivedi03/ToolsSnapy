@@ -37,6 +37,7 @@ export async function shareFiles(
   files: File[],
   endpoint: "files" | "images" | "pdfs",
   folderName?: string,
+  onProgress?: (percent: number) => void,
 ): Promise<ShareUploadResult> {
   const fd = new FormData();
   for (const f of files) {
@@ -44,11 +45,35 @@ export async function shareFiles(
   }
   if (folderName) fd.append("folderName", folderName);
 
-  const res = await fetch(`${BASE}/api/share/${endpoint}`, {
-    method: "POST",
-    body: fd,
+  // Without a progress callback, keep the lightweight fetch path.
+  if (!onProgress) {
+    const res = await fetch(`${BASE}/api/share/${endpoint}`, {
+      method: "POST",
+      body: fd,
+    });
+    return res.json() as Promise<ShareUploadResult>;
+  }
+
+  // XHR gives us real upload progress events that fetch() cannot.
+  return new Promise<ShareUploadResult>((resolve) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `${BASE}/api/share/${endpoint}`);
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) {
+        onProgress(Math.round((e.loaded / e.total) * 100));
+      }
+    };
+    xhr.onload = () => {
+      onProgress(100);
+      try {
+        resolve(JSON.parse(xhr.responseText) as ShareUploadResult);
+      } catch {
+        resolve({ success: false, message: "Unexpected server response." });
+      }
+    };
+    xhr.onerror = () => resolve({ success: false, message: "Network error. Please try again." });
+    xhr.send(fd);
   });
-  return res.json() as Promise<ShareUploadResult>;
 }
 
 export async function receiveShare(code: string): Promise<ShareReceiveResult> {

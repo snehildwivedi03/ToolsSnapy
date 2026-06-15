@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./pdfTools.module.css";
 import ShareViaToolSnapy from "../../Images/tools/ShareViaToolSnapy";
@@ -194,6 +195,8 @@ const SplitPdf = () => {
               "Extract Pages"
             )}
           </button>
+
+          {busy && <ProgressBar tone="red" label="Extracting pages…" />}
 
           {error && <p className={ls.errorMsg}>{error}</p>}
 
