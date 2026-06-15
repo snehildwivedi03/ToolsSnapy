@@ -43,6 +43,11 @@
   line-height: 1.6;
 }
 
+.taglineBreak {
+  display: block;
+  margin-top: 0.125rem;
+}
+
 .tagline strong {
   color: var(--color-text);
   font-weight: 600;

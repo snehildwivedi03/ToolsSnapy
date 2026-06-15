@@ -12,8 +12,8 @@ const Footer = () => {
           <span className={styles.brandName}>ToolSnapy</span>
         </div>
         <p className={styles.tagline}>
-          No tracking &nbsp;&middot;&nbsp; No history &nbsp;&middot;&nbsp;
-          No saves. You exit, we exit.
+          No tracking &nbsp;&middot;&nbsp; No history &nbsp;&middot;&nbsp; No saves.
+          <span className={styles.taglineBreak}>You exit, we exit.</span>
         </p>
         <p className={styles.copy}>
           &copy; {year} ToolSnapy. Built for speed, built for privacy.

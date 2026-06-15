@@ -93,6 +93,7 @@ const AppRoutes = () => {
         {/* Placeholders */}
         <Route path="/pdf"    element={<Placeholder label="PDF Tools" />} />
         <Route path="/images" element={<Placeholder label="Image Tools" />} />
+        <Route path="/share"  element={<Placeholder label="Instant Share" />} />
       </Route>
     </Routes>
   );

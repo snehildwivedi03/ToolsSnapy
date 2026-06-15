@@ -72,3 +72,20 @@
 
 /* On touch devices keep images fully static (no parallax, no extra rules needed \u2014
    the JS already skips on non-hover devices) */
+/* ── Responsive image sizing ─────────────────────────────── */
+/* max-width constrains even inline width; height: auto keeps aspect ratio */
+@media (max-width: 768px) {
+  .toolImg {
+    max-width: 120px;
+    height: auto;
+    opacity: 0.06;
+  }
+}
+
+@media (max-width: 480px) {
+  .toolImg {
+    max-width: 72px;
+    height: auto;
+    opacity: 0.05;
+  }
+}

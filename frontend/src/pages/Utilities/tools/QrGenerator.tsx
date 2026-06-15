@@ -18,13 +18,25 @@ const Icon = () => (
 );
 
 const QrGenerator = () => {
-  const [text,    setText]    = useState("https://example.com");
-  const [size,    setSize]    = useState(256);
-  const [fgColor, setFgColor] = useState("#000000");
-  const [bgColor, setBgColor] = useState("#ffffff");
+  const [text,      setText]      = useState("https://example.com");
+  const [size,      setSize]      = useState(256);
+  const [fgColor,   setFgColor]   = useState("#000000");
+  const [bgColor,   setBgColor]   = useState("#ffffff");
+  const [generated, setGenerated] = useState<string | null>(null);
+  const [success,   setSuccess]   = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
 
-  const hasContent = text.trim().length > 0;
+  const generate = () => {
+    const val = text.trim();
+    if (!val) return;
+    setGenerated(val);
+    setSuccess(true);
+    setTimeout(() => setSuccess(false), 3000);
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  };
 
   const download = () => {
     const canvas = canvasRef.current?.querySelector("canvas");
@@ -53,10 +65,32 @@ const QrGenerator = () => {
             id="qr-text"
             className={`${s.input} ${ls.textarea}`}
             value={text}
-            onChange={e => setText(e.target.value)}
+            onChange={e => { setText(e.target.value); setGenerated(null); setSuccess(false); }}
             placeholder="https://example.com"
             rows={3}
           />
+        </div>
+
+        <div className={ls.generateRow}>
+          <button
+            type="button"
+            className={s.calcBtn}
+            onClick={generate}
+            disabled={!text.trim()}
+          >
+            Generate QR Code
+          </button>
+
+          {success && (
+            <span className={ls.successMsg} role="status">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2.5"
+                strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              QR generated successfully!
+            </span>
+          )}
         </div>
       </div>
 
@@ -88,11 +122,11 @@ const QrGenerator = () => {
         </div>
       </div>
 
-      {hasContent && (
-        <div className={s.card}>
+      {generated && (
+        <div className={s.card} ref={resultRef}>
           <div className={ls.qrWrap} ref={canvasRef}>
             <QRCodeCanvas
-              value={text}
+              value={generated}
               size={Math.min(size, 512)}
               fgColor={fgColor}
               bgColor={bgColor}

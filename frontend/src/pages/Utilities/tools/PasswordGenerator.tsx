@@ -37,7 +37,7 @@ const PasswordGenerator = () => {
   const [useUpper, setUseUpper] = useState(true);
   const [useLower, setUseLower] = useState(true);
   const [useDigit, setUseDigit] = useState(true);
-  const [useSym,   setUseSym]   = useState(false);
+  const [useSym,   setUseSym]   = useState(true);
   const [password, setPassword] = useState("");
   const [copied,   setCopied]   = useState(false);
   const [bulkN,    setBulkN]    = useState(5);
@@ -145,7 +145,7 @@ const PasswordGenerator = () => {
       {/* Password output */}
       <div className={s.card}>
         <div className={ls.pwdRow}>
-          <code className={ls.pwdDisplay}>{password || "—"}</code>
+          <code className={ls.pwdDisplay}>{password}</code>
           <div className={ls.pwdActions}>
             <button type="button" className={ls.iconBtn} onClick={regen} aria-label="Regenerate">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"

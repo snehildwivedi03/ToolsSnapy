@@ -152,12 +152,15 @@
   font-weight: 700;
   cursor: pointer;
   text-align: center;
-  transition: all var(--transition-fast);
+  transition: border-color var(--transition-fast),
+    color var(--transition-fast),
+    background var(--transition-fast);
 }
 
 .radioBtn:hover {
   border-color: var(--color-accent-subtle);
   color: var(--color-accent);
+  background: var(--color-accent-light);
 }
 
 /* Active state locked — hover must not override it */
@@ -175,6 +178,17 @@
   flex-wrap: wrap;
 }
 
+/* Generic chip group — responsive flex container for any chip set */
+.chipGroup {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .chipGroup { gap: 0.375rem; }
+}
+
 .chip {
   padding: 0.375rem 0.875rem;
   border: 1.5px solid var(--color-border);
@@ -185,12 +199,16 @@
   font-size: 0.875rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: border-color var(--transition-fast),
+    color var(--transition-fast),
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .chip:hover {
-  border-color: var(--color-accent);
+  border-color: var(--color-accent-subtle);
   color: var(--color-accent);
+  background: var(--color-accent-light);
 }
 
 /* Active chip locked — keeps solid fill on hover */
@@ -222,6 +240,14 @@
 }
 
 .calcBtn:active { transform: translateY(0); }
+
+/* ── Result block — vertical stack of result cards ──────── */
+.resultBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
 
 /* ── Result cards ───────────────────────────────────────── */
 .resultGrid {

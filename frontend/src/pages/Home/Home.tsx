@@ -59,18 +59,18 @@ const UtilIcon = () => (
   </svg>
 );
 
+const ShareIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" strokeWidth="2"
+    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+  </svg>
+);
+
 /* ── Static data ─────────────────────────────────────────── */
 const CATEGORIES = [
-  {
-    id: "pdf",
-    to: "/pdf",
-    title: "PDF Tools",
-    description: "Merge, split, compress and convert PDF files.",
-    icon: <PdfIcon />,
-    toolCount: 5,
-    iconColor: "#dc2626",
-    iconBg: "#fef2f2",
-  },
   {
     id: "images",
     to: "/images",
@@ -82,14 +82,34 @@ const CATEGORIES = [
     iconBg: "#f5f3ff",
   },
   {
-    id: "text",
-    to: "/text",
-    title: "Text Tools",
-    description: "Count words, format, encode and transform text.",
-    icon: <TextIcon />,
-    toolCount: 6,
-    iconColor: "#2563eb",
-    iconBg: "#eff6ff",
+    id: "pdf",
+    to: "/pdf",
+    title: "PDF Tools",
+    description: "Merge, split, compress and convert PDF files.",
+    icon: <PdfIcon />,
+    toolCount: 5,
+    iconColor: "#dc2626",
+    iconBg: "#fef2f2",
+  },
+  {
+    id: "share",
+    to: "/share",
+    title: "Instant Share",
+    description: "Share files, links and snippets instantly — no login, no storage.",
+    icon: <ShareIcon />,
+    toolCount: 0,
+    iconColor: "#d97706",
+    iconBg: "#fffbeb",
+  },
+  {
+    id: "utilities",
+    to: "/utilities",
+    title: "Utilities & Dev Tools",
+    description: "Converters, generators, encoders and developer helpers.",
+    icon: <UtilIcon />,
+    toolCount: 13,
+    iconColor: "#0891b2",
+    iconBg: "#ecfeff",
   },
   {
     id: "calculators",
@@ -102,14 +122,14 @@ const CATEGORIES = [
     iconBg: "#ecfdf5",
   },
   {
-    id: "utilities",
-    to: "/utilities",
-    title: "Utilities & Dev Tools",
-    description: "Converters, generators, encoders and developer helpers.",
-    icon: <UtilIcon />,
-    toolCount: 13,
-    iconColor: "#0891b2",
-    iconBg: "#ecfeff",
+    id: "text",
+    to: "/text",
+    title: "Text Tools",
+    description: "Count words, format, encode and transform text.",
+    icon: <TextIcon />,
+    toolCount: 6,
+    iconColor: "#2563eb",
+    iconBg: "#eff6ff",
   },
 ] as const;
 

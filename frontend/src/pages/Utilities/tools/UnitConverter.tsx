@@ -108,7 +108,7 @@ const DEFAULT_TO: Record<CategoryKey, string> = {
 };
 
 const fmt = (n: number): string => {
-  if (!isFinite(n)) return "—";
+  if (!isFinite(n)) return "";
   const abs = Math.abs(n);
   if (abs === 0) return "0";
   if (abs >= 1e15 || (abs > 0 && abs < 1e-10)) return n.toExponential(6).replace(/\.?0+e/, "e");
