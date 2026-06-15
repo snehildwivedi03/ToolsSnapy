@@ -8,6 +8,10 @@ import CaseConverter from "../pages/Text/tools/CaseConverter";
 import JsonFormatter from "../pages/Text/tools/JsonFormatter";
 import JsonValidator from "../pages/Text/tools/JsonValidator";
 import RandomParagraph from "../pages/Text/tools/RandomParagraph";
+import Images from "../pages/Images/Images";
+import ImageResize from "../pages/Images/tools/ImageResize";
+import BackgroundRemove from "../pages/Images/tools/BackgroundRemove";
+import ImageConverter from "../pages/Images/tools/ImageConverter";
 import Calculators from "../pages/Calculators/Calculators";
 import ScientificCalculator from "../pages/Calculators/tools/ScientificCalculator";
 import BmiCalculator from "../pages/Calculators/tools/BmiCalculator";
@@ -104,9 +108,14 @@ const AppRoutes = () => {
         <Route path="/share/pdfs"    element={<SharePdfs />} />
         <Route path="/share/receive" element={<ReceiveContent />} />
 
+        {/* Image Tools */}
+        <Route path="/images"                    element={<Images />} />
+        <Route path="/images/resize"             element={<ImageResize />} />
+        <Route path="/images/background-remover" element={<BackgroundRemove />} />
+        <Route path="/images/converter"          element={<ImageConverter />} />
+
         {/* Placeholders */}
         <Route path="/pdf"    element={<Placeholder label="PDF Tools" />} />
-        <Route path="/images" element={<Placeholder label="Image Tools" />} />
       </Route>
     </Routes>
   );

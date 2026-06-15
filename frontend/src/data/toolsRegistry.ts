@@ -17,6 +17,11 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: "json-validator", title: "JSON Validator", description: "Validate JSON syntax and get clear error messages.", to: "/text/json-validator", category: "Text Tools", keywords: ["json", "validate", "lint"] },
   { id: "random-paragraph", title: "Random Paragraph Generator", description: "Generate Lorem Ipsum placeholder paragraphs instantly.", to: "/text/random-paragraph", category: "Text Tools", keywords: ["lorem", "ipsum", "placeholder", "dummy"] },
 
+  // ── Image Tools ─────────────────────────────────────────
+  { id: "image-resize", title: "Resize to Target Size", description: "Compress an image to an exact file size like 200 KB.", to: "/images/resize", category: "Image Tools", keywords: ["compress", "reduce", "kb", "mb", "file size", "shrink", "optimize"] },
+  { id: "background-remover", title: "Background Remover", description: "Automatically erase the background from any photo.", to: "/images/background-remover", category: "Image Tools", keywords: ["remove background", "transparent", "cutout", "png", "erase"] },
+  { id: "image-converter", title: "Image Converter", description: "Convert images between PNG, JPG, WebP, AVIF and SVG.", to: "/images/converter", category: "Image Tools", keywords: ["convert", "png", "jpg", "jpeg", "webp", "avif", "svg", "format"] },
+
   // ── Calculators ─────────────────────────────────────────
   { id: "scientific", title: "Scientific Calculator", description: "Advanced scientific calculator with trig and logs.", to: "/calculators/scientific", category: "Calculators", keywords: ["math", "trig", "log"] },
   { id: "bmi", title: "BMI Calculator", description: "Calculate your Body Mass Index.", to: "/calculators/bmi", category: "Calculators", keywords: ["body", "mass", "health", "weight"] },
