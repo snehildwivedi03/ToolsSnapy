@@ -23,6 +23,12 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: "background-remover", title: "Background Remover", description: "Automatically erase the background from any photo.", to: "/images/background-remover", category: "Image Tools", keywords: ["remove background", "transparent", "cutout", "png", "erase"] },
   { id: "image-converter", title: "Image Converter", description: "Convert images between PNG, JPG, WebP, AVIF and SVG.", to: "/images/converter", category: "Image Tools", keywords: ["convert", "png", "jpg", "jpeg", "webp", "avif", "svg", "format"] },
 
+  // ── PDF Tools ───────────────────────────────────────────
+  { id: "pdf-merge", title: "Merge PDF", description: "Combine multiple PDFs into a single document.", to: "/pdf/merge", category: "PDF Tools", keywords: ["combine", "join", "merge", "concat", "pdf"] },
+  { id: "pdf-split", title: "Split & Extract PDF", description: "Extract pages or ranges from a PDF into a new file.", to: "/pdf/split", category: "PDF Tools", keywords: ["split", "extract", "pages", "range", "separate", "pdf"] },
+  { id: "pdf-images-to-pdf", title: "Images to PDF", description: "Convert JPG, PNG or WebP images into a single PDF.", to: "/pdf/images-to-pdf", category: "PDF Tools", keywords: ["jpg to pdf", "png to pdf", "image", "convert", "pdf"] },
+  { id: "pdf-to-images", title: "PDF to Images", description: "Export each PDF page as a PNG or JPG image.", to: "/pdf/pdf-to-images", category: "PDF Tools", keywords: ["pdf to jpg", "pdf to png", "render", "export", "image"] },
+
   // ── Calculators ─────────────────────────────────────────
   { id: "scientific", title: "Scientific Calculator", description: "Advanced scientific calculator with trig and logs.", to: "/calculators/scientific", category: "Calculators", keywords: ["math", "trig", "log"] },
   { id: "bmi", title: "BMI Calculator", description: "Calculate your Body Mass Index.", to: "/calculators/bmi", category: "Calculators", keywords: ["body", "mass", "health", "weight"] },

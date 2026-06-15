@@ -8,6 +8,8 @@ const OTHER_CATEGORIES = [
   { to: "/images",    label: "Image Tools",         color: "#7c3aed" },
   { to: "/text",      label: "Text Tools",          color: "#2563eb" },
   { to: "/utilities", label: "Utilities & Dev Tools", color: "#0891b2" },
+  { to: "/share",       label: "Instant Share", color: "#d97706" },
+
 ];
 
 const TOOLS = [

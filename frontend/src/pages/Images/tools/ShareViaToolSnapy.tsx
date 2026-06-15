@@ -8,11 +8,13 @@ import ls from "./imageTools.module.css";
 interface Props {
   /** Produce the File to share when the button is clicked. */
   getFile: () => File | Promise<File>;
+  /** Which share bucket to upload to. Defaults to "images". */
+  kind?: "files" | "images" | "pdfs";
   disabled?: boolean;
 }
 
-/** "Share via ToolsSnapy" button + result card, reused across image tools. */
-const ShareViaToolSnapy = ({ getFile, disabled }: Props) => {
+/** "Share via ToolsSnapy" button + result card, reused across image and PDF tools. */
+const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
   const [sharing, setSharing] = useState(false);
   const [code, setCode] = useState<string | null>(null);
   const [err, setErr] = useState("");
@@ -25,7 +27,7 @@ const ShareViaToolSnapy = ({ getFile, disabled }: Props) => {
     setSharing(true);
     try {
       const file = await getFile();
-      const res = await shareFiles([file], "images");
+      const res = await shareFiles([file], kind);
       if (res.success && res.code) {
         setCode(res.code);
         incrementFiles();

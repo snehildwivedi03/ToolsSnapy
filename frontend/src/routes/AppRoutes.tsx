@@ -13,6 +13,11 @@ import ImageResize from "../pages/Images/tools/ImageResize";
 import ImageResizeDimensions from "../pages/Images/tools/ImageResizeDimensions";
 import BackgroundRemove from "../pages/Images/tools/BackgroundRemove";
 import ImageConverter from "../pages/Images/tools/ImageConverter";
+import Pdf from "../pages/Pdf/Pdf";
+import MergePdf from "../pages/Pdf/tools/MergePdf";
+import SplitPdf from "../pages/Pdf/tools/SplitPdf";
+import ImagesToPdf from "../pages/Pdf/tools/ImagesToPdf";
+import PdfToImages from "../pages/Pdf/tools/PdfToImages";
 import Calculators from "../pages/Calculators/Calculators";
 import ScientificCalculator from "../pages/Calculators/tools/ScientificCalculator";
 import BmiCalculator from "../pages/Calculators/tools/BmiCalculator";
@@ -42,13 +47,6 @@ import ShareFiles from "../pages/Share/tools/ShareFiles";
 import ShareImages from "../pages/Share/tools/ShareImages";
 import SharePdfs from "../pages/Share/tools/SharePdfs";
 import ReceiveContent from "../pages/Share/tools/ReceiveContent";
-
-// Placeholder for modules not yet implemented
-const Placeholder = ({ label }: { label: string }) => (
-  <main style={{ padding: "4rem 2rem", textAlign: "center" }}>
-    <h1>{label}</h1>
-  </main>
-);
 
 const AppRoutes = () => {
   return (
@@ -116,8 +114,12 @@ const AppRoutes = () => {
         <Route path="/images/background-remover" element={<BackgroundRemove />} />
         <Route path="/images/converter"          element={<ImageConverter />} />
 
-        {/* Placeholders */}
-        <Route path="/pdf"    element={<Placeholder label="PDF Tools" />} />
+        {/* PDF Tools */}
+        <Route path="/pdf"                element={<Pdf />} />
+        <Route path="/pdf/merge"          element={<MergePdf />} />
+        <Route path="/pdf/split"          element={<SplitPdf />} />
+        <Route path="/pdf/images-to-pdf"  element={<ImagesToPdf />} />
+        <Route path="/pdf/pdf-to-images"  element={<PdfToImages />} />
       </Route>
     </Routes>
   );
