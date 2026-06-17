@@ -12,5 +12,9 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+<<<<<<< Updated upstream
+=======
+    allowedHosts: ["plots-knight-lady-duration.trycloudflare.com"],
+>>>>>>> Stashed changes
   },
 })
