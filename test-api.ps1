@@ -5,6 +5,8 @@ param(
     [string]$baseUrl = "http://localhost:5000"
 )
 
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 $passed = 0
 $failed = 0
 
@@ -26,16 +28,15 @@ function Test-Endpoint {
     }
 }
 
-Write-Host @"
-╔══════════════════════════════════════════════════════════════╗
-║          ToolSnapy API Security & Functionality Test         ║
-║                  Target: $baseUrl                  ║
-╚══════════════════════════════════════════════════════════════╝
-"@ -ForegroundColor Cyan
+Write-Host ""
+Write-Host "==============================================================" -ForegroundColor Cyan
+Write-Host "        ToolSnapy API Security & Functionality Test" -ForegroundColor Cyan
+Write-Host "        Target: $baseUrl" -ForegroundColor Cyan
+Write-Host "==============================================================" -ForegroundColor Cyan
 
-# ═══════════════════════════════════════════════════════════════
+# --------------------------------------------------------------
 # BASIC CONNECTIVITY
-# ═══════════════════════════════════════════════════════════════
+# --------------------------------------------------------------
 
 Test-Endpoint "Health Check" {
     $r = Invoke-RestMethod "$baseUrl/api/health" -Method GET
@@ -65,7 +66,7 @@ Test-Endpoint "Word Counter - Missing Text (Should Fail)" {
 Test-Endpoint "Character Counter" {
     $body = @{ text = "Hello" } | ConvertTo-Json
     $r = Invoke-RestMethod "$baseUrl/api/text/character-counter" -Method POST -Body $body -ContentType "application/json"
-    $r.success -and $r.data.total -eq 5
+    $r.success -and $r.data.characters -eq 5
 }
 
 Test-Endpoint "Case Converter - Uppercase" {
@@ -122,7 +123,7 @@ Test-Endpoint "Share Text - Create" {
 Test-Endpoint "Share Text - Retrieve" {
     if (-not $script:shareCode) { return $false }
     $r = Invoke-RestMethod "$baseUrl/api/share/$($script:shareCode)" -Method GET
-    $r.type -eq "text" -and $r.content -like "*Test share*"
+    $r.success -and $r.share.type -eq "text" -and $r.share.content -like "*Test share*"
 }
 
 Test-Endpoint "Share Text - Delete" {
@@ -166,7 +167,7 @@ Test-Endpoint "Share Text - Size Limit (>50KB Should Fail)" {
 # ═══════════════════════════════════════════════════════════════
 
 Test-Endpoint "Security Headers Present" {
-    $r = Invoke-WebRequest "$baseUrl/api/health" -Method GET
+    $r = Invoke-WebRequest "$baseUrl/api/health" -Method GET -UseBasicParsing
     $headers = $r.Headers
     ($headers["X-Content-Type-Options"] -eq "nosniff") -or 
     ($headers["X-Frame-Options"] -ne $null) -or
@@ -189,28 +190,29 @@ Test-Endpoint "Invalid Share Code Format Sanitized" {
 # ═══════════════════════════════════════════════════════════════
 
 Test-Endpoint "Rate Limit Headers Present (Share API)" {
-    $r = Invoke-WebRequest "$baseUrl/api/share/TESTXX" -Method GET -SkipHttpErrorCheck
-    $headers = $r.Headers
-    $headers["X-RateLimit-Limit"] -ne $null -or $headers["RateLimit-Limit"] -ne $null
+    try {
+        $r = Invoke-WebRequest "$baseUrl/api/share/TESTXX" -Method GET -UseBasicParsing
+        $headers = $r.Headers
+    } catch {
+        $headers = $_.Exception.Response.Headers
+    }
+    if (-not $headers) { return $false }
+    ($headers["X-RateLimit-Limit"] -ne $null) -or ($headers["RateLimit-Limit"] -ne $null)
 }
 
-# ═══════════════════════════════════════════════════════════════
+# --------------------------------------------------------------
 # RESULTS
-# ═══════════════════════════════════════════════════════════════
+# --------------------------------------------------------------
 
-Write-Host @"
+Write-Host ""
+Write-Host "==============================================================" -ForegroundColor Cyan
+Write-Host "                      TEST RESULTS" -ForegroundColor Cyan
+Write-Host "==============================================================" -ForegroundColor Cyan
 
-╔══════════════════════════════════════════════════════════════╗
-║                       TEST RESULTS                           ║
-╠══════════════════════════════════════════════════════════════╣
-"@ -ForegroundColor Cyan
-
-Write-Host "║  Passed: $passed" -ForegroundColor Green -NoNewline
-Write-Host "                                                 ║"
-Write-Host "║  Failed: $failed" -ForegroundColor $(if($failed -gt 0){"Red"}else{"Green"}) -NoNewline
-Write-Host "                                                 ║"
-Write-Host "║  Total:  $($passed + $failed)                                                ║"
-Write-Host "╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+Write-Host "  Passed: $passed" -ForegroundColor Green
+Write-Host "  Failed: $failed" -ForegroundColor $(if($failed -gt 0){"Red"}else{"Green"})
+Write-Host "  Total:  $($passed + $failed)" -ForegroundColor Cyan
+Write-Host "==============================================================" -ForegroundColor Cyan
 
 if ($failed -eq 0) {
     Write-Host "`nAll tests passed! API is ready for deployment." -ForegroundColor Green
