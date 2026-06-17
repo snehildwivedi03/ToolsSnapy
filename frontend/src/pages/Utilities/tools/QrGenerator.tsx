@@ -71,7 +71,7 @@ const QrGenerator = () => {
         setShareCode(res.code);
         incrementFiles();
       } else {
-        setShareErr(res.message ?? "Share failed. Try again.");
+        setShareErr(res.message ?? "We couldn't share that. Please try again.");
       }
     } catch {
       setShareErr("Could not share. Try again.");

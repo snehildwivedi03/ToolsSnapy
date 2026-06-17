@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import s from "../../../styles/calc.module.css";
 import ls from "./DevTool.module.css";
 
@@ -81,6 +82,8 @@ const Sha256 = () => {
           <p style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", marginTop: "0.5rem", fontWeight: 600 }}>
             256-bit · 64 hex chars · SHA-2 family
           </p>
+
+          <ShareTextViaToolSnapy getText={() => hash} disabled={!hash} />
         </div>
       )}
 

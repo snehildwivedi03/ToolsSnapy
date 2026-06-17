@@ -3,22 +3,36 @@ import { dirname } from "path";
 import { mkdir } from "fs/promises";
 import type { Archiver, ArchiverOptions } from "archiver";
 
-// archiver is a CommonJS-only package. Load it lazily via dynamic import and
-// normalise the default export so it works under tsx / Node 24 ESM.
+// archiver v8 is an ESM module that exposes dedicated format classes
+// (`ZipArchive`, `TarArchive`, …) constructed with just an options object.
+// Older v7 exposed a single callable factory: archiver("zip", options).
+// Load lazily via dynamic import and support both shapes.
+type ZipCtor = new (options?: ArchiverOptions) => Archiver;
 type ArchiverFactory = (format: "zip" | "tar", options?: ArchiverOptions) => Archiver;
 
-let archiverFactory: ArchiverFactory | null = null;
+let createArchive: ArchiverFactory | null = null;
 
 async function getArchiver(): Promise<ArchiverFactory> {
-  if (archiverFactory) return archiverFactory;
+  if (createArchive) return createArchive;
+
   const mod = (await import("archiver")) as unknown as {
+    ZipArchive?: ZipCtor;
     default?: ArchiverFactory;
-  } & ArchiverFactory;
-  const factory = (mod.default ?? mod) as ArchiverFactory;
+  };
+
+  // v8: dedicated ZipArchive class (options-only constructor).
+  if (typeof mod.ZipArchive === "function") {
+    const Zip = mod.ZipArchive;
+    createArchive = (_format, options) => new Zip(options);
+    return createArchive;
+  }
+
+  // v7 and earlier: callable default (or namespace) export.
+  const factory = (mod.default ?? (mod as unknown as ArchiverFactory)) as ArchiverFactory;
   if (typeof factory !== "function") {
     throw new Error("Failed to load archiver module.");
   }
-  archiverFactory = factory;
+  createArchive = factory;
   return factory;
 }
 

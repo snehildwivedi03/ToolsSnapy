@@ -1,12 +1,16 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
+import tp from "../../../styles/toolpage.module.css";
 import ls from "./pdfTools.module.css";
-import { baseName, downloadBlob, formatBytes, readArrayBuffer } from "./pdfUtils";
+import { baseName, downloadBlob, formatBytes } from "./pdfUtils";
 import { canvasToBlob } from "../../Images/tools/imageUtils";
+import { shareFiles } from "../../../services/shareApi";
+import { incrementFiles } from "../../../services/shareCounter";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
@@ -35,6 +39,24 @@ interface PageImage {
   label: string;
 }
 
+/** Read a File into an ArrayBuffer while reporting real read progress (0–100). */
+const readFileWithProgress = (
+  file: File,
+  onProgress: (pct: number) => void,
+): Promise<ArrayBuffer> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onprogress = (e) => {
+      if (e.lengthComputable) onProgress(Math.round((e.loaded / e.total) * 100));
+    };
+    reader.onload = () => {
+      onProgress(100);
+      resolve(reader.result as ArrayBuffer);
+    };
+    reader.onerror = () => reject(new Error("Could not read file."));
+    reader.readAsArrayBuffer(file);
+  });
+
 const PdfToImages = () => {
   const [src, setSrc] = useState<SourceState | null>(null);
   const [format, setFormat] = useState<Format>("png");
@@ -44,6 +66,16 @@ const PdfToImages = () => {
   const [pages, setPages] = useState<PageImage[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [loadingSrc, setLoadingSrc] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
+
+  const [sharing, setSharing] = useState(false);
+  const [shareProgress, setShareProgress] = useState(0);
+  const [shareCode, setShareCode] = useState<string | null>(null);
+  const [shareErr, setShareErr] = useState("");
+  const [copied, setCopied] = useState(false);
+  const navigate = useNavigate();
 
   const clearPages = () => {
     setPages((prev) => {
@@ -66,14 +98,18 @@ const PdfToImages = () => {
       setError("Please choose a PDF file.");
       return;
     }
+    setLoadingSrc(true);
+    setLoadProgress(0);
     try {
-      const buf = await readArrayBuffer(file);
+      const buf = await readFileWithProgress(file, setLoadProgress);
       const bytes = new Uint8Array(buf);
       const doc = await pdfjsLib.getDocument({ data: bytes.slice() }).promise;
       setSrc({ file, bytes, pages: doc.numPages });
       await doc.destroy();
     } catch {
       setError("Could not read that PDF. It may be corrupted or password-protected.");
+    } finally {
+      setLoadingSrc(false);
     }
   };
 
@@ -139,6 +175,39 @@ const PdfToImages = () => {
     });
   };
 
+  const shareAll = async () => {
+    if (pages.length === 0) return;
+    setShareErr("");
+    setShareCode(null);
+    setShareProgress(0);
+    setSharing(true);
+    try {
+      const files = pages.map((p) => new File([p.blob], p.filename, { type: p.blob.type }));
+      const res = await shareFiles(files, "images", undefined, setShareProgress);
+      if (res.success && res.code) {
+        setShareCode(res.code);
+        incrementFiles();
+      } else {
+        setShareErr(res.message ?? "We couldn't share that. Please try again.");
+      }
+    } catch {
+      setShareErr("Could not share. Try again.");
+    } finally {
+      setSharing(false);
+    }
+  };
+
+  const copyCode = async () => {
+    if (!shareCode) return;
+    try {
+      await navigator.clipboard.writeText(shareCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* ignore */
+    }
+  };
+
   return (
     <ToolPageShell
       backTo="/pdf"
@@ -178,6 +247,15 @@ const PdfToImages = () => {
             className={ls.hiddenInput}
             onChange={onPick}
           />
+          {loadingSrc && (
+            <div className={ls.processing}>
+              <ProgressBar
+                value={loadProgress}
+                tone="red"
+                label={loadProgress < 100 ? "Reading PDF…" : "Processing PDF…"}
+              />
+            </div>
+          )}
           {error && <p className={ls.errorMsg}>{error}</p>}
         </div>
       ) : (
@@ -248,7 +326,56 @@ const PdfToImages = () => {
                   </svg>
                   Upload more
                 </button>
+                <button
+                  type="button"
+                  className={ls.shareBtn}
+                  onClick={shareAll}
+                  disabled={sharing}
+                >
+                  {sharing ? (
+                    <>
+                      <span className={ls.spinner} aria-hidden="true" />
+                      Sharing…
+                    </>
+                  ) : (
+                    <>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                        aria-hidden="true">
+                        <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                      </svg>
+                      Share via ToolsSnapy
+                    </>
+                  )}
+                </button>
               </div>
+
+              {sharing && (
+                <ProgressBar value={shareProgress} tone="red" label="Uploading…" />
+              )}
+
+              {shareErr && <p className={ls.errorMsg}>{shareErr}</p>}
+
+              {shareCode && (
+                <div className={ls.shareResult}>
+                  <span className={ls.shareCodeLabel}>Share Code</span>
+                  <span className={ls.shareCodeValue}>{shareCode}</span>
+                  <div className={ls.shareActions}>
+                    <button
+                      className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary}
+                      onClick={copyCode}
+                    >
+                      {copied ? "Copied!" : "Copy Code"}
+                    </button>
+                    <button className={ls.receiveBtn} onClick={() => navigate("/share/receive")}>
+                      Open Receive Page →
+                    </button>
+                  </div>
+                  <span className={ls.shareExpiry}>Expires in 15 minutes</span>
+                </div>
+              )}
 
               <div className={ls.pageGrid}>
                 {pages.map((p) => (

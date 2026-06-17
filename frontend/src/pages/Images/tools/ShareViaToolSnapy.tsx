@@ -35,7 +35,7 @@ const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
         setCode(res.code);
         incrementFiles();
       } else {
-        setErr(res.message ?? "Share failed. Try again.");
+        setErr(res.message ?? "We couldn't share that. Please try again.");
       }
     } catch {
       setErr("Could not share. Try again.");

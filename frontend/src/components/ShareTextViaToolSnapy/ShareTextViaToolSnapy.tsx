@@ -35,10 +35,10 @@ const ShareTextViaToolSnapy = ({ getText, disabled }: Props) => {
         setCode(res.code);
         incrementTexts();
       } else {
-        setErr(res.message ?? "Share failed. Try again.");
+        setErr(res.message ?? "We couldn't share that. Please try again.");
       }
     } catch {
-      setErr("Could not share. Try again.");
+      setErr("Something went wrong while sharing. Please try again.");
     } finally {
       setSharing(false);
     }

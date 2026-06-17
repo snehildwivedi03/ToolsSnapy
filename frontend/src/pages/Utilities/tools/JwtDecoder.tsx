@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import s from "../../../styles/calc.module.css";
 import ls from "./DevTool.module.css";
 
@@ -75,6 +76,7 @@ const JwtDecoder = () => {
       )}
 
       {result && (
+        <>
         <div className={ls.jwtGrid}>
           {/* Header */}
           <div className={ls.jwtSection}>
@@ -112,6 +114,11 @@ const JwtDecoder = () => {
             <pre className={ls.jwtPre}>{result.sig}</pre>
           </div>
         </div>
+
+        <ShareTextViaToolSnapy
+          getText={() => `Header:\n${result.header.decoded}\n\nPayload:\n${result.payload.decoded}`}
+        />
+        </>
       )}
 
     </ToolPageShell>

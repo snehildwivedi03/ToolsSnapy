@@ -1,5 +1,42 @@
 const BASE = (import.meta.env.VITE_API_URL as string | undefined) ?? "http://localhost:5000";
 
+/** Friendly message shown when the request never reached the server. */
+export const NETWORK_ERROR =
+  "We couldn't connect. Please check your internet connection and try again.";
+
+/** Turn an HTTP status code into a short, plain-English message. */
+export function friendlyStatus(status: number): string {
+  switch (status) {
+    case 400: return "Something was wrong with your request (400). Please check and try again.";
+    case 401: return "You need to sign in to do this (401).";
+    case 403: return "You don't have permission to do this (403).";
+    case 404: return "We couldn't find that (404). It may have expired or been removed.";
+    case 408: return "The request took too long (408). Please try again.";
+    case 409: return "That conflicts with something that already exists (409).";
+    case 413: return "Your upload is too large (413). Try fewer or smaller files.";
+    case 415: return "That file type isn't supported (415).";
+    case 422: return "We couldn't process that input (422). Please check and try again.";
+    case 429: return "You're doing that too fast (429). Please wait a moment and try again.";
+    case 500: return "Something went wrong on our end (500). Please try again shortly.";
+    case 502:
+    case 503:
+    case 504: return `Our service is temporarily unavailable (${status}). Please try again shortly.`;
+    default:
+      if (status >= 500) return `Our service hit a problem (${status}). Please try again shortly.`;
+      if (status >= 400) return `Something went wrong with your request (${status}). Please try again.`;
+      return `Something went wrong (${status}). Please try again.`;
+  }
+}
+
+/** Safely parse a JSON body; returns null if the body isn't valid JSON. */
+async function safeJson<T>(res: Response): Promise<T | null> {
+  try {
+    return (await res.json()) as T;
+  } catch {
+    return null;
+  }
+}
+
 export interface ShareUploadResult {
   success: boolean;
   code?: string;
@@ -25,12 +62,20 @@ export interface ShareReceiveResult {
 }
 
 export async function shareText(text: string): Promise<ShareUploadResult> {
-  const res = await fetch(`${BASE}/api/share/text`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
-  });
-  return res.json() as Promise<ShareUploadResult>;
+  try {
+    const res = await fetch(`${BASE}/api/share/text`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    const data = await safeJson<ShareUploadResult>(res);
+    if (!res.ok) {
+      return { success: false, message: data?.message ?? friendlyStatus(res.status) };
+    }
+    return data ?? { success: false, message: "We got an unexpected response. Please try again." };
+  } catch {
+    return { success: false, message: NETWORK_ERROR };
+  }
 }
 
 export async function shareFiles(
@@ -47,11 +92,19 @@ export async function shareFiles(
 
   // Without a progress callback, keep the lightweight fetch path.
   if (!onProgress) {
-    const res = await fetch(`${BASE}/api/share/${endpoint}`, {
-      method: "POST",
-      body: fd,
-    });
-    return res.json() as Promise<ShareUploadResult>;
+    try {
+      const res = await fetch(`${BASE}/api/share/${endpoint}`, {
+        method: "POST",
+        body: fd,
+      });
+      const data = await safeJson<ShareUploadResult>(res);
+      if (!res.ok) {
+        return { success: false, message: data?.message ?? friendlyStatus(res.status) };
+      }
+      return data ?? { success: false, message: "We got an unexpected response. Please try again." };
+    } catch {
+      return { success: false, message: NETWORK_ERROR };
+    }
   }
 
   // XHR gives us real upload progress events that fetch() cannot.
@@ -65,21 +118,36 @@ export async function shareFiles(
     };
     xhr.onload = () => {
       onProgress(100);
+      let data: ShareUploadResult | null = null;
       try {
-        resolve(JSON.parse(xhr.responseText) as ShareUploadResult);
+        data = JSON.parse(xhr.responseText) as ShareUploadResult;
       } catch {
-        resolve({ success: false, message: "Unexpected server response." });
+        data = null;
+      }
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(data ?? { success: false, message: "We got an unexpected response. Please try again." });
+      } else {
+        resolve({ success: false, message: data?.message ?? friendlyStatus(xhr.status) });
       }
     };
-    xhr.onerror = () => resolve({ success: false, message: "Network error. Please try again." });
+    xhr.onerror = () => resolve({ success: false, message: NETWORK_ERROR });
+    xhr.ontimeout = () => resolve({ success: false, message: "The upload took too long (408). Please try again." });
     xhr.send(fd);
   });
 }
 
 export async function receiveShare(code: string): Promise<ShareReceiveResult> {
   const safeCode = code.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
-  const res = await fetch(`${BASE}/api/share/${safeCode}`);
-  return res.json() as Promise<ShareReceiveResult>;
+  try {
+    const res = await fetch(`${BASE}/api/share/${safeCode}`);
+    const data = await safeJson<ShareReceiveResult>(res);
+    if (!res.ok) {
+      return { success: false, message: data?.message ?? friendlyStatus(res.status) };
+    }
+    return data ?? { success: false, message: "We got an unexpected response. Please try again." };
+  } catch {
+    return { success: false, message: NETWORK_ERROR };
+  }
 }
 
 export function downloadZipUrl(code: string): string {

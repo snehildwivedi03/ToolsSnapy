@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import s from "../../../styles/calc.module.css";
 import ls from "./PasswordGenerator.module.css";
 
@@ -175,6 +176,8 @@ const PasswordGenerator = () => {
             {strength.label}
           </span>
         </div>
+
+        <ShareTextViaToolSnapy getText={() => password} disabled={!password} />
       </div>
 
       {/* Bulk generate */}

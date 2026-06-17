@@ -1,9 +1,9 @@
 .wrap {
   position: fixed;
-  top: 1.5rem;
+  top: calc(var(--navbar-height) + 1rem);
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 2000;
   pointer-events: none;
   width: max-content;
   max-width: calc(100vw - 2rem);
@@ -22,9 +22,9 @@
 }
 
 .success {
-  background: #ecfdf5;
-  border-color: #a7f3d0;
-  color: #047857;
+  background: #7c3aed;
+  border-color: #6d28d9;
+  color: #ffffff;
 }
 
 .error {

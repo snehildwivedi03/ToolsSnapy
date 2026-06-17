@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import s from "../../../styles/calc.module.css";
 import ls from "./DevTool.module.css";
 import ts from "./UnixTimestamp.module.css";
@@ -121,6 +122,12 @@ const UnixTimestamp = () => {
           </div>
         )}
       </div>
+
+      {isValidTs && tsDate && !isNaN(tsDate.getTime()) && (
+        <ShareTextViaToolSnapy
+          getText={() => `ISO 8601 (UTC): ${toISO(tsNum)}\nLocal: ${toLocal(tsNum)}\nReadable: ${toReadable(tsNum)}\nMilliseconds: ${tsNum * 1000}`}
+        />
+      )}
 
     </ToolPageShell>
   );

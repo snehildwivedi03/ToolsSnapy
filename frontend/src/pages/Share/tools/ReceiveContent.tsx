@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import Toast from "../../../components/Toast/Toast";
 import s from "../../../styles/calc.module.css";
 import t from "./ShareTool.module.css";
 import tp from "../../../styles/toolpage.module.css";
@@ -41,6 +42,7 @@ const ReceiveContent = () => {
   const [copied,   setCopied]   = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleted,  setDeleted]  = useState(false);
+  const [download, setDownload] = useState<string | null>(null);
   const [,         setTick]     = useState(0);
   const resultRef = useRef<HTMLDivElement>(null);
   const timerRef  = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -62,10 +64,10 @@ const ReceiveContent = () => {
         timerRef.current = setInterval(() => setTick((n) => n + 1), 1000);
         setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
       } else {
-        setError(res.message ?? "Share not found or expired.");
+        setError(res.message ?? "We couldn't find that code. It may be wrong, or the share may have expired.");
       }
     } catch {
-      setError("Could not reach the server. Make sure the backend is running.");
+      setError("We couldn't connect. Please check your internet connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -118,6 +120,9 @@ const ReceiveContent = () => {
       title="Receive Content"
       description="Enter the 6-character share code to retrieve text, files, images or PDFs."
     >
+      {download && (
+        <Toast message={download} onClose={() => setDownload(null)} />
+      )}
       {/* Code input */}
       <div className={s.card}>
         <div className={s.fieldGroup}>
@@ -221,6 +226,7 @@ const ReceiveContent = () => {
                       href={downloadZipUrl(share.code)}
                       download={`share-${share.code}.zip`}
                       className={s.primaryBtn}
+                      onClick={() => setDownload("Download started — your ZIP is on the way.")}
                       style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -244,6 +250,7 @@ const ReceiveContent = () => {
                             href={downloadFileUrl(share.code, f.path)}
                             download={f.name}
                             className={t.fileRemove}
+                            onClick={() => setDownload(`Downloading ${f.name}…`)}
                             style={{ color: "var(--color-accent)" }}
                             aria-label={`Download ${f.name}`}
                           >

@@ -11,6 +11,12 @@ const app: Application = express();
 
 const isProduction = process.env.NODE_ENV === "production";
 
+// Trust the first proxy hop (Render/Vercel/Nginx, and the Vite dev proxy) so
+// req.ip and express-rate-limit read the real client IP from X-Forwarded-For.
+// Using a fixed count (not `true`) keeps it safe against IP spoofing.
+// Override with TRUST_PROXY if you sit behind more than one proxy.
+app.set("trust proxy", Number(process.env.TRUST_PROXY ?? 1));
+
 // ═══════════════════════════════════════════════════════════════
 // SECURITY MIDDLEWARE (10/10 Configuration)
 // ═══════════════════════════════════════════════════════════════

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import s from "../../../styles/calc.module.css";
 import ls from "./UuidGenerator.module.css";
 
@@ -105,6 +106,11 @@ const UuidGenerator = () => {
             </li>
           ))}
         </ul>
+
+        <ShareTextViaToolSnapy
+          getText={() => uuids.map(fmt).join("\n")}
+          disabled={uuids.length === 0}
+        />
       </div>
 
     </ToolPageShell>

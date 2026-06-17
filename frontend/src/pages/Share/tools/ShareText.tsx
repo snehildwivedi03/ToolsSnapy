@@ -45,10 +45,10 @@ const ShareText = () => {
         startCountdown();
         setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
       } else {
-        setError(res.message ?? "Something went wrong. Try again.");
+        setError(res.message ?? "We couldn't create your share. Please try again.");
       }
     } catch {
-      setError("Could not reach the server. Make sure the backend is running.");
+      setError("We couldn't connect. Please check your internet connection and try again.");
     } finally {
       setLoading(false);
     }

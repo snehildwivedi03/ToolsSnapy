@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import s from "../../../styles/calc.module.css";
 import ls from "./DevTool.module.css";
 
@@ -108,6 +109,8 @@ const UrlEncoderDecoder = () => {
         <button type="button" className={s.calcBtn} onClick={swap} style={{ marginTop: "0.75rem" }}>
           ⇅ Swap Input ↔ Output
         </button>
+
+        <ShareTextViaToolSnapy getText={() => result} disabled={!result} />
       </div>
 
     </ToolPageShell>

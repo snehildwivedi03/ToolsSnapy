@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import {
   jsonValidatorApi,
   getApiError,
@@ -207,6 +208,10 @@ const JsonValidator = () => {
                   </button>
                 )}
               </div>
+            )}
+
+            {result.valid && (
+              <ShareTextViaToolSnapy getText={() => text} disabled={!text.trim()} />
             )}
           </div>
         )}

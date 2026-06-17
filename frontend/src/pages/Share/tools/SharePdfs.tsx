@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, DragEvent, ChangeEvent } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import Toast from "../../../components/Toast/Toast";
+import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import t from "./ShareTool.module.css";
 import tp from "../../../styles/toolpage.module.css";
@@ -71,10 +72,9 @@ const SharePdfs = () => {
     if (!files.length) return;
     setErrors([]);
     setLoading(true);
-    setProgress(10);
+    setProgress(0);
     try {
-      setProgress(40);
-      const res = await shareFiles(files, "pdfs");
+      const res = await shareFiles(files, "pdfs", undefined, setProgress);
       setProgress(100);
       if (res.success && res.code && res.expiresAt) {
         setResult({ code: res.code, expiresAt: res.expiresAt, errors: res.errors ?? [] });
@@ -83,8 +83,8 @@ const SharePdfs = () => {
         if (timerRef.current) clearInterval(timerRef.current);
         timerRef.current = setInterval(() => setTick((n) => n + 1), 1000);
         setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
-      } else { setErrors([res.message ?? "Upload failed."]); }
-    } catch { setErrors(["Could not reach the server."]); }
+      } else { setErrors([res.message ?? "We couldn't upload your PDFs. Please try again."]); }
+    } catch { setErrors(["We couldn't connect. Please check your internet connection and try again."]); }
     finally { setLoading(false); setProgress(0); }
   };
 
@@ -178,8 +178,8 @@ const SharePdfs = () => {
             </div>
           )}
 
-          {loading && progress > 0 && (
-            <div className={t.progressWrap}><div className={t.progressBar} style={{ width: `${progress}%` }} /></div>
+          {loading && (
+            <ProgressBar value={progress} tone="purple" label="Uploading…" />
           )}
 
           <button className={s.primaryBtn} onClick={upload} disabled={loading || files.length === 0}>
