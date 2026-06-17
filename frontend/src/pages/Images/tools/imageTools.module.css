@@ -13,7 +13,8 @@
   background: var(--color-bg);
   text-align: center;
   cursor: pointer;
-  transition: border-color var(--transition-fast),
+  transition:
+    border-color var(--transition-fast),
     background var(--transition-fast);
 }
 
@@ -87,7 +88,9 @@
   font-size: 0.8125rem;
   font-weight: 700;
   cursor: pointer;
-  transition: border-color var(--transition-fast), color var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 .resetBtn:hover {
   border-color: #ef4444;
@@ -114,7 +117,11 @@
     linear-gradient(45deg, transparent 75%, #e5e7eb 75%),
     linear-gradient(-45deg, transparent 75%, #e5e7eb 75%);
   background-size: 20px 20px;
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  background-position:
+    0 0,
+    0 10px,
+    10px -10px,
+    -10px 0;
   object-fit: contain;
 }
 
@@ -125,7 +132,9 @@
 }
 
 @media (min-width: 640px) {
-  .comparison { grid-template-columns: 1fr 1fr; }
+  .comparison {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .compareCol {
@@ -170,25 +179,42 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(236, 72, 153, 0.12));
+  background: linear-gradient(
+    135deg,
+    rgba(124, 58, 237, 0.12),
+    rgba(236, 72, 153, 0.12)
+  );
   animation: scanPulse 1.5s ease-in-out infinite;
 }
 
 @keyframes scanSweep {
-  0%   { background-position: 150% 0; }
-  100% { background-position: -150% 0; }
+  0% {
+    background-position: 150% 0;
+  }
+  100% {
+    background-position: -150% 0;
+  }
 }
 
 @keyframes scanPulse {
-  0%, 100% { opacity: 0.35; }
-  50%      { opacity: 0.75; }
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.75;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scanWrap::after { animation-duration: 3s; }
-  .scanWrap::before { animation: none; opacity: 0.4; }
+  .scanWrap::after {
+    animation-duration: 3s;
+  }
+  .scanWrap::before {
+    animation: none;
+    opacity: 0.4;
+  }
 }
-
 
 .compareLabel {
   font-size: 0.75rem;
@@ -254,7 +280,8 @@
   font-size: 0.8125rem;
   font-weight: 700;
   cursor: pointer;
-  transition: border-color var(--transition-fast),
+  transition:
+    border-color var(--transition-fast),
     color var(--transition-fast),
     background var(--transition-fast);
 }
@@ -300,11 +327,19 @@
 .dlSplit {
   display: flex;
   width: 100%;
+  height: 50px;
+  align-items: stretch;
 }
 
 .dlMain {
   flex: 1;
   min-width: 0;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0;
+  padding-bottom: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -312,11 +347,11 @@
 .dlCaret {
   flex: 0 0 auto;
   width: 2.75rem;
-  padding-left: 0;
-  padding-right: 0;
+  height: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border-left: 1px solid rgba(255, 255, 255, 0.35);
@@ -353,7 +388,9 @@
   color: var(--color-text-secondary);
   text-align: left;
   cursor: pointer;
-  transition: background var(--transition-fast), color var(--transition-fast);
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
 }
 .dlItem:hover {
   background: var(--color-accent-light);
@@ -375,7 +412,8 @@
   font-size: 0.9375rem;
   font-weight: 700;
   cursor: pointer;
-  transition: border-color var(--transition-fast),
+  transition:
+    border-color var(--transition-fast),
     color var(--transition-fast),
     background var(--transition-fast);
 }
@@ -400,7 +438,8 @@
   font-size: 0.9375rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background var(--transition-fast),
+  transition:
+    background var(--transition-fast),
     color var(--transition-fast),
     border-color var(--transition-fast),
     box-shadow var(--transition-fast);
@@ -427,7 +466,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ── Status badges ───────────────────────────────────────── */
@@ -458,8 +499,14 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ── Processing overlay (background remover) ─────────────── */
@@ -552,7 +599,9 @@
   font-size: 0.875rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background var(--transition-fast), color var(--transition-fast);
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
 }
 .receiveBtn:hover {
   background: var(--color-accent-light);
