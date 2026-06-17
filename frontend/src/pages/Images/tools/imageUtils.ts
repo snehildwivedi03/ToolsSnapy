@@ -138,6 +138,32 @@ async function padBlobToSize(blob: Blob, targetBytes: number): Promise<Blob> {
   return new Blob([blob, padding], { type: blob.type });
 }
 
+/**
+ * Re-encode an image blob into another format. PNG and WebP keep transparency;
+ * JPEG is flattened onto a solid background (default white) because it has no
+ * alpha channel. Returns a new blob in the requested `type`.
+ */
+export async function convertImageBlob(
+  blob: Blob,
+  type: "image/png" | "image/jpeg" | "image/webp",
+  options: { background?: string; quality?: number } = {},
+): Promise<Blob> {
+  const img = await loadImage(blob);
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, img.naturalWidth);
+  canvas.height = Math.max(1, img.naturalHeight);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas not supported.");
+  if (type === "image/jpeg") {
+    ctx.fillStyle = options.background ?? "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, 0, 0);
+  const quality = options.quality ?? (type === "image/png" ? undefined : 0.92);
+  return canvasToBlob(canvas, type, quality);
+}
+
 /** Trigger a browser download for a blob with the given filename. */
 export function downloadBlob(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob);

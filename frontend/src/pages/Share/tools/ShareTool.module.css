@@ -143,8 +143,8 @@
   align-items: center;
   gap: 1rem;
   padding: 2rem 1.5rem;
-  background: #f0fdf4;
-  border: 1.5px solid #86efac;
+  background: #fffbeb;
+  border: 1.5px solid #fde68a;
   border-radius: var(--radius-lg);
   text-align: center;
 }
@@ -152,7 +152,7 @@
 .successTitle {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #15803d;
+  color: #92400e;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }

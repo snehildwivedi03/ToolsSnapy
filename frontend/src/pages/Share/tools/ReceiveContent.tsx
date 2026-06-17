@@ -226,7 +226,7 @@ const ReceiveContent = () => {
                       href={downloadZipUrl(share.code)}
                       download={`share-${share.code}.zip`}
                       className={s.primaryBtn}
-                      onClick={() => setDownload("Download started — your ZIP is on the way.")}
+                      onClick={() => setDownload("Download started. Your ZIP is on the way.")}
                       style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none"

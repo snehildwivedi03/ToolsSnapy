@@ -238,7 +238,7 @@ const PdfToImages = () => {
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
             <span className={ls.dropTitle}>Click to upload or drag &amp; drop</span>
-            <span className={ls.dropHint}>A single PDF — processed in your browser</span>
+            <span className={ls.dropHint}>A single PDF, processed in your browser</span>
           </div>
           <input
             ref={inputRef}
@@ -251,7 +251,7 @@ const PdfToImages = () => {
             <div className={ls.processing}>
               <ProgressBar
                 value={loadProgress}
-                tone="red"
+                tone="amber"
                 label={loadProgress < 100 ? "Reading PDF…" : "Processing PDF…"}
               />
             </div>
@@ -302,7 +302,7 @@ const PdfToImages = () => {
             <div className={ls.processing}>
               <ProgressBar
                 value={(progress.current / progress.total) * 100}
-                tone="red"
+                tone="purple"
                 label={`Rendering page ${progress.current} of ${progress.total}…`}
               />
             </div>
@@ -353,7 +353,7 @@ const PdfToImages = () => {
               </div>
 
               {sharing && (
-                <ProgressBar value={shareProgress} tone="red" label="Uploading…" />
+                <ProgressBar value={shareProgress} tone="amber" label="Uploading…" />
               )}
 
               {shareErr && <p className={ls.errorMsg}>{shareErr}</p>}

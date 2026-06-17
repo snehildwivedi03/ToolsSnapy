@@ -203,7 +203,7 @@ const ImageConverter = () => {
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
             <span className={ls.dropTitle}>Click to upload or drag &amp; drop</span>
-            <span className={ls.dropHint}>PNG, JPG, WebP, AVIF, SVG — processed in your browser</span>
+            <span className={ls.dropHint}>PNG, JPG, WebP, AVIF, SVG. Processed in your browser</span>
           </div>
           <input
             ref={inputRef}

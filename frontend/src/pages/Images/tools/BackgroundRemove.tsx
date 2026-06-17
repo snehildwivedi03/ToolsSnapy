@@ -5,7 +5,8 @@ import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./imageTools.module.css";
 import ShareViaToolSnapy from "./ShareViaToolSnapy";
-import { baseName, downloadBlob, formatBytes } from "./imageUtils";
+import ImageDownloadMenu from "./ImageDownloadMenu";
+import { baseName, formatBytes, loadImage } from "./imageUtils";
 
 const Icon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
@@ -79,15 +80,21 @@ const BackgroundRemove = () => {
     setStage("Preparing…");
     try {
       const blob = await removeBackground(src.file, {
+        model: "isnet",
+        output: { format: "image/png", quality: 1 },
         progress: (key, current, total) => {
           const pct = total ? Math.round((current / total) * 100) : 0;
           setProgress(pct);
-          setStage(key.startsWith("fetch") ? "Loading model…" : "Removing background…");
+          setStage(key.startsWith("fetch") ? "Downloading AI model…" : "Removing background…");
         },
       });
+      // Fully decode the cut-out before revealing it, so the result appears
+      // instantly and the UI never flashes a half-loaded image.
+      const url = URL.createObjectURL(blob);
+      await loadImage(url);
       if (result) URL.revokeObjectURL(result.url);
       const filename = `${baseName(src.file.name)}-no-bg.png`;
-      setResult({ blob, url: URL.createObjectURL(blob), filename });
+      setResult({ blob, url, filename });
     } catch {
       setError("Background removal failed. Please try a different image or check your connection.");
     } finally {
@@ -130,7 +137,7 @@ const BackgroundRemove = () => {
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
             <span className={ls.dropTitle}>Click to upload or drag &amp; drop</span>
-            <span className={ls.dropHint}>PNG, JPG, WebP — a subject with a clear background works best</span>
+            <span className={ls.dropHint}>PNG, JPG, WebP. A subject with a clear background works best</span>
           </div>
           <input
             ref={inputRef}
@@ -166,8 +173,15 @@ const BackgroundRemove = () => {
 
           {busy ? (
             <div className={ls.processing}>
+              <span className={ls.processingTitle}>
+                {stage === "Downloading AI model…" ? "Getting the AI ready…" : "Removing the background…"}
+              </span>
               <ProgressBar value={progress} tone="purple" label={stage || "Working…"} />
-              <span className={ls.dropHint}>First run downloads the AI model (one time).</span>
+              <span className={ls.dropHint}>
+                {stage === "Downloading AI model…"
+                  ? "First run downloads the AI model (one time). This can take a moment on slower connections."
+                  : "Hang tight. Your cut-out will appear as soon as it's ready."}
+              </span>
             </div>
           ) : (
             !result && (
@@ -202,13 +216,16 @@ const BackgroundRemove = () => {
               </div>
 
               <div className={ls.actionRow}>
-                <button
-                  type="button"
-                  className={`${s.calcBtn} ${ls.dlBtn}`}
-                  onClick={() => downloadBlob(result.blob, result.filename)}
-                >
-                  Download PNG
-                </button>
+                <ImageDownloadMenu
+                  blob={result.blob}
+                  baseFilename={`${baseName(src.file.name)}-no-bg`}
+                  nativeType="image/png"
+                  formats={[
+                    { type: "image/png", ext: "png", label: "PNG · transparent background" },
+                    { type: "image/jpeg", ext: "jpg", label: "JPG · white background" },
+                    { type: "image/webp", ext: "webp", label: "WebP · transparent background" },
+                  ]}
+                />
                 <button type="button" className={ls.uploadMoreBtn} onClick={reset}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"

@@ -72,7 +72,7 @@ const JwtDecoder = () => {
       </div>
 
       {token.trim() && !result && (
-        <p className={ls.error}>Invalid JWT format — a valid token has exactly 3 Base64URL-encoded parts separated by dots.</p>
+        <p className={ls.error}>Invalid JWT format. A valid token has exactly 3 Base64URL-encoded parts separated by dots.</p>
       )}
 
       {result && (

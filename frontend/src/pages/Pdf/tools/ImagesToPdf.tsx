@@ -164,7 +164,7 @@ const ImagesToPdf = () => {
       iconColor="#dc2626"
       iconBg="#fef2f2"
       title="Images to PDF"
-      description="Turn JPG, PNG or WebP images into a single PDF — one image per page. Drag to reorder."
+      description="Turn JPG, PNG or WebP images into a single PDF, one image per page. Drag to reorder."
     >
       {items.length === 0 ? (
         <div className={s.card}>
@@ -186,7 +186,7 @@ const ImagesToPdf = () => {
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
             <span className={ls.dropTitle}>Click to upload or drag &amp; drop</span>
-            <span className={ls.dropHint}>JPG, PNG, WebP — one image per page, processed in your browser</span>
+            <span className={ls.dropHint}>JPG, PNG, WebP. One image per page, processed in your browser</span>
           </div>
           <input
             ref={inputRef}
@@ -271,7 +271,7 @@ const ImagesToPdf = () => {
             )}
           </button>
 
-          {busy && <ProgressBar value={progress} tone="red" label="Building PDF…" />}
+          {busy && <ProgressBar value={progress} tone="purple" label="Building PDF…" />}
 
           {error && <p className={ls.errorMsg}>{error}</p>}
 
@@ -283,7 +283,7 @@ const ImagesToPdf = () => {
                   strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
-                PDF ready — {result.pages} page{result.pages > 1 ? "s" : ""} · {formatBytes(result.blob.size)}
+                PDF ready: {result.pages} page{result.pages > 1 ? "s" : ""} · {formatBytes(result.blob.size)}
               </span>
 
               <div className={ls.actionRow}>

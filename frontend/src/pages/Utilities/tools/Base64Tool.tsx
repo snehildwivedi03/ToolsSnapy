@@ -15,12 +15,12 @@ const Icon = () => (
 
 const safeEncode = (text: string): { result: string; error: string | null } => {
   try { return { result: btoa(unescape(encodeURIComponent(text))), error: null }; }
-  catch { return { result: "", error: "Encoding failed — ensure input is valid text." }; }
+  catch { return { result: "", error: "Encoding failed. Ensure input is valid text." }; }
 };
 
 const safeDecode = (text: string): { result: string; error: string | null } => {
   try { return { result: decodeURIComponent(escape(atob(text.trim()))), error: null }; }
-  catch { return { result: "", error: "Invalid Base64 — the input could not be decoded." }; }
+  catch { return { result: "", error: "Invalid Base64. The input could not be decoded." }; }
 };
 
 const Base64Tool = () => {

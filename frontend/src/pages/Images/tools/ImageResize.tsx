@@ -4,10 +4,10 @@ import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./imageTools.module.css";
 import ShareViaToolSnapy from "./ShareViaToolSnapy";
+import ImageDownloadMenu from "./ImageDownloadMenu";
 import {
   baseName,
   compressToTargetSize,
-  downloadBlob,
   formatBytes,
   loadImage,
 } from "./imageUtils";
@@ -144,7 +144,7 @@ const ImageResize = () => {
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
             <span className={ls.dropTitle}>Click to upload or drag &amp; drop</span>
-            <span className={ls.dropHint}>PNG, JPG, WebP — processed in your browser</span>
+            <span className={ls.dropHint}>PNG, JPG, WebP. Processed in your browser</span>
           </div>
           <input
             ref={inputRef}
@@ -215,7 +215,7 @@ const ImageResize = () => {
                   strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
-                Done — output is exactly {formatBytes(result.blob.size)}
+                Done. Output is exactly {formatBytes(result.blob.size)}
                 {result.scaled ? " (dimensions reduced to fit)" : ""}
               </span>
 
@@ -224,13 +224,16 @@ const ImageResize = () => {
               </div>
 
               <div className={ls.actionRow}>
-                <button
-                  type="button"
-                  className={`${s.calcBtn} ${ls.dlBtn}`}
-                  onClick={() => downloadBlob(result.blob, result.filename)}
-                >
-                  Download JPG
-                </button>
+                <ImageDownloadMenu
+                  blob={result.blob}
+                  baseFilename={baseName(result.filename)}
+                  nativeType="image/jpeg"
+                  formats={[
+                    { type: "image/jpeg", ext: "jpg", label: "JPG · exact target size" },
+                    { type: "image/png", ext: "png", label: "PNG · lossless" },
+                    { type: "image/webp", ext: "webp", label: "WebP · smaller file" },
+                  ]}
+                />
                 <button type="button" className={ls.uploadMoreBtn} onClick={reset}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"

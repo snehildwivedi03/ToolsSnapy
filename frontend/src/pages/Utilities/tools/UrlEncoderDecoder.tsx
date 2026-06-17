@@ -21,7 +21,7 @@ const safeEncode = (text: string) => {
 
 const safeDecode = (text: string) => {
   try { return { result: decodeURIComponent(text), error: null }; }
-  catch { return { result: "", error: "Invalid percent-encoding — the input could not be decoded." }; }
+  catch { return { result: "", error: "Invalid percent-encoding. The input could not be decoded." }; }
 };
 
 const UrlEncoderDecoder = () => {

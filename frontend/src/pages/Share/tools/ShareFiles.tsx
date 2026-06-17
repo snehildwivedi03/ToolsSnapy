@@ -251,7 +251,7 @@ const ShareFiles = () => {
           )}
 
           {loading && (
-            <ProgressBar value={progress} tone="purple" label="Uploading…" />
+            <ProgressBar value={progress} tone="amber" label="Uploading…" />
           )}
 
           <button

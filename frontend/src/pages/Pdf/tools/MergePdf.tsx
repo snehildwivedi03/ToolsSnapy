@@ -133,7 +133,7 @@ const MergePdf = () => {
       iconColor="#dc2626"
       iconBg="#fef2f2"
       title="Merge PDF"
-      description="Combine multiple PDFs into a single document. Drag to reorder, then merge — all in your browser."
+      description="Combine multiple PDFs into a single document. Drag to reorder, then merge. All in your browser."
     >
       {items.length === 0 ? (
         <div className={s.card}>
@@ -155,7 +155,7 @@ const MergePdf = () => {
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
             <span className={ls.dropTitle}>Click to upload or drag &amp; drop</span>
-            <span className={ls.dropHint}>Select two or more PDF files — processed in your browser</span>
+            <span className={ls.dropHint}>Select two or more PDF files, processed in your browser</span>
           </div>
           <input
             ref={inputRef}
@@ -239,7 +239,7 @@ const MergePdf = () => {
             )}
           </button>
 
-          {busy && <ProgressBar value={progress} tone="red" label="Merging PDFs…" />}
+          {busy && <ProgressBar value={progress} tone="purple" label="Merging PDFs…" />}
 
           {error && <p className={ls.errorMsg}>{error}</p>}
 
@@ -251,7 +251,7 @@ const MergePdf = () => {
                   strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
-                Merged into one PDF — {result.pages} pages · {formatBytes(result.blob.size)}
+                Merged into one PDF: {result.pages} pages · {formatBytes(result.blob.size)}
               </span>
 
               <div className={ls.actionRow}>

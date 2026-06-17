@@ -12,7 +12,7 @@ const PDF_TOOLS = [
     to: "/pdf/merge",
     title: "Merge PDF",
     description:
-      "Combine several PDFs into one document. Drag to reorder pages, then download — nothing leaves your browser.",
+      "Combine several PDFs into one document. Drag to reorder pages, then download. Nothing leaves your browser.",
   },
   {
     id: "pdf-split",
@@ -26,7 +26,7 @@ const PDF_TOOLS = [
     to: "/pdf/images-to-pdf",
     title: "Images to PDF",
     description:
-      "Turn JPG, PNG or WebP images into a single PDF — one image per page, in the order you choose.",
+      "Turn JPG, PNG or WebP images into a single PDF, one image per page, in the order you choose.",
   },
   {
     id: "pdf-to-images",
@@ -106,7 +106,7 @@ const Pdf = () => {
         <h1 className={styles.title}>PDF Tools</h1>
         <p className={styles.description}>
           Merge, split, and convert PDFs right in your browser. Your files are never
-          uploaded — everything happens locally on your device.
+          uploaded. Everything happens locally on your device.
         </p>
       </div>
 

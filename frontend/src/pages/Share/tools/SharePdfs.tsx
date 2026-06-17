@@ -179,7 +179,7 @@ const SharePdfs = () => {
           )}
 
           {loading && (
-            <ProgressBar value={progress} tone="purple" label="Uploading…" />
+            <ProgressBar value={progress} tone="amber" label="Uploading…" />
           )}
 
           <button className={s.primaryBtn} onClick={upload} disabled={loading || files.length === 0}>

@@ -183,7 +183,7 @@ const ImageResizeDimensions = () => {
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
             <span className={ls.dropTitle}>Click to upload or drag &amp; drop</span>
-            <span className={ls.dropHint}>PNG, JPG, WebP — processed in your browser</span>
+            <span className={ls.dropHint}>PNG, JPG, WebP. Processed in your browser</span>
           </div>
           <input
             ref={inputRef}

@@ -199,7 +199,7 @@ const ImageToText = () => {
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
             <span className={ls.dropTitle}>Click to upload or drag &amp; drop</span>
-            <span className={ls.dropHint}>PNG, JPG, WebP — images with clear text work best</span>
+            <span className={ls.dropHint}>PNG, JPG, WebP. Images with clear text work best</span>
           </div>
           <input
             ref={inputRef}
