@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import {
   caseConverterApi,
   getApiError,
@@ -163,6 +164,7 @@ const CaseConverter = () => {
                 >
                   {copied ? "Copied!" : "Copy result"}
                 </button>
+                <ShareTextViaToolSnapy getText={() => output ?? ""} />
               </div>
             </>
           )}

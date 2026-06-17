@@ -78,7 +78,7 @@ const CATEGORIES = [
     title: "Image Tools",
     description: "Resize, crop, convert and optimise images.",
     icon: <ImageIcon />,
-    toolCount: 4,
+    toolCount: 5,
     iconColor: "#7c3aed",
     iconBg: "#f5f3ff",
   },

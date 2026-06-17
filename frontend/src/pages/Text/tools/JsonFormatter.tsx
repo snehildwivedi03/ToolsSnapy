@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import {
   jsonFormatterApi,
   getApiError,
@@ -144,6 +145,7 @@ const JsonFormatter = () => {
                 >
                   {copied ? "Copied!" : "Copy JSON"}
                 </button>
+                <ShareTextViaToolSnapy getText={() => output ?? ""} />
               </div>
             </>
           )}

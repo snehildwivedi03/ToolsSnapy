@@ -6,7 +6,7 @@
   <img src="frontend/public/favicon.png" alt="ToolSnapy Logo" width="80" height="80">
 </p>
 
-## 🎯 Mission
+## Mission
 
 ToolSnapy was built with a simple philosophy: **tools should work for you, not collect data about you.**
 
@@ -14,21 +14,22 @@ In an era where every online service tracks, stores, and monetizes user data, To
 
 **You upload. You work. You leave. Until next time.**
 
-## ✨ Features
+## Features
 
-### 🖼️ Image Tools
+### Image Tools
 - **Resize to Target Size** — Compress images to an exact file size (e.g., 200 KB)
 - **Background Remover** — AI-powered background removal, runs entirely in-browser
 - **Image Resizer** — Resize to exact pixel dimensions with aspect ratio lock
 - **Image Converter** — Convert between PNG, JPG, WebP, AVIF, and SVG
+- **Image to Text (OCR)** — Extract text from images using optical character recognition
 
-### 📄 PDF Tools
+### PDF Tools
 - **Merge PDF** — Combine multiple PDFs into one document
 - **Split & Extract PDF** — Pull specific pages from a PDF
 - **Images to PDF** — Convert images into a single PDF document
 - **PDF to Images** — Export PDF pages as PNG or JPG images
 
-### 🔗 Instant Share
+### Instant Share
 - **Share Text** — Share text snippets with a 6-character code
 - **Share Files** — Upload and share files (up to 500 MB)
 - **Share Images** — Share images instantly
@@ -37,7 +38,7 @@ In an era where every online service tracks, stores, and monetizes user data, To
 
 *All shared content auto-deletes after 15 minutes.*
 
-### 🔢 Calculators
+### Calculators
 - Age & Date Calculator
 - Percentage Calculator
 - Scientific Calculator
@@ -48,7 +49,7 @@ In an era where every online service tracks, stores, and monetizes user data, To
 - Tip & Bill Splitter
 - Discount Calculator
 
-### ✏️ Text Tools
+### Text Tools
 - Word Counter
 - Text Case Converter
 - Text Encoder/Decoder
@@ -56,7 +57,7 @@ In an era where every online service tracks, stores, and monetizes user data, To
 - Find & Replace
 - Text Diff Checker
 
-### 🛠️ Utilities & Dev Tools
+### Utilities & Dev Tools
 - QR Code Generator
 - Barcode Generator
 - Password Generator
@@ -71,7 +72,7 @@ In an era where every online service tracks, stores, and monetizes user data, To
 - Live Clock
 - Pomodoro Timer
 
-## 🔒 Privacy & Security
+## Privacy & Security
 
 ToolSnapy is built with security and privacy as core principles:
 
@@ -85,7 +86,7 @@ ToolSnapy is built with security and privacy as core principles:
 | **Rate Limiting** | Protection against API abuse |
 | **Auto-Cleanup** | Shared content auto-deletes after 15 minutes |
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React 19** with TypeScript
@@ -94,6 +95,7 @@ ToolSnapy is built with security and privacy as core principles:
 - **CSS Modules** for scoped styling
 - **pdf-lib** & **pdfjs-dist** for PDF processing
 - **@imgly/background-removal** for AI background removal
+- **tesseract.js** for OCR text extraction
 
 ### Backend
 - **Express 5** with TypeScript
@@ -102,7 +104,7 @@ ToolSnapy is built with security and privacy as core principles:
 - **Compression** for response optimization
 - **Multer** for file uploads
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 - Node.js 18+ 
@@ -150,7 +152,7 @@ ToolSnapy is built with security and privacy as core principles:
    http://localhost:5173
    ```
 
-## ⚙️ Environment Variables
+## Environment Variables
 
 ### Backend (`backend/.env`)
 
@@ -176,7 +178,7 @@ ToolSnapy is built with security and privacy as core principles:
 | `VITE_APP_NAME` | App name | `ToolSnapy` |
 | `VITE_CONTACT_EMAIL` | Contact email | `support@toolsnapy.com` |
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 toolsnapy/
@@ -207,7 +209,7 @@ toolsnapy/
 └── README.md
 ```
 
-## 🚀 Deployment
+## Deployment
 
 ### Production Build
 
@@ -234,7 +236,7 @@ npm run build
 - Set up proper CORS origins
 - Configure a process manager (PM2)
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -244,7 +246,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the ISC License.
 

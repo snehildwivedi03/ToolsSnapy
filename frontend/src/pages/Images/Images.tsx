@@ -35,6 +35,13 @@ const IMAGE_TOOLS = [
     description:
       "Convert images between PNG, JPG, WebP, AVIF and SVG with adjustable quality. Fast and fully in-browser.",
   },
+  {
+    id: "image-to-text",
+    to: "/images/text-extractor",
+    title: "Image to Text (OCR)",
+    description:
+      "Extract text from images using optical character recognition. Supports multiple languages.",
+  },
 ] as const;
 
 const OTHER_CATEGORIES = [

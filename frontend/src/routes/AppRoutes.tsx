@@ -13,6 +13,7 @@ import ImageResize from "../pages/Images/tools/ImageResize";
 import ImageResizeDimensions from "../pages/Images/tools/ImageResizeDimensions";
 import BackgroundRemove from "../pages/Images/tools/BackgroundRemove";
 import ImageConverter from "../pages/Images/tools/ImageConverter";
+import ImageToText from "../pages/Images/tools/ImageToText";
 import Pdf from "../pages/Pdf/Pdf";
 import MergePdf from "../pages/Pdf/tools/MergePdf";
 import SplitPdf from "../pages/Pdf/tools/SplitPdf";
@@ -113,6 +114,7 @@ const AppRoutes = () => {
         <Route path="/images/resizer"            element={<ImageResizeDimensions />} />
         <Route path="/images/background-remover" element={<BackgroundRemove />} />
         <Route path="/images/converter"          element={<ImageConverter />} />
+        <Route path="/images/text-extractor"     element={<ImageToText />} />
 
         {/* PDF Tools */}
         <Route path="/pdf"                element={<Pdf />} />

@@ -1,5 +1,6 @@
 ﻿import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import {
   randomParagraphApi,
   getApiError,
@@ -193,6 +194,9 @@ const RandomParagraph = () => {
               >
                 {copied ? "Copied!" : "Copy all"}
               </button>
+            )}
+            {paragraphs !== null && (
+              <ShareTextViaToolSnapy getText={() => paragraphs.join("\n\n")} />
             )}
           </div>
 

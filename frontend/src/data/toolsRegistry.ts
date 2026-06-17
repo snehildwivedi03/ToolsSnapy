@@ -22,6 +22,7 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: "image-resizer", title: "Image Resizer", description: "Resize an image to exact pixel dimensions with aspect-ratio lock.", to: "/images/resizer", category: "Image Tools", keywords: ["resize", "dimensions", "width", "height", "pixels", "scale", "px"] },
   { id: "background-remover", title: "Background Remover", description: "Automatically erase the background from any photo.", to: "/images/background-remover", category: "Image Tools", keywords: ["remove background", "transparent", "cutout", "png", "erase"] },
   { id: "image-converter", title: "Image Converter", description: "Convert images between PNG, JPG, WebP, AVIF and SVG.", to: "/images/converter", category: "Image Tools", keywords: ["convert", "png", "jpg", "jpeg", "webp", "avif", "svg", "format"] },
+  { id: "image-to-text", title: "Image to Text (OCR)", description: "Extract text from images using optical character recognition.", to: "/images/text-extractor", category: "Image Tools", keywords: ["ocr", "extract", "text", "scan", "recognize", "read", "optical"] },
 
   // ── PDF Tools ───────────────────────────────────────────
   { id: "pdf-merge", title: "Merge PDF", description: "Combine multiple PDFs into a single document.", to: "/pdf/merge", category: "PDF Tools", keywords: ["combine", "join", "merge", "concat", "pdf"] },
