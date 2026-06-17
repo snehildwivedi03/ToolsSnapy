@@ -1,3 +1,4 @@
+import "dotenv/config";
 import app from "./app.js";
 import { startCleanupService } from "./services/share/cleanup.service.js";
 

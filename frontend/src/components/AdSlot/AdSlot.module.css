@@ -1,0 +1,68 @@
+.slot {
+  display: none;
+}
+
+/* Only show when ads are enabled via env variable */
+.slotEnabled {
+  display: block;
+  width: 100%;
+  min-height: 90px;
+  background: var(--color-surface);
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* Ad label required by most ad networks */
+.label {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 0.25rem 0;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Standard ad sizes */
+.slotBanner {
+  min-height: 90px; /* 728x90 leaderboard */
+  max-width: 728px;
+  margin: 0 auto;
+}
+
+.slotRectangle {
+  min-height: 250px; /* 300x250 medium rectangle */
+  max-width: 300px;
+}
+
+.slotSkyscraper {
+  min-height: 600px; /* 160x600 skyscraper */
+  max-width: 160px;
+}
+
+/* Responsive: hide large ads on mobile */
+@media (max-width: 768px) {
+  .slotBanner {
+    min-height: 50px; /* 320x50 mobile banner */
+    max-width: 320px;
+  }
+  
+  .slotSkyscraper {
+    display: none !important;
+  }
+}
+
+/* Loading state placeholder */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: inherit;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}

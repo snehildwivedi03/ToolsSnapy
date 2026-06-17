@@ -248,10 +248,10 @@ const Home = () => {
           <li className={styles.uspItem}>
             <span className={styles.uspNum} aria-hidden="true">02</span>
             <div>
-              <h3 className={styles.uspHeading}>No ads.</h3>
+              <h3 className={styles.uspHeading}>No cloud.</h3>
               <p className={styles.uspDesc}>
-                Clean interface. No banners, no pop-ups,
-                no sponsored clutter. Just tools.
+                Everything runs in your browser. Your files
+                never leave your device.
               </p>
             </div>
           </li>

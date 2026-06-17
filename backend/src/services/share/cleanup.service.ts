@@ -4,7 +4,8 @@ import { fileURLToPath } from "url";
 import { SHARE_ROOT } from "./shareText.service.js";
 import type { ShareMetadata } from "../../types/share.types.js";
 
-const INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+// Cleanup interval from env (default: 6 hours)
+const INTERVAL_MS = Number(process.env.CLEANUP_INTERVAL_MS) || 6 * 60 * 60 * 1000;
 
 async function sweep() {
   let entries: string[];
@@ -50,6 +51,8 @@ async function sweep() {
 }
 
 export function startCleanupService() {
+  const hours = (INTERVAL_MS / (60 * 60 * 1000)).toFixed(1);
+  console.log(`[cleanup] Service started. Sweeping every ${hours}h (${INTERVAL_MS}ms)`);
   void sweep(); // run once on start
   setInterval(() => void sweep(), INTERVAL_MS);
 }
