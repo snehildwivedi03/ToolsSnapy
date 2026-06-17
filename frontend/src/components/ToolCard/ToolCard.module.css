@@ -3,90 +3,74 @@
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
-  background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
+  height: 100%;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius-lg);
-  padding: 1.125rem 1.25rem 1rem;
+  padding: 1.25rem 1.25rem 1.125rem;
   text-decoration: none;
   overflow: hidden;
+  box-shadow: 0 4px 18px -8px rgba(124, 58, 237, 0.18);
   transition: transform var(--transition-base),
     box-shadow var(--transition-base),
     border-color var(--transition-base);
 }
 
-/* Accent strip that slides in on hover  signals interactivity */
+/* Colored top accent bar — the editorial / magazine look */
 .card::before {
   content: "";
   position: absolute;
-  inset: 0 auto 0 0;
-  width: 3px;
-  background: var(--color-accent);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform var(--transition-base);
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--card-accent, var(--color-accent));
+  transition: height var(--transition-base);
 }
 
 .card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-card-hover);
-  border-color: var(--color-accent-subtle);
+  border-color: color-mix(in srgb, var(--card-accent, var(--color-accent)) 35%, var(--color-border));
 }
 
 .card:hover::before {
-  transform: scaleY(1);
+  height: 6px;
 }
 
 .card:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--card-accent, var(--color-accent));
   outline-offset: 3px;
 }
 
-.header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.625rem;
+/* Uppercase colored category label */
+.tag {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--card-accent, var(--color-accent));
 }
 
 .title {
-  font-size: 0.9375rem;
+  font-size: 1.0625rem;
   font-weight: 800;
   color: var(--color-text);
   letter-spacing: -0.02em;
   line-height: 1.3;
 }
 
-/* Launch badge in the corner  makes the card read as a clickable tool */
-.iconBadge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
-  border-radius: var(--radius-md);
-  background: var(--color-accent-light);
-  color: var(--color-accent);
-  transition: background var(--transition-base),
-    color var(--transition-base),
-    transform var(--transition-base);
-}
-
-.card:hover .iconBadge {
-  background: var(--color-accent);
-  color: #fff;
-  transform: rotate(45deg);
-}
-
 .desc {
   font-size: 0.8125rem;
   color: var(--color-text-secondary);
   font-weight: 500;
-  line-height: 1.5;
-  margin-bottom: 0.125rem;
+  line-height: 1.55;
+  margin-bottom: 0.25rem;
 }
 
-/* CTA styled as a real pill button */
+/* CTA styled as a pill that adopts the card's accent on hover */
 .cta {
   display: inline-flex;
   align-self: flex-start;
@@ -95,15 +79,15 @@
   margin-top: auto;
   padding: 0.4rem 0.75rem;
   border-radius: var(--radius-full);
-  background: var(--color-accent-subtle);
+  background: color-mix(in srgb, var(--card-accent, var(--color-accent)) 12%, transparent);
   font-size: 0.8125rem;
   font-weight: 700;
-  color: var(--color-accent);
+  color: var(--card-accent, var(--color-accent));
   transition: background var(--transition-base), color var(--transition-base);
 }
 
 .card:hover .cta {
-  background: var(--color-accent);
+  background: var(--card-accent, var(--color-accent));
   color: #fff;
 }
 
