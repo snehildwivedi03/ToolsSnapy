@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,9 +12,6 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
-<<<<<<< Updated upstream
-=======
     allowedHosts: ["plots-knight-lady-duration.trycloudflare.com"],
->>>>>>> Stashed changes
   },
-})
+});
