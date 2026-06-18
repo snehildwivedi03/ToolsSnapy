@@ -203,12 +203,14 @@ Test-Endpoint "Rate Limit Headers Present (Share API)" {
         $names = @($r.Headers.Keys)
     } catch {
         $resp = $_.Exception.Response
-        if ($resp -is [System.Net.Http.HttpResponseMessage]) {
-            # PowerShell 7+
-            $names = @($resp.Headers | ForEach-Object { $_.Key })
-        } elseif ($resp) {
-            # Windows PowerShell 5.1
-            $names = @($resp.Headers.AllKeys)
+        if ($resp) {
+            if ($PSVersionTable.PSEdition -eq 'Core') {
+                # PowerShell 7+: HttpResponseMessage.Headers is an enumerable of KeyValuePair
+                $names = @($resp.Headers | ForEach-Object { $_.Key })
+            } else {
+                # Windows PowerShell 5.1: HttpWebResponse.Headers is a WebHeaderCollection
+                $names = @($resp.Headers.AllKeys)
+            }
         }
     }
     # Matches draft-6 (RateLimit-Limit), draft-7 (RateLimit / RateLimit-Policy)
