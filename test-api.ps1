@@ -190,14 +190,30 @@ Test-Endpoint "Invalid Share Code Format Sanitized" {
 # ═══════════════════════════════════════════════════════════════
 
 Test-Endpoint "Rate Limit Headers Present (Share API)" {
+    # TESTXX doesn't exist, so the server replies 404 and Invoke-WebRequest
+    # throws. The rate-limit headers are still on that response, but the way
+    # PowerShell exposes error-response headers differs by edition:
+    #   - Windows PowerShell 5.1: WebException -> HttpWebResponse.Headers (string-indexable)
+    #   - PowerShell 7 (Linux/macOS): HttpResponseException -> HttpResponseMessage.Headers
+    #     (an enumerable of KeyValuePair, NOT string-indexable)
+    # So collect the header *names* in a way that works on both, then match.
+    $names = @()
     try {
         $r = Invoke-WebRequest "$baseUrl/api/share/TESTXX" -Method GET -UseBasicParsing
-        $headers = $r.Headers
+        $names = @($r.Headers.Keys)
     } catch {
-        $headers = $_.Exception.Response.Headers
+        $resp = $_.Exception.Response
+        if ($resp -is [System.Net.Http.HttpResponseMessage]) {
+            # PowerShell 7+
+            $names = @($resp.Headers | ForEach-Object { $_.Key })
+        } elseif ($resp) {
+            # Windows PowerShell 5.1
+            $names = @($resp.Headers.AllKeys)
+        }
     }
-    if (-not $headers) { return $false }
-    ($headers["X-RateLimit-Limit"] -ne $null) -or ($headers["RateLimit-Limit"] -ne $null)
+    # Matches draft-6 (RateLimit-Limit), draft-7 (RateLimit / RateLimit-Policy)
+    # and legacy (X-RateLimit-*) header names.
+    ($names | Where-Object { $_ -match '^(X-)?RateLimit' }).Count -gt 0
 }
 
 # --------------------------------------------------------------
