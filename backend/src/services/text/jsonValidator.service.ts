@@ -10,14 +10,16 @@ export function validateJson(text: string): JsonValidatorResult {
 
     // Modern Node (v20+): "... at line X column Y"
     const lineMatch = message.match(/\bat line (\d+)\b/i);
-    if (lineMatch) {
-      return { valid: false, error: message, line: parseInt(lineMatch[1], 10) };
+    const lineStr = lineMatch?.[1];
+    if (lineStr) {
+      return { valid: false, error: message, line: parseInt(lineStr, 10) };
     }
 
-    // Older Node: "... at position X" — compute line from char offset
+    // Older Node: "... at position X" - compute line from char offset
     const posMatch = message.match(/\bat position (\d+)\b/i);
-    if (posMatch) {
-      const pos = parseInt(posMatch[1], 10);
+    const posStr = posMatch?.[1];
+    if (posStr) {
+      const pos = parseInt(posStr, 10);
       const line = text.substring(0, pos).split("\n").length;
       return { valid: false, error: message, line };
     }

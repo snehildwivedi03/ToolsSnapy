@@ -11,8 +11,9 @@ import {
 } from "../services/share/shareFiles.service.js";
 import { SHARE_ROOT } from "../services/share/shareText.service.js";
 
-function safeCode(raw: string): string | null {
-  const code = (raw ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+function safeCode(raw: unknown): string | null {
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  const code = (typeof value === "string" ? value : "").toUpperCase().replace(/[^A-Z0-9]/g, "");
   return code.length === 6 ? code : null;
 }
 

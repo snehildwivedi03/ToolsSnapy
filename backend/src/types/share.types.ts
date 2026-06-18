@@ -15,7 +15,7 @@ export interface ShareMetadata {
   files?: FileInfo[];
   totalSize?: number;
   fileCount?: number;
-  folderName?: string;
+  folderName?: string | undefined;
 }
 
 export const EXPIRY_MS = 15 * 60 * 1000; // 15 minutes
