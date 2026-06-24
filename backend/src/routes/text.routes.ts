@@ -20,6 +20,7 @@ router.post("/character-counter", textCtrl.characterCounter);
 router.post("/case-converter", textCtrl.caseConverter);
 router.post("/json-formatter", textCtrl.jsonFormatter);
 router.post("/json-validator", textCtrl.jsonValidator);
+router.post("/json-repair", textCtrl.jsonRepair);
 router.post("/random-paragraph", textCtrl.randomParagraph);
 
 export default router;

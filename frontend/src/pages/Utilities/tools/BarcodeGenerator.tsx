@@ -7,6 +7,7 @@ import ls from "./BarcodeGenerator.module.css";
 import tp from "../../../styles/toolpage.module.css";
 import { shareFiles } from "../../../services/shareApi";
 import { incrementFiles } from "../../../services/shareCounter";
+import Toast from "../../../components/Toast/Toast";
 
 type BarcodeFormat = "CODE128" | "EAN13" | "EAN8" | "UPC" | "CODE39" | "ITF14";
 
@@ -35,6 +36,7 @@ const BarcodeGenerator = () => {
   const [shareCode, setShareCode] = useState<string | null>(null);
   const [shareErr,  setShareErr]  = useState("");
   const [copied,    setCopied]    = useState(false);
+  const [downloadToast, setDownloadToast] = useState(false);
   const svgRef   = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -54,6 +56,7 @@ const BarcodeGenerator = () => {
     link.href = URL.createObjectURL(blob);
     link.click();
     URL.revokeObjectURL(link.href);
+    setDownloadToast(true);
   };
 
   /** Convert the SVG barcode to a PNG blob via an off-screen canvas */
@@ -121,6 +124,7 @@ const BarcodeGenerator = () => {
       title="Barcode Generator"
       description="Generate barcodes in multiple formats. Download as SVG for print-ready quality."
     >
+      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
       <div className={s.card}>
         <span className={s.cardTitle}>Barcode Options</span>
 

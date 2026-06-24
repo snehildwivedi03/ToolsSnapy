@@ -4,7 +4,10 @@ import { countText } from "../services/text/wordCounter.service.js";
 import { countChars } from "../services/text/characterCounter.service.js";
 import { convertCase } from "../services/text/caseConverter.service.js";
 import { formatJson } from "../services/text/jsonFormatter.service.js";
-import { validateJson } from "../services/text/jsonValidator.service.js";
+import {
+  analyzeJson,
+  repairJson,
+} from "../services/text/jsonValidator.service.js";
 import { generateParagraphs } from "../services/text/randomParagraph.service.js";
 
 // Validate that req.body.text is a non-empty string
@@ -116,7 +119,21 @@ export const jsonValidator = async (
   try {
     const text = requireText(req, res);
     if (text === null) return;
-    res.json({ success: true, data: validateJson(text) });
+    res.json({ success: true, data: analyzeJson(text) });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const jsonRepair = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const text = requireText(req, res);
+    if (text === null) return;
+    res.json({ success: true, data: repairJson(text) });
   } catch (err) {
     next(err);
   }

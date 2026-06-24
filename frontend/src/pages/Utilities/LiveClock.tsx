@@ -5,26 +5,93 @@ import styles from "./LiveClock.module.css";
 const fmt = (date: Date, opts: Intl.DateTimeFormatOptions) =>
   new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", ...opts }).format(date);
 
+function istDate(d: Date): { year: number; month: number; day: number } {
+  const str = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
+  const [year, month, day] = str.split("-").map(Number);
+  return { year: year ?? 0, month: (month ?? 1) - 1, day: day ?? 1 };
+}
+
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+const WEEKDAY_SHORT = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
+function buildCalendar(year: number, month: number): (number | null)[][] {
+  // Use setFullYear so years 0-99 are not misinterpreted as 1900-1999
+  const firstD = new Date(0);
+  firstD.setFullYear(year, month, 1);
+  const firstDay = firstD.getDay();
+
+  const lastD = new Date(0);
+  lastD.setFullYear(year, month + 1, 0);
+  const daysInMonth = lastD.getDate();
+
+  const cells: (number | null)[] = [
+    ...Array(firstDay).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ];
+  // Always pad to exactly 42 cells (6 rows × 7 cols) so height never changes
+  while (cells.length < 42) cells.push(null);
+  const weeks: (number | null)[][] = [];
+  for (let i = 0; i < 42; i += 7) weeks.push(cells.slice(i, i + 7));
+  return weeks;
+}
+
 const LiveClock = () => {
-  const [now, setNow]         = useState(new Date());
+  const [now, setNow] = useState(new Date());
   const [format24, setFormat24] = useState(true);
 
-  /* 100 ms interval keeps seconds display snappy with minimal drift */
+  const today = istDate(now);
+  const [calYear, setCalYear] = useState(today.year);
+  const [calMonth, setCalMonth] = useState(today.month);
+  const [goYearInput, setGoYearInput] = useState(String(today.year));
+
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 100);
     return () => clearInterval(id);
   }, []);
 
-  const hh = fmt(now, { hour: "2-digit",   hour12: false });
-  const mm = fmt(now, { minute: "2-digit"                });
-  const ss = fmt(now, { second: "2-digit"                });
-
-  /* 12-hr needs AM/PM split */
+  const hh = fmt(now, { hour: "2-digit", hour12: false });
+  const mm = fmt(now, { minute: "2-digit" });
+  const ss = fmt(now, { second: "2-digit" });
   const hh12Raw = fmt(now, { hour: "2-digit", hour12: true });
-  const hh12    = hh12Raw.replace(/\s?(AM|PM)$/i, "").padStart(2, "0");
-  const ampm    = /AM/i.test(hh12Raw) ? "AM" : "PM";
-
+  const hh12 = hh12Raw.replace(/\s?(AM|PM)$/i, "").padStart(2, "0");
+  const ampm = /AM/i.test(hh12Raw) ? "AM" : "PM";
   const dateStr = fmt(now, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+
+  const weeks = buildCalendar(calYear, calMonth);
+
+  const prevMonth = () => {
+    if (calMonth === 0) { setCalYear(y => y - 1); setCalMonth(11); }
+    else setCalMonth(m => m - 1);
+  };
+  const nextMonth = () => {
+    if (calMonth === 11) { setCalYear(y => y + 1); setCalMonth(0); }
+    else setCalMonth(m => m + 1);
+  };
+  const goToday = () => {
+    const t = istDate(now);
+    setCalYear(t.year);
+    setCalMonth(t.month);
+    setGoYearInput(String(t.year));
+  };
+
+  const handleGoYear = () => {
+    const y = parseInt(goYearInput, 10);
+    if (!isNaN(y) && y >= 1 && y <= 9999) setCalYear(y);
+    else setGoYearInput(String(calYear));
+  };
+
+  const isToday = (d: number | null) =>
+    d !== null && d === today.day && calMonth === today.month && calYear === today.year;
+
+  const atToday = calYear === today.year && calMonth === today.month;
 
   return (
     <div className={styles.page}>
@@ -47,33 +114,116 @@ const LiveClock = () => {
         </Link>
       </div>
 
-      <div className={styles.card}>
-        <div className={styles.badge}>
-          <span className={styles.badgeDot} aria-hidden="true" />
-          India Standard Time · UTC +5:30
+      <div className={styles.twoCardRow}>
+
+        {/* ── Clock card ── */}
+        <div className={styles.card}>
+          <div className={styles.badge}>
+            <span className={styles.badgeDot} aria-hidden="true" />
+            India Standard Time · UTC +5:30
+          </div>
+
+          <div className={styles.timeRow} aria-live="polite"
+            aria-label={`Current time: ${format24 ? hh : hh12}:${mm}:${ss}${!format24 ? " " + ampm : ""}`}>
+            <span className={styles.digits}>{format24 ? hh : hh12}</span>
+            <span className={styles.colon} aria-hidden="true">:</span>
+            <span className={styles.digits}>{mm}</span>
+            <span className={styles.colon} aria-hidden="true">:</span>
+            <span className={styles.seconds}>{ss}</span>
+            {!format24 && <span className={styles.ampm}>{ampm}</span>}
+          </div>
+
+          <div className={styles.date}>{dateStr}</div>
+
+          <div className={styles.divider} />
+
+          <button className={styles.toggle} onClick={() => setFormat24(f => !f)}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            {format24 ? "Switch to 12-hour" : "Switch to 24-hour"}
+          </button>
         </div>
 
-        <div className={styles.timeRow} aria-live="polite" aria-label={`Current time: ${format24 ? hh : hh12}:${mm}:${ss}${!format24 ? " " + ampm : ""}`}>
-          <span className={styles.digits}>{format24 ? hh : hh12}</span>
-          <span className={styles.colon} aria-hidden="true">:</span>
-          <span className={styles.digits}>{mm}</span>
-          <span className={styles.colon} aria-hidden="true">:</span>
-          <span className={styles.seconds}>{ss}</span>
-          {!format24 && <span className={styles.ampm}>{ampm}</span>}
+        {/* ── Calendar card ── */}
+        <div className={styles.calendarCard}>
+          <div className={styles.calHeaderRow}>
+            <button className={styles.calNavBtn} onClick={prevMonth} aria-label="Previous month">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <div className={styles.calMonthYear}>
+              <select
+                className={styles.calMonthSelect}
+                value={calMonth}
+                onChange={e => setCalMonth(Number(e.target.value))}
+                aria-label="Month"
+              >
+                {MONTH_NAMES.map((name, i) => (
+                  <option key={i} value={i}>{name}</option>
+                ))}
+              </select>
+            </div>
+            <button className={styles.calNavBtn} onClick={nextMonth} aria-label="Next month">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+
+          <div className={styles.calGrid}>
+            {WEEKDAY_SHORT.map(d => (
+              <div key={d} className={styles.calWeekday}>{d}</div>
+            ))}
+            {weeks.map((week, wi) =>
+              week.map((day, di) => (
+                <div
+                  key={`${wi}-${di}`}
+                  className={
+                    day === null
+                      ? styles.calCellEmpty
+                      : isToday(day)
+                      ? `${styles.calCell} ${styles.calCellToday}`
+                      : styles.calCell
+                  }
+                  aria-current={isToday(day) ? "date" : undefined}
+                >
+                  {day ?? ""}
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Go to date row */}
+          <div className={styles.goToRow}>
+            <span className={styles.goToLabel}>Year:</span>
+            <input
+              type="number"
+              className={styles.goToYear}
+              value={goYearInput}
+              onChange={e => setGoYearInput(e.target.value)}
+              onBlur={handleGoYear}
+              onKeyDown={e => { if (e.key === "Enter") handleGoYear(); }}
+              min={1}
+              max={9999}
+              aria-label="Go to year"
+            />
+            <button
+              className={styles.calTodayBtn}
+              onClick={goToday}
+              style={{ visibility: atToday ? "hidden" : "visible" }}
+              tabIndex={atToday ? -1 : 0}
+            >
+              Back to today
+            </button>
+          </div>
         </div>
 
-        <div className={styles.date}>{dateStr}</div>
-
-        <div className={styles.divider} />
-
-        <button className={styles.toggle} onClick={() => setFormat24(f => !f)}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
-          </svg>
-          {format24 ? "Switch to 12-hour" : "Switch to 24-hour"}
-        </button>
       </div>
     </div>
   );

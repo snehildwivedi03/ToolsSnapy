@@ -41,10 +41,22 @@ export interface JsonFormatterResult {
   formattedJson: string;
 }
 
+export interface JsonIssue {
+  line: number;
+  column?: number;
+  message: string;
+  severity: "error" | "warning";
+}
+
 export interface JsonValidatorResult {
   valid: boolean;
-  error?: string;
-  line?: number;
+  issues: JsonIssue[];
+}
+
+export interface JsonRepairResult {
+  valid: boolean;
+  repairedJson: string;
+  fixes: string[];
 }
 
 export interface RandomParagraphResult {

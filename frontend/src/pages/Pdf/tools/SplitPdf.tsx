@@ -5,6 +5,7 @@ import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./pdfTools.module.css";
 import ShareViaToolSnapy from "../../Images/tools/ShareViaToolSnapy";
+import Toast from "../../../components/Toast/Toast";
 import {
   baseName,
   downloadBlob,
@@ -42,6 +43,7 @@ const SplitPdf = () => {
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [downloadToast, setDownloadToast] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const reset = () => {
@@ -128,6 +130,7 @@ const SplitPdf = () => {
       title="Split & Extract PDF"
       description="Pull out the pages you need into a new PDF. Enter page numbers or ranges like 1-3, 5, 8-10."
     >
+      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
       {!src ? (
         <div className={s.card}>
           <span className={s.cardTitle}>Upload PDF</span>
@@ -215,7 +218,7 @@ const SplitPdf = () => {
                 <button
                   type="button"
                   className={`${s.calcBtn} ${ls.dlBtn}`}
-                  onClick={() => downloadBlob(result.blob, result.filename)}
+                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast(true); }}
                 >
                   Download PDF
                 </button>

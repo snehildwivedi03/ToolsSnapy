@@ -4,6 +4,7 @@ import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./imageTools.module.css";
 import ShareViaToolSnapy from "./ShareViaToolSnapy";
+import Toast from "../../../components/Toast/Toast";
 import {
   baseName,
   canvasToBlob,
@@ -48,6 +49,7 @@ const ImageResizeDimensions = () => {
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [downloadToast, setDownloadToast] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const ratio = src ? src.img.naturalWidth / src.img.naturalHeight : 1;
@@ -163,6 +165,7 @@ const ImageResizeDimensions = () => {
       title="Image Resizer"
       description="Resize an image to exact pixel dimensions, with optional aspect-ratio lock."
     >
+      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
       {!src ? (
         <div className={s.card}>
           <span className={s.cardTitle}>Upload Image</span>
@@ -273,7 +276,7 @@ const ImageResizeDimensions = () => {
                 <button
                   type="button"
                   className={`${s.calcBtn} ${ls.dlBtn}`}
-                  onClick={() => downloadBlob(result.blob, result.filename)}
+                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast(true); }}
                 >
                   Download
                 </button>

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { removeBackground } from "@imgly/background-removal";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
@@ -29,6 +29,8 @@ interface ResultState {
   filename: string;
 }
 
+type EditTool = "none" | "eraser" | "restore";
+
 const BackgroundRemove = () => {
   const [src, setSrc] = useState<SourceState | null>(null);
   const [busy, setBusy] = useState(false);
@@ -39,6 +41,14 @@ const BackgroundRemove = () => {
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Canvas editing state
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [originalImgRef, setOriginalImgRef] = useState<HTMLImageElement | null>(null);
+  const [activeTool, setActiveTool] = useState<EditTool>("none");
+  const [brushSize, setBrushSize] = useState(20);
+  const [isPainting, setIsPainting] = useState(false);
+  const lastPos = useRef<{ x: number; y: number } | null>(null);
+
   const reset = () => {
     if (src) URL.revokeObjectURL(src.url);
     if (result) URL.revokeObjectURL(result.url);
@@ -46,6 +56,8 @@ const BackgroundRemove = () => {
     setResult(null);
     setError("");
     setProgress(0);
+    setActiveTool("none");
+    setOriginalImgRef(null);
   };
 
   const loadFile = (file: File) => {
@@ -72,6 +84,132 @@ const BackgroundRemove = () => {
     if (file) loadFile(file);
   };
 
+  // Draw result onto canvas when result changes
+  useEffect(() => {
+    if (!result || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+    };
+    img.src = result.url;
+  }, [result]);
+
+  // Keep the original image element for restore tool
+  useEffect(() => {
+    if (!src) return;
+    const img = new Image();
+    img.onload = () => setOriginalImgRef(img);
+    img.src = src.url;
+  }, [src]);
+
+  const getCanvasPoint = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>,
+    canvas: HTMLCanvasElement,
+  ) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    let clientX: number, clientY: number;
+    if ("touches" in e) {
+      const t = e.touches[0];
+      if (!t) return null;
+      clientX = t.clientX;
+      clientY = t.clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY,
+    };
+  };
+
+  const paint = useCallback(
+    (x: number, y: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas || activeTool === "none") return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      ctx.save();
+      // Draw a circle at position
+      ctx.beginPath();
+      ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
+
+      if (activeTool === "eraser") {
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.fill();
+      } else if (activeTool === "restore" && originalImgRef) {
+        ctx.globalCompositeOperation = "source-over";
+        ctx.clip();
+        ctx.drawImage(originalImgRef, 0, 0, canvas.width, canvas.height);
+      }
+      ctx.restore();
+    },
+    [activeTool, brushSize, originalImgRef],
+  );
+
+  const onPointerDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (activeTool === "none") return;
+    setIsPainting(true);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const pt = getCanvasPoint(e, canvas);
+    if (!pt) return;
+    lastPos.current = pt;
+    paint(pt.x, pt.y);
+  };
+
+  const onPointerMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isPainting || activeTool === "none") return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const pt = getCanvasPoint(e, canvas);
+    if (!pt) return;
+    // Interpolate for smooth strokes
+    if (lastPos.current) {
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        const dx = pt.x - lastPos.current.x;
+        const dy = pt.y - lastPos.current.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const steps = Math.max(1, Math.floor(dist / (brushSize / 4)));
+        for (let i = 0; i <= steps; i++) {
+          paint(
+            lastPos.current.x + (dx * i) / steps,
+            lastPos.current.y + (dy * i) / steps,
+          );
+        }
+      }
+    }
+    lastPos.current = pt;
+  };
+
+  const onPointerUp = () => {
+    setIsPainting(false);
+    lastPos.current = null;
+  };
+
+  // Export canvas back to blob for download / share
+  const getCanvasBlob = (): Promise<Blob> =>
+    new Promise((resolve, reject) => {
+      const canvas = canvasRef.current;
+      if (!canvas) { reject(new Error("No canvas")); return; }
+      canvas.toBlob(
+        (blob) => blob ? resolve(blob) : reject(new Error("Canvas empty")),
+        "image/png",
+        1,
+      );
+    });
+
   const remove = async () => {
     if (!src) return;
     setBusy(true);
@@ -80,7 +218,7 @@ const BackgroundRemove = () => {
     setStage("Preparing…");
     try {
       const blob = await removeBackground(src.file, {
-        model: "isnet",
+        model: "isnet_fp16",
         output: { format: "image/png", quality: 1 },
         progress: (key, current, total) => {
           const pct = total ? Math.round((current / total) * 100) : 0;
@@ -88,8 +226,6 @@ const BackgroundRemove = () => {
           setStage(key.startsWith("fetch") ? "Downloading AI model…" : "Removing background…");
         },
       });
-      // Fully decode the cut-out before revealing it, so the result appears
-      // instantly and the UI never flashes a half-loaded image.
       const url = URL.createObjectURL(blob);
       await loadImage(url);
       if (result) URL.revokeObjectURL(result.url);
@@ -104,7 +240,17 @@ const BackgroundRemove = () => {
 
   const shareFile = async (): Promise<File> => {
     if (!result) throw new Error("No result");
-    return new File([result.blob], result.filename, { type: "image/png" });
+    // Use canvas version (includes edits)
+    try {
+      const editedBlob = await getCanvasBlob();
+      return new File([editedBlob], result.filename, { type: "image/png" });
+    } catch {
+      return new File([result.blob], result.filename, { type: "image/png" });
+    }
+  };
+
+  const getDownloadBlob = async (): Promise<Blob> => {
+    try { return await getCanvasBlob(); } catch { return result!.blob; }
   };
 
   return (
@@ -204,15 +350,72 @@ const BackgroundRemove = () => {
                 Background removed!
               </span>
 
-              <div className={ls.comparison}>
-                <div className={ls.compareCol}>
-                  <span className={ls.compareLabel}>Original</span>
-                  <img src={src.url} alt="Original" className={ls.preview} />
-                </div>
-                <div className={ls.compareCol}>
-                  <span className={ls.compareLabel}>Result</span>
-                  <img src={result.url} alt="Background removed" className={ls.preview} />
-                </div>
+              {/* ── Canvas result with editing ── */}
+              <div className={ls.canvasWrap}>
+                <canvas
+                  ref={canvasRef}
+                  className={`${ls.resultCanvas} ${activeTool !== "none" ? (activeTool === "eraser" ? ls.cursorEraser : ls.cursorRestore) : ""}`}
+                  onMouseDown={onPointerDown}
+                  onMouseMove={onPointerMove}
+                  onMouseUp={onPointerUp}
+                  onMouseLeave={onPointerUp}
+                  style={{ touchAction: activeTool !== "none" ? "none" : "auto" }}
+                />
+              </div>
+
+              {/* ── Edit toolbar ── */}
+              <div className={ls.editToolbar}>
+                <span className={ls.editToolbarLabel}>Edit:</span>
+                <button
+                  type="button"
+                  className={`${ls.toolBtn} ${activeTool === "eraser" ? ls.toolBtnActive : ""}`}
+                  onClick={() => setActiveTool(t => t === "eraser" ? "none" : "eraser")}
+                  title="Eraser — remove areas that should be transparent"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 20H7L3 16l10-10 7 7z"/>
+                    <line x1="6" y1="14" x2="14" y2="6"/>
+                  </svg>
+                  Eraser
+                </button>
+                <button
+                  type="button"
+                  className={`${ls.toolBtn} ${activeTool === "restore" ? ls.toolBtnActive : ""}`}
+                  onClick={() => setActiveTool(t => t === "restore" ? "none" : "restore")}
+                  title="Restore pen — paint back original pixels"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                  </svg>
+                  Restore
+                </button>
+                {activeTool !== "none" && (
+                  <div className={ls.brushRow}>
+                    <span className={ls.brushLabel}>Size</span>
+                    <input
+                      type="range"
+                      min={5}
+                      max={80}
+                      value={brushSize}
+                      onChange={e => setBrushSize(Number(e.target.value))}
+                      className={ls.brushSlider}
+                      aria-label="Brush size"
+                    />
+                    <span className={ls.brushValue}>{brushSize}px</span>
+                  </div>
+                )}
+                {activeTool !== "none" && (
+                  <button
+                    type="button"
+                    className={ls.toolBtnDone}
+                    onClick={() => setActiveTool("none")}
+                  >
+                    Done
+                  </button>
+                )}
               </div>
 
               <div className={ls.actionRow}>
@@ -225,6 +428,7 @@ const BackgroundRemove = () => {
                     { type: "image/jpeg", ext: "jpg", label: "JPG · white background" },
                     { type: "image/webp", ext: "webp", label: "WebP · transparent background" },
                   ]}
+                  getEditedBlob={getDownloadBlob}
                 />
                 <button type="button" className={ls.uploadMoreBtn} onClick={reset}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"

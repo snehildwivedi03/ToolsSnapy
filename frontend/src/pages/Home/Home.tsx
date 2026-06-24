@@ -221,6 +221,17 @@ const Home = () => {
           </Link>
         </div>
 
+        {/* ── Floating background images (mobile + tablet only) ── */}
+        <div className={styles.heroFloatBg} aria-hidden="true">
+          <img src="/laptop.png"     className={`${styles.heroFloatImg} ${styles.floatImg1}`} alt="" loading="lazy" draggable="false" />
+          <img src="/pen.png"        className={`${styles.heroFloatImg} ${styles.floatImg2}`} alt="" loading="lazy" draggable="false" />
+          <img src="/pdf.png"        className={`${styles.heroFloatImg} ${styles.floatImg3}`} alt="" loading="lazy" draggable="false" />
+          <img src="/calculator.png" className={`${styles.heroFloatImg} ${styles.floatImg4}`} alt="" loading="lazy" draggable="false" />
+          <img src="/clock.png"      className={`${styles.heroFloatImg} ${styles.floatImg5}`} alt="" loading="lazy" draggable="false" />
+          <img src="/code.png"       className={`${styles.heroFloatImg} ${styles.floatImg6}`} alt="" loading="lazy" draggable="false" />
+          <img src="/image.png"      className={`${styles.heroFloatImg} ${styles.floatImg7}`} alt="" loading="lazy" draggable="false" />
+        </div>
+
       </section>
 
       {/* ── USP: four big bold headings ── */}

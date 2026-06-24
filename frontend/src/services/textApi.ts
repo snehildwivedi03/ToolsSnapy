@@ -42,10 +42,22 @@ export interface JsonFormatterData {
   formattedJson: string;
 }
 
+export interface JsonIssue {
+  line: number;
+  column?: number;
+  message: string;
+  severity: "error" | "warning";
+}
+
 export interface JsonValidatorData {
   valid: boolean;
-  error?: string;
-  line?: number;
+  issues: JsonIssue[];
+}
+
+export interface JsonRepairData {
+  valid: boolean;
+  repairedJson: string;
+  fixes: string[];
 }
 
 export interface RandomParagraphData {
@@ -82,6 +94,11 @@ export const jsonFormatterApi = (text: string, indent: 2 | 4) =>
 
 export const jsonValidatorApi = (text: string) =>
   api.post<ApiOk<JsonValidatorData>>("/text/json-validator", {
+    text,
+  });
+
+export const jsonRepairApi = (text: string) =>
+  api.post<ApiOk<JsonRepairData>>("/text/json-repair", {
     text,
   });
 

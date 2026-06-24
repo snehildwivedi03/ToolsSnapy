@@ -11,6 +11,7 @@ import { baseName, downloadBlob, formatBytes } from "./pdfUtils";
 import { canvasToBlob } from "../../Images/tools/imageUtils";
 import { shareFiles } from "../../../services/shareApi";
 import { incrementFiles } from "../../../services/shareCounter";
+import Toast from "../../../components/Toast/Toast";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
 
@@ -75,6 +76,7 @@ const PdfToImages = () => {
   const [shareCode, setShareCode] = useState<string | null>(null);
   const [shareErr, setShareErr] = useState("");
   const [copied, setCopied] = useState(false);
+  const [downloadToast, setDownloadToast] = useState(false);
   const navigate = useNavigate();
 
   const clearPages = () => {
@@ -173,6 +175,7 @@ const PdfToImages = () => {
     pages.forEach((p, i) => {
       setTimeout(() => downloadBlob(p.blob, p.filename), i * 150);
     });
+    setDownloadToast(true);
   };
 
   const shareAll = async () => {
@@ -218,6 +221,7 @@ const PdfToImages = () => {
       title="PDF to Images"
       description="Convert each page of a PDF into a high-resolution PNG or JPG image. Everything runs in your browser."
     >
+      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
       {!src ? (
         <div className={s.card}>
           <span className={s.cardTitle}>Upload PDF</span>
@@ -386,7 +390,7 @@ const PdfToImages = () => {
                       <button
                         type="button"
                         className={ls.pageThumbDl}
-                        onClick={() => downloadBlob(p.blob, p.filename)}
+                        onClick={() => { downloadBlob(p.blob, p.filename); setDownloadToast(true); }}
                         aria-label={`Download ${p.label}`}
                       >
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"

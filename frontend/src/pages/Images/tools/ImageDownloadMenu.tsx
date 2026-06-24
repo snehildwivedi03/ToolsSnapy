@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import s from "../../../styles/calc.module.css";
 import ls from "./imageTools.module.css";
 import { convertImageBlob, downloadBlob } from "./imageUtils";
+import Toast from "../../../components/Toast/Toast";
 
 export interface DownloadFormat {
   type: "image/png" | "image/jpeg" | "image/webp";
@@ -20,12 +21,15 @@ interface Props {
   formats: DownloadFormat[];
   /** Background colour used when flattening to JPEG. Defaults to white. */
   background?: string;
+  /** Optional: returns an up-to-date blob (e.g. from canvas edits) before download. */
+  getEditedBlob?: () => Promise<Blob>;
 }
 
 /** Split download button: primary format + a menu of alternative formats. */
-const ImageDownloadMenu = ({ blob, baseFilename, nativeType, formats, background }: Props) => {
+const ImageDownloadMenu = ({ blob, baseFilename, nativeType, formats, background, getEditedBlob }: Props) => {
   const [open, setOpen] = useState(false);
   const [working, setWorking] = useState(false);
+  const [downloadToast, setDownloadToast] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,14 +44,18 @@ const ImageDownloadMenu = ({ blob, baseFilename, nativeType, formats, background
   const download = async (fmt: DownloadFormat) => {
     setOpen(false);
     const filename = `${baseFilename}.${fmt.ext}`;
+    // Use edited canvas blob if available
+    const sourceBlob = getEditedBlob ? await getEditedBlob() : blob;
     if (fmt.type === nativeType) {
-      downloadBlob(blob, filename);
+      downloadBlob(sourceBlob, filename);
+      setDownloadToast(true);
       return;
     }
     try {
       setWorking(true);
-      const converted = await convertImageBlob(blob, fmt.type, { background });
+      const converted = await convertImageBlob(sourceBlob, fmt.type, { background });
       downloadBlob(converted, filename);
+      setDownloadToast(true);
     } finally {
       setWorking(false);
     }
@@ -56,7 +64,9 @@ const ImageDownloadMenu = ({ blob, baseFilename, nativeType, formats, background
   const primary = formats[0];
 
   return (
-    <div className={ls.dlMenu} ref={wrapRef}>
+    <>
+      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
+      <div className={ls.dlMenu} ref={wrapRef}>
       <div className={ls.dlSplit}>
         <button
           type="button"
@@ -104,6 +114,7 @@ const ImageDownloadMenu = ({ blob, baseFilename, nativeType, formats, background
         </div>
       )}
     </div>
+    </>
   );
 };
 

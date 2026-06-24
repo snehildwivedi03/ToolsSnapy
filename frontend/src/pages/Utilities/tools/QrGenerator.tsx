@@ -7,6 +7,7 @@ import ls from "./QrGenerator.module.css";
 import tp from "../../../styles/toolpage.module.css";
 import { shareFiles } from "../../../services/shareApi";
 import { incrementFiles } from "../../../services/shareCounter";
+import Toast from "../../../components/Toast/Toast";
 
 const Icon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -31,6 +32,7 @@ const QrGenerator = () => {
   const [shareCode, setShareCode] = useState<string | null>(null);
   const [shareErr,  setShareErr]  = useState("");
   const [copied,    setCopied]    = useState(false);
+  const [downloadToast, setDownloadToast] = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const navigate  = useNavigate();
@@ -53,6 +55,7 @@ const QrGenerator = () => {
     link.download = "qrcode.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
+    setDownloadToast(true);
   };
 
   const shareQR = async () => {
@@ -98,6 +101,7 @@ const QrGenerator = () => {
       title="QR Code Generator"
       description="Turn any URL or text into a QR code instantly. Download as PNG."
     >
+      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
       <div className={s.card}>
         <span className={s.cardTitle}>Content</span>
         <div className={s.inputGroup}>

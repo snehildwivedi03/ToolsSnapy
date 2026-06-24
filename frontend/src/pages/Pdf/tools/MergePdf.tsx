@@ -5,6 +5,7 @@ import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./pdfTools.module.css";
 import ShareViaToolSnapy from "../../Images/tools/ShareViaToolSnapy";
+import Toast from "../../../components/Toast/Toast";
 import { baseName, downloadBlob, formatBytes, readArrayBuffer } from "./pdfUtils";
 
 const Icon = () => (
@@ -34,6 +35,7 @@ const MergePdf = () => {
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [downloadToast, setDownloadToast] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const reset = () => {
@@ -135,6 +137,7 @@ const MergePdf = () => {
       title="Merge PDF"
       description="Combine multiple PDFs into a single document. Drag to reorder, then merge. All in your browser."
     >
+      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
       {items.length === 0 ? (
         <div className={s.card}>
           <span className={s.cardTitle}>Upload PDFs</span>
@@ -258,7 +261,7 @@ const MergePdf = () => {
                 <button
                   type="button"
                   className={`${s.calcBtn} ${ls.dlBtn}`}
-                  onClick={() => downloadBlob(result.blob, result.filename)}
+                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast(true); }}
                 >
                   Download PDF
                 </button>

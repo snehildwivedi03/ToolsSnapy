@@ -6,6 +6,7 @@ import {
   getApiError,
 } from "../../../services/textApi";
 import s from "../../../styles/toolpage.module.css";
+import Toast from "../../../components/Toast/Toast";
 
 const JsonIcon = () => (
   <svg
@@ -31,6 +32,7 @@ const JsonFormatter = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [downloadToast, setDownloadToast] = useState(false);
 
   const handleFormat = async () => {
     if (!text.trim()) return;
@@ -68,6 +70,7 @@ const JsonFormatter = () => {
     a.download = "formatted.json";
     a.click();
     URL.revokeObjectURL(url);
+    setDownloadToast(true);
   };
 
   return (
@@ -80,6 +83,7 @@ const JsonFormatter = () => {
       title="JSON Formatter"
       description="Paste minified or messy JSON and get a clean, indented output."
     >
+      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
       <div className={s.workspace}>
         {/* Input */}
         <div className={s.panel}>
