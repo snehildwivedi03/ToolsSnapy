@@ -59,6 +59,17 @@ const JsonFormatter = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownload = () => {
+    if (output === null) return;
+    const blob = new Blob([output], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "formatted.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <ToolPageShell
       backTo="/text"
@@ -136,6 +147,7 @@ const JsonFormatter = () => {
               />
               <div className={s.actions}>
                 <button
+                  style={{ minWidth: "7.5rem" }}
                   className={
                     copied
                       ? `${s.btnSecondary} ${s.btnCopied}`
@@ -144,6 +156,24 @@ const JsonFormatter = () => {
                   onClick={handleCopy}
                 >
                   {copied ? "Copied!" : "Copy JSON"}
+                </button>
+                <button className={s.btnSecondary} onClick={handleDownload}>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  Download JSON
                 </button>
                 <ShareTextViaToolSnapy getText={() => output ?? ""} />
               </div>
