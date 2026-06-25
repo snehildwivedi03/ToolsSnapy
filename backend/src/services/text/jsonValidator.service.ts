@@ -1,3 +1,4 @@
+import { jsonrepair } from "jsonrepair";
 import type {
   JsonValidatorResult,
   JsonRepairResult,
@@ -46,12 +47,39 @@ function inString(idx: number, ranges: Array<[number, number]>): boolean {
 
 export function analyzeJson(text: string): JsonValidatorResult {
   // Fast path: valid JSON → no issues
+  let parseError: SyntaxError | null = null;
   try {
     JSON.parse(text);
     return { valid: true, issues: [] };
-  } catch { /* fall through to heuristic analysis */ }
+  } catch (e) {
+    if (e instanceof SyntaxError) parseError = e;
+  }
 
   const issues: JsonIssue[] = [];
+
+  // ── Primary: surface the native parse error with position ────────────────
+  if (parseError) {
+    const msg = parseError.message;
+    // Modern V8: "… at line N column N"
+    const lcMatch = msg.match(/at line (\d+) column (\d+)/);
+    // Older V8: "… at position N"
+    const posMatch = msg.match(/at position (\d+)/);
+
+    if (lcMatch?.[1] && lcMatch?.[2]) {
+      issues.push({
+        line: Number(lcMatch[1]),
+        column: Number(lcMatch[2]),
+        message: msg,
+        severity: "error",
+      });
+    } else if (posMatch?.[1]) {
+      const p = positionOf(text, Number(posMatch[1]));
+      issues.push({ line: p.line, column: p.column, message: msg, severity: "error" });
+    } else {
+      issues.push({ line: 1, message: msg, severity: "error" });
+    }
+  }
+
   const strings = findStringRanges(text);
 
   const addIssue = (
@@ -117,6 +145,50 @@ export function analyzeJson(text: string): JsonValidatorResult {
     addIssue(m.index, "Number with leading zero (e.g. 0123 should be 123)"),
   );
 
+  // 9. Unclosed string literals — parser-based: track quote/escape state character by character
+  {
+    let ci = 0, inStr = false, strStartLine = 1, curLine = 1;
+    while (ci < text.length) {
+      const ch = text[ci];
+      if (inStr) {
+        if (ch === "\\") { ci += 2; continue; }
+        if (ch === '"') { inStr = false; }
+        else if (ch === "\n") {
+          issues.push({
+            line: strStartLine,
+            message: "Unclosed string literal — missing closing quote before line break",
+            severity: "error",
+          });
+          inStr = false;
+          curLine++;
+        }
+      } else {
+        if (ch === '"') { inStr = true; strStartLine = curLine; }
+        else if (ch === "\n") { curLine++; }
+      }
+      ci++;
+    }
+    if (inStr) {
+      issues.push({
+        line: strStartLine,
+        message: "Unclosed string literal — missing closing quote before end of input",
+        severity: "error",
+      });
+    }
+  }
+
+  // 10. Missing commas — closing value token followed by newline then a quoted key
+  {
+    const re = /(["\d}\]]|\btrue\b|\bfalse\b|\bnull\b)([ \t]*\n[ \t]*)(?="[^"]*"\s*:)/g;
+    let mc: RegExpExecArray | null;
+    while ((mc = re.exec(text)) !== null) {
+      if (!inString(mc.index, strings)) {
+        const { line } = positionOf(text, mc.index);
+        issues.push({ line, message: "Missing comma after property value", severity: "error" });
+      }
+    }
+  }
+
   // Deduplicate by line+message, then sort by line then column
   const seen = new Set<string>();
   const unique = issues.filter((iss) => {
@@ -132,73 +204,139 @@ export function analyzeJson(text: string): JsonValidatorResult {
   return { valid: false, issues: unique };
 }
 
+// ── closeUnclosedStrings ──────────────────────────────────────────────────────
+// Parser-based: walks the text tracking string state. When a bare newline is
+// encountered inside a string the string is closed before the newline so the
+// content is preserved. Only actually unclosed strings are touched.
+function closeUnclosedStrings(text: string): string {
+  let result = "";
+  let i = 0;
+  let inStr = false;
+  while (i < text.length) {
+    const ch = text[i];
+    if (inStr) {
+      if (ch === "\\") {
+        result += ch;
+        if (i + 1 < text.length) result += text[i + 1];
+        i += 2;
+        continue;
+      }
+      if (ch === '"') { inStr = false; result += ch; }
+      else if (ch === "\n") { result += '"'; result += ch; inStr = false; }
+      else { result += ch; }
+    } else {
+      if (ch === '"') { inStr = true; result += ch; }
+      else { result += ch; }
+    }
+    i++;
+  }
+  if (inStr) result += '"';
+  return result;
+}
+
 // ── repairJson ────────────────────────────────────────────────────────────────
 
 export function repairJson(text: string): JsonRepairResult {
-  let s = text;
   const fixes: string[] = [];
+
+  // ── Step 0: targeted pre-fixes that jsonrepair sometimes misses ───────────
+  // Add missing commas between adjacent object properties.
+  // Pattern: closing token + newline + opening quote of a key (quoted string followed by ':')
+  const preFix = (label: string, fn: (t: string) => string, src: string): string => {
+    const result = fn(src);
+    if (result !== src) fixes.push(label);
+    return result;
+  };
+
+  let preprocessed = text;
+
+  // Step 0a: close unclosed string literals (bare newline inside a string)
+  // Uses parser-based approach: only closes strings that are actually unclosed.
+  {
+    const fixed = closeUnclosedStrings(preprocessed);
+    if (fixed !== preprocessed) { fixes.push("Close unclosed string literals"); preprocessed = fixed; }
+  }
+
+  // Step 0b: add missing commas between adjacent object properties
+  preprocessed = preFix(
+    "Add missing commas between adjacent properties",
+    (t) => t.replace(
+      /(["\d}\]]|\btrue\b|\bfalse\b|\bnull\b)([ \t]*\n[ \t]*)(?="[^"\n]*"\s*:)/g,
+      "$1,$2",
+    ),
+    preprocessed,
+  );
+
+  // Step 0c: remove double commas — jsonrepair throws "Colon expected" on ,, inside arrays
+  preprocessed = preFix("Remove double commas", (t) => {
+    let prev = "";
+    while (prev !== t) { prev = t; t = t.replace(/,(\s*),/g, ",$1"); }
+    return t;
+  }, preprocessed);
+
+  // ── Primary: use jsonrepair for comprehensive structural repair ────────────
+  // Handles: unclosed strings, missing brackets/braces, missing commas,
+  // trailing commas, double commas, unquoted keys/values, leading zeros,
+  // JS comments, Python-style values, and more.
+  try {
+    const repaired = jsonrepair(preprocessed);
+    if (repaired !== text) {
+      fixes.push(
+        "Repaired structural issues (unclosed strings, missing brackets/braces, " +
+        "missing commas, trailing commas, unquoted keys/values, leading zeros, etc.)",
+      );
+    }
+    const parsed = JSON.parse(repaired) as unknown;
+    const formatted = JSON.stringify(parsed, null, 2);
+    if (formatted !== repaired) fixes.push("Formatted and pretty-printed");
+    return { valid: true, repairedJson: formatted, fixes };
+  } catch { /* fall through to regex-based fallback */ }
+
+  // ── Fallback: regex-based partial repair ─────────────────────────────────
+  let s = preprocessed; // start from pre-fixed version
 
   const apply = (label: string, fn: (t: string) => string): void => {
     const result = fn(s);
-    if (result !== s) {
-      fixes.push(label);
-      s = result;
-    }
+    if (result !== s) { fixes.push(label); s = result; }
   };
 
-  // 1. Remove BOM
+  apply("Close unclosed string literals", closeUnclosedStrings);
+  // Missing commas (already applied above, but run again on the fallback text)
+  apply("Add missing commas between adjacent properties", (t) =>
+    t.replace(
+      /(["\d}\]]|\btrue\b|\bfalse\b|\bnull\b)([ \t]*\n[ \t]*)(?="[^"\n]*"\s*:)/g,
+      "$1,$2",
+    ),
+  );
   apply("Remove BOM", (t) => t.replace(/^\uFEFF/, ""));
-
-  // 2. Remove single-line comments
   apply("Remove single-line comments", (t) => t.replace(/\/\/[^\n]*/g, ""));
-
-  // 3. Remove block comments
   apply("Remove block comments", (t) => t.replace(/\/\*[\s\S]*?\*\//g, ""));
-
-  // 4. Remove double commas (iterate until none remain)
   apply("Remove double commas", (t) => {
     let prev = "";
-    while (prev !== t) {
-      prev = t;
-      t = t.replace(/,(\s*),/g, ",$1");
-    }
+    while (prev !== t) { prev = t; t = t.replace(/,(\s*),/g, ",$1"); }
     return t;
   });
-
-  // 5. Remove trailing commas before } or ] (iterate until none remain)
   apply("Remove trailing commas", (t) => {
     let prev = "";
-    while (prev !== t) {
-      prev = t;
-      t = t.replace(/,(\s*[}\]])/g, "$1");
-    }
+    while (prev !== t) { prev = t; t = t.replace(/,(\s*[}\]])/g, "$1"); }
     return t;
   });
-
-  // 6. Fix empty collections with stray commas: {,} → {}
   apply("Fix empty collections with stray commas", (t) =>
     t.replace(/([{[])\s*,\s*([}\]])/g, "$1$2"),
   );
-
-  // 7. Quote unquoted keys: { key: → { "key":
   apply("Add quotes to unquoted keys", (t) =>
     t.replace(/([{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*:)/g, '$1"$2"$3'),
   );
-
-  // 8. Fix common unquoted boolean/null values
   apply("Fix unquoted boolean/null values", (t) =>
     t
       .replace(/:\s*(enabled|yes|on)\b/gi, ": true")
       .replace(/:\s*(disabled|no|off)\b/gi, ": false")
       .replace(/:\s*undefined\b/gi, ": null"),
   );
-
-  // 9. Remove leading zeros from number values (: 0123 → : 123)
   apply("Remove leading zeros from numbers", (t) =>
     t.replace(/(:\s*)(0+)([1-9]\d*)/g, "$1$3"),
   );
 
-  // Final: attempt to parse and pretty-print
   let valid = false;
   try {
     const parsed = JSON.parse(s) as unknown;

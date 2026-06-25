@@ -773,3 +773,46 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* ── Inline diff inside the editor (same lineNumContainer) ───────────── */
+.diffEditorContent {
+  flex: 1;
+  overflow: auto;
+  background: var(--color-surface);
+  min-height: 224px;
+  font-family: "Cascadia Code", "Fira Mono", "Consolas", monospace;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.6;
+  padding: 0.875rem 0;
+}
+
+.diffEditorLineSame {
+  display: flex;
+  align-items: baseline;
+  padding: 0 1rem;
+  white-space: pre;
+  color: var(--color-text);
+}
+
+.diffEditorLineRemoved {
+  display: flex;
+  align-items: baseline;
+  padding: 0 1rem;
+  white-space: pre;
+  background: #fef2f2;
+  color: #991b1b;
+  border-left: 3px solid #dc2626;
+  text-decoration: line-through;
+  text-decoration-color: #dc262680;
+}
+
+.diffEditorLineAdded {
+  display: flex;
+  align-items: baseline;
+  padding: 0 1rem;
+  white-space: pre;
+  background: #f0fdf4;
+  color: #166534;
+  border-left: 3px solid #16a34a;
+}

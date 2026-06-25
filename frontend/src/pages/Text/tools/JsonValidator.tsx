@@ -147,12 +147,7 @@ const JsonValidator = () => {
   const handleApplyCorrection = () => {
     if (!corrected) return;
     setText(corrected.repairedJson);
-    // Immediately surface the validation result so user sees "Valid JSON" without re-clicking
-    if (corrected.valid) {
-      setResult({ valid: true, issues: [] });
-    } else {
-      setResult(null);
-    }
+    setResult(null);
     setShowDiff(false);
     setDiffEntries([]);
     setCorrected(null);
@@ -212,295 +207,293 @@ const JsonValidator = () => {
       {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
       <div className={s.workspaceSingle}>
 
-        {/* ── Input / Diff Panel ── */}
+        {/* ── Input Panel — always shows textarea with gutter highlighting ── */}
         <div className={s.panel}>
           <span className={s.panelLabel}>
-            {showDiff ? "Corrections — Diff View" : "Input JSON"}
+            {showDiff && corrected !== null ? "Diff View" : "Input JSON"}
           </span>
 
-          {/* Structural note — shown only during diff */}
-          {showDiff && (
-            <div className={s.diffNote}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-                aria-hidden="true" style={{ flexShrink: 0 }}>
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="16" x2="12" y2="12" />
-                <line x1="12" y1="8" x2="12.01" y2="8" />
-              </svg>
-              Structural fixes only — we correct commas, brackets, and syntax symbols.
-              Duplicate keys and content values are not modified.
-            </div>
-          )}
-
-          {showDiff ? (
-            /* ── DIFF VIEW ── */
-            <div className={s.diffView}>
-              {diffEntries.map((entry, idx) => (
-                <div
-                  key={idx}
-                  className={
-                    entry.type === "removed"
-                      ? s.diffLineRemoved
-                      : entry.type === "added"
-                      ? s.diffLineAdded
-                      : s.diffLineSame
-                  }
-                >
-                  <span className={s.diffPrefix} aria-hidden="true">
-                    {entry.type === "removed" ? "−" : entry.type === "added" ? "+" : " "}
-                  </span>
-                  <span className={s.diffContent}>{entry.content || "\u00a0"}</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            /* ── TEXTAREA WITH GUTTER ── */
-            <div className={s.lineNumContainer}>
-              <div className={s.lineGutter} ref={gutterRef} aria-hidden="true">
-                {lines.map((_, i) => (
-                  <div
-                    key={i}
-                    className={
-                      errorLineSet.has(i + 1)
-                        ? `${s.lineNum} ${s.lineNumError}`
-                        : s.lineNum
-                    }
-                  >
-                    {i + 1}
-                  </div>
-                ))}
-              </div>
-              <textarea
-                ref={taRef}
-                className={s.lineGutterTextarea}
-                value={text}
-                onChange={(e) => {
-                  setText(e.target.value);
-                  setResult(null);
-                  setError(null);
-                  setCorrected(null);
-                  setCorrectError(null);
-                }}
-                onScroll={handleScroll}
-                placeholder='{"name":"Alice","valid":true}'
-                aria-label="Input JSON"
-                spellCheck={false}
-                rows={10}
-              />
-            </div>
-          )}
-
-          <div className={s.actions}>
-            {showDiff ? (
+          {/* ── EDITOR: textarea normally, inline diff in diff mode ── */}
+          <div className={s.lineNumContainer}>
+            {showDiff && corrected !== null ? (
+              /* ── Inline diff — same container, colored lines ── */
               <>
-                <button
-                  className={s.btnSecondary}
-                  onClick={() => { setShowDiff(false); setDiffEntries([]); }}
-                >
-                  ← Back to editing
-                </button>
-                <button className={s.btnPrimary} onClick={handleApplyCorrection}>
-                  Apply correction
-                </button>
+                <div className={s.lineGutter} aria-hidden="true">
+                  {diffEntries.map((_, i) => (
+                    <div key={i} className={s.lineNum}>{i + 1}</div>
+                  ))}
+                </div>
+                <div className={s.diffEditorContent}>
+                  {diffEntries.map((entry, idx) => (
+                    <div
+                      key={idx}
+                      className={
+                        entry.type === "removed"
+                          ? s.diffEditorLineRemoved
+                          : entry.type === "added"
+                          ? s.diffEditorLineAdded
+                          : s.diffEditorLineSame
+                      }
+                    >
+                      <span className={s.diffPrefix} aria-hidden="true">
+                        {entry.type === "removed" ? "−" : entry.type === "added" ? "+" : " "}
+                      </span>
+                      <span>{entry.content || "\u00a0"}</span>
+                    </div>
+                  ))}
+                </div>
               </>
             ) : (
+              /* ── Normal textarea with gutter highlighting ── */
               <>
-                <button
-                  className={s.btnPrimary}
-                  onClick={handleValidate}
-                  disabled={loading || !text.trim()}
-                >
-                  {loading ? "Validating..." : "Validate JSON"}
-                </button>
-                <button className={s.btnSecondary} onClick={handleClear}>
-                  Clear
-                </button>
+                <div className={s.lineGutter} ref={gutterRef} aria-hidden="true">
+                  {lines.map((_, i) => (
+                    <div
+                      key={i}
+                      className={
+                        errorLineSet.has(i + 1)
+                          ? `${s.lineNum} ${s.lineNumError}`
+                          : s.lineNum
+                      }
+                    >
+                      {i + 1}
+                    </div>
+                  ))}
+                </div>
+                <textarea
+                  ref={taRef}
+                  className={s.lineGutterTextarea}
+                  value={text}
+                  onChange={(e) => {
+                    setText(e.target.value);
+                    setResult(null);
+                    setError(null);
+                    setCorrected(null);
+                    setCorrectError(null);
+                    setShowDiff(false);
+                    setDiffEntries([]);
+                  }}
+                  onScroll={handleScroll}
+                  placeholder='{"name":"Alice","valid":true}'
+                  aria-label="Input JSON"
+                  spellCheck={false}
+                  rows={10}
+                />
               </>
             )}
           </div>
-          {error !== null && <p className={s.error}>{error}</p>}
-        </div>
 
-        {/* ── Result panel — errors + Correct It (hidden while diff is open) ── */}
-        {result !== null && !showDiff && (
-          <div className={s.panel}>
-            <span className={s.panelLabel}>Result</span>
-
-            {result.valid ? (
-              <div className={s.resultValid}>
-                <svg
-                  width="28" height="28" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5"
-                  strokeLinecap="round" strokeLinejoin="round"
-                  aria-hidden="true" style={{ flexShrink: 0 }}
-                >
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                  <polyline points="22 4 12 14.01 9 11.01" />
-                </svg>
-                <div>
-                  <p className={s.resultTitle}>Valid JSON</p>
-                  <p style={{ fontSize: "0.875rem", marginTop: "2px" }}>
-                    Well-formed and syntactically correct.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className={s.resultInvalid}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <svg
-                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" strokeWidth="2.5"
-                    strokeLinecap="round" strokeLinejoin="round"
-                    aria-hidden="true" style={{ flexShrink: 0 }}
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="15" y1="9" x2="9" y2="15" />
-                    <line x1="9" y1="9" x2="15" y2="15" />
-                  </svg>
-                  <div>
-                    <p className={s.resultTitle}>Invalid JSON</p>
-                    <p style={{ fontSize: "0.8125rem", marginTop: "2px", opacity: 0.8 }}>
-                      {errorCount > 0 && `${errorCount} error${errorCount !== 1 ? "s" : ""}`}
-                      {errorCount > 0 && warningCount > 0 && ", "}
-                      {warningCount > 0 && `${warningCount} warning${warningCount !== 1 ? "s" : ""}`}
-                      {" found"}
-                    </p>
-                  </div>
-                </div>
-
-                {result.issues.length > 0 && (
-                  <div className={s.issueList}>
-                    {result.issues.map((issue, idx) => (
-                      <div
-                        key={idx}
-                        className={
-                          issue.severity === "warning"
-                            ? `${s.issueItem} ${s.issueItemWarning}`
-                            : s.issueItem
-                        }
-                      >
-                        <button
-                          className={
-                            issue.severity === "warning"
-                              ? `${s.issueLine} ${s.issueLineWarning}`
-                              : s.issueLine
-                          }
-                          onClick={() => jumpToLine(issue.line)}
-                          title={`Jump to line ${issue.line}`}
-                        >
-                          L{issue.line}
-                        </button>
-                        <span className={s.issueMessage}>{issue.message}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <div style={{ display: "flex", gap: "0.625rem", flexWrap: "wrap" }}>
-                  <button
-                    className={s.btnPrimary}
-                    onClick={handleCorrect}
-                    disabled={correcting}
-                  >
-                    {correcting ? "Correcting..." : "Correct It"}
-                  </button>
-                </div>
-                {correctError !== null && <p className={s.error}>{correctError}</p>}
-              </div>
-            )}
-
-            {result.valid && (
-              <ShareTextViaToolSnapy getText={() => text} disabled={!text.trim()} />
-            )}
-          </div>
-        )}
-
-        {/* ── Corrected output panel — shown while diff is visible ── */}
-        {showDiff && corrected !== null && (
-          <div className={s.panel}>
-            <span className={s.panelLabel}>Corrected JSON</span>
-
-            <div
-              className={
-                corrected.valid
-                  ? s.resultCorrected
-                  : `${s.resultCorrected} ${s.resultCorrectedPartial}`
-              }
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                {corrected.valid ? (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669"
-                    strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-                    aria-hidden="true" style={{ flexShrink: 0 }}>
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
-                  </svg>
-                ) : (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706"
-                    strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-                    aria-hidden="true" style={{ flexShrink: 0 }}>
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                    <line x1="12" y1="9" x2="12" y2="13" />
-                    <line x1="12" y1="17" x2="12.01" y2="17" />
-                  </svg>
-                )}
-                <div>
-                  <p
-                    className={s.resultTitle}
-                    style={{ color: corrected.valid ? "#059669" : "#d97706" }}
-                  >
-                    {corrected.valid ? "Fully corrected" : "Partially corrected"}
-                  </p>
-                  {!corrected.valid && (
-                    <p style={{ fontSize: "0.8125rem", marginTop: "2px", color: "#92400e" }}>
-                      Some issues could not be auto-fixed — review manually.
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {corrected.fixes.length > 0 && (
-                <div>
-                  <p style={{ fontSize: "0.8125rem", fontWeight: 700, color: "var(--color-text-secondary)", marginBottom: "0.25rem" }}>
-                    Applied fixes:
-                  </p>
-                  <div className={s.fixList}>
-                    {corrected.fixes.map((fix, i) => (
-                      <div key={i} className={s.fixItem}>
-                        <CheckIcon />
-                        {fix}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
+          {!showDiff && (
             <div className={s.actions}>
               <button
-                className={copiedCorrected ? `${s.btnSecondary} ${s.btnCopied}` : s.btnSecondary}
-                style={{ minWidth: "7.5rem" }}
-                onClick={handleCopyCorrected}
+                className={s.btnPrimary}
+                onClick={handleValidate}
+                disabled={loading || !text.trim()}
               >
-                {copiedCorrected ? "Copied!" : "Copy JSON"}
+                {loading ? "Validating..." : "Validate JSON"}
               </button>
-              <button className={s.btnSecondary} onClick={handleDownloadCorrected}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5"
-                  strokeLinecap="round" strokeLinejoin="round"
-                  aria-hidden="true" style={{ flexShrink: 0 }}>
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="7 10 12 15 17 10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-                Download JSON
+              <button className={s.btnSecondary} onClick={handleClear}>
+                Clear
               </button>
-              <ShareTextViaToolSnapy
-                getText={() => corrected.repairedJson}
-                disabled={!corrected.repairedJson.trim()}
-              />
             </div>
+          )}
+          {!showDiff && error !== null && <p className={s.error}>{error}</p>}
+        </div>
+
+        {/* ── Right panel: validation results OR diff view ── */}
+        {(result !== null || (showDiff && corrected !== null)) && (
+          <div className={s.panel}>
+
+            {/* ── Validation result (error list + Correct It) ── */}
+            {!showDiff && result !== null && (
+              <>
+                <span className={s.panelLabel}>Result</span>
+
+                {result.valid ? (
+                  <div className={s.resultValid}>
+                    <svg
+                      width="28" height="28" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" strokeWidth="2.5"
+                      strokeLinecap="round" strokeLinejoin="round"
+                      aria-hidden="true" style={{ flexShrink: 0 }}
+                    >
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                      <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                    <div>
+                      <p className={s.resultTitle}>Valid JSON</p>
+                      <p style={{ fontSize: "0.875rem", marginTop: "2px" }}>
+                        Well-formed and syntactically correct.
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={s.resultInvalid}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <svg
+                        width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" strokeWidth="2.5"
+                        strokeLinecap="round" strokeLinejoin="round"
+                        aria-hidden="true" style={{ flexShrink: 0 }}
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="15" y1="9" x2="9" y2="15" />
+                        <line x1="9" y1="9" x2="15" y2="15" />
+                      </svg>
+                      <div>
+                        <p className={s.resultTitle}>Invalid JSON</p>
+                        <p style={{ fontSize: "0.8125rem", marginTop: "2px", opacity: 0.8 }}>
+                          {errorCount > 0 && `${errorCount} error${errorCount !== 1 ? "s" : ""}`}
+                          {errorCount > 0 && warningCount > 0 && ", "}
+                          {warningCount > 0 && `${warningCount} warning${warningCount !== 1 ? "s" : ""}`}
+                          {" found"}
+                        </p>
+                      </div>
+                    </div>
+
+                    {result.issues.length > 0 && (
+                      <div className={s.issueList}>
+                        {result.issues.map((issue, idx) => (
+                          <div
+                            key={idx}
+                            className={
+                              issue.severity === "warning"
+                                ? `${s.issueItem} ${s.issueItemWarning}`
+                                : s.issueItem
+                            }
+                          >
+                            <button
+                              className={
+                                issue.severity === "warning"
+                                  ? `${s.issueLine} ${s.issueLineWarning}`
+                                  : s.issueLine
+                              }
+                              onClick={() => jumpToLine(issue.line)}
+                              title={`Jump to line ${issue.line}`}
+                            >
+                              L{issue.line}
+                            </button>
+                            <span className={s.issueMessage}>{issue.message}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <div style={{ display: "flex", gap: "0.625rem", flexWrap: "wrap" }}>
+                      <button
+                        className={s.btnPrimary}
+                        onClick={handleCorrect}
+                        disabled={correcting}
+                      >
+                        {correcting ? "Correcting..." : "Correct It"}
+                      </button>
+                    </div>
+                    {correctError !== null && <p className={s.error}>{correctError}</p>}
+                  </div>
+                )}
+
+                {result.valid && (
+                  <ShareTextViaToolSnapy getText={() => text} disabled={!text.trim()} />
+                )}
+              </>
+            )}
+
+            {/* ── Diff correction status + actions ── */}
+            {showDiff && corrected !== null && (
+              <>
+                <span className={s.panelLabel}>Correction Result</span>
+
+                <div
+                  className={
+                    corrected.valid
+                      ? s.resultCorrected
+                      : `${s.resultCorrected} ${s.resultCorrectedPartial}`
+                  }
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    {corrected.valid ? (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669"
+                        strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                        aria-hidden="true" style={{ flexShrink: 0 }}>
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                      </svg>
+                    ) : (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706"
+                        strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                        aria-hidden="true" style={{ flexShrink: 0 }}>
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                        <line x1="12" y1="9" x2="12" y2="13" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                      </svg>
+                    )}
+                    <div>
+                      <p
+                        className={s.resultTitle}
+                        style={{ color: corrected.valid ? "#059669" : "#d97706" }}
+                      >
+                        {corrected.valid ? "Fully corrected" : "Partially corrected"}
+                      </p>
+                      {!corrected.valid && (
+                        <p style={{ fontSize: "0.8125rem", marginTop: "2px", color: "#92400e" }}>
+                          Some issues could not be auto-fixed — review manually.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {corrected.fixes.length > 0 && (
+                    <div>
+                      <p style={{ fontSize: "0.8125rem", fontWeight: 700, color: "var(--color-text-secondary)", marginBottom: "0.25rem" }}>
+                        Applied fixes:
+                      </p>
+                      <div className={s.fixList}>
+                        {corrected.fixes.map((fix, i) => (
+                          <div key={i} className={s.fixItem}>
+                            <CheckIcon />
+                            {fix}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className={s.actions}>
+                  <button className={s.btnPrimary} onClick={handleApplyCorrection}>
+                    Apply correction
+                  </button>
+                  <button
+                    className={s.btnSecondary}
+                    onClick={() => { setShowDiff(false); setDiffEntries([]); }}
+                  >
+                    Reset
+                  </button>
+                  <button
+                    className={copiedCorrected ? `${s.btnSecondary} ${s.btnCopied}` : s.btnSecondary}
+                    onClick={handleCopyCorrected}
+                  >
+                    {copiedCorrected ? "Copied!" : "Copy JSON"}
+                  </button>
+                  <button className={s.btnSecondary} onClick={handleDownloadCorrected}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" strokeWidth="2.5"
+                      strokeLinecap="round" strokeLinejoin="round"
+                      aria-hidden="true" style={{ flexShrink: 0 }}>
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Download
+                  </button>
+                  <ShareTextViaToolSnapy
+                    getText={() => corrected.repairedJson}
+                    disabled={!corrected.repairedJson.trim()}
+                  />
+                </div>
+              </>
+            )}
+
           </div>
         )}
 
