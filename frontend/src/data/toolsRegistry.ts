@@ -29,6 +29,7 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: "pdf-split", title: "Split & Extract PDF", description: "Extract pages or ranges from a PDF into a new file.", to: "/pdf/split", category: "PDF Tools", keywords: ["split", "extract", "pages", "range", "separate", "pdf"] },
   { id: "pdf-images-to-pdf", title: "Images to PDF", description: "Convert JPG, PNG or WebP images into a single PDF.", to: "/pdf/images-to-pdf", category: "PDF Tools", keywords: ["jpg to pdf", "png to pdf", "image", "convert", "pdf"] },
   { id: "pdf-to-images", title: "PDF to Images", description: "Export each PDF page as a PNG or JPG image.", to: "/pdf/pdf-to-images", category: "PDF Tools", keywords: ["pdf to jpg", "pdf to png", "render", "export", "image"] },
+  { id: "pdf-resize", title: "Resize PDF to Target Size", description: "Compress a PDF to an exact file size in KB or MB.", to: "/pdf/resize", category: "PDF Tools", keywords: ["compress", "reduce", "size", "target", "shrink", "pdf", "kb", "mb"] },
 
   // ── Calculators ─────────────────────────────────────────
   { id: "scientific", title: "Scientific Calculator", description: "Advanced scientific calculator with trig and logs.", to: "/calculators/scientific", category: "Calculators", keywords: ["math", "trig", "log"] },

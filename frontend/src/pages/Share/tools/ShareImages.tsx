@@ -36,9 +36,11 @@ const ShareImages = () => {
   const [copied,   setCopied]   = useState(false);
   const [toast,    setToast]    = useState(false);
   const [,         setTick]     = useState(0);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const resultRef    = useRef<HTMLDivElement>(null);
-  const timerRef     = useRef<ReturnType<typeof setInterval> | null>(null);
+  const fileInputRef  = useRef<HTMLInputElement>(null);
+  const resultRef     = useRef<HTMLDivElement>(null);
+  const timerRef      = useRef<ReturnType<typeof setInterval> | null>(null);
+  const shareButtonRef = useRef<HTMLButtonElement>(null);
+  const [addedToast, setAddedToast] = useState<string | null>(null);
 
   const addFiles = useCallback((incoming: File[]) => {
     setErrors([]);
@@ -64,6 +66,10 @@ const ShareImages = () => {
       return combined;
     });
     if (clientErrors.length) setErrors(clientErrors);
+    if (valid.length > 0) {
+      setAddedToast(`${valid.length} image${valid.length !== 1 ? "s" : ""} selected`);
+      setTimeout(() => shareButtonRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
+    }
   }, []);
 
   const onDrop = (e: DragEvent<HTMLDivElement>) => { e.preventDefault(); setDragging(false); addFiles(Array.from(e.dataTransfer.files)); };
@@ -117,6 +123,7 @@ const ShareImages = () => {
       title="Share Images"
       description="Upload PNG, JPG, JPEG or WEBP images. Up to 50 images, 10 MB each, 250 MB total. Expires in 15 minutes."
     >
+      {addedToast && <Toast message={addedToast} onClose={() => setAddedToast(null)} />}
       {toast && <Toast message="Images uploaded successfully!" onClose={() => setToast(false)} />}
       {!result ? (
         <>
@@ -183,7 +190,7 @@ const ShareImages = () => {
             <ProgressBar value={progress} tone="amber" label="Uploading…" />
           )}
 
-          <button className={s.primaryBtn} onClick={upload} disabled={loading || files.length === 0}>
+          <button ref={shareButtonRef} className={s.primaryBtn} onClick={upload} disabled={loading || files.length === 0}>
             {loading ? "Uploading…" : `Share ${files.length || ""} Image${files.length !== 1 ? "s" : ""}`}
           </button>
         </>

@@ -35,6 +35,13 @@ const PDF_TOOLS = [
     description:
       "Export every page of a PDF as a high-resolution PNG or JPG. Download pages individually or all at once.",
   },
+  {
+    id: "pdf-resize",
+    to: "/pdf/resize",
+    title: "Resize to Target Size",
+    description:
+      "Compress a PDF to an exact file size. Pick a KB or MB target and we hit it precisely. Processed entirely in your browser.",
+  },
 ] as const;
 
 const OTHER_CATEGORIES = [

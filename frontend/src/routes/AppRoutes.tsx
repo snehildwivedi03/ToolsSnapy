@@ -19,6 +19,7 @@ import MergePdf from "../pages/Pdf/tools/MergePdf";
 import SplitPdf from "../pages/Pdf/tools/SplitPdf";
 import ImagesToPdf from "../pages/Pdf/tools/ImagesToPdf";
 import PdfToImages from "../pages/Pdf/tools/PdfToImages";
+import PdfResize from "../pages/Pdf/tools/PdfResize";
 import Calculators from "../pages/Calculators/Calculators";
 import ScientificCalculator from "../pages/Calculators/tools/ScientificCalculator";
 import BmiCalculator from "../pages/Calculators/tools/BmiCalculator";
@@ -122,6 +123,7 @@ const AppRoutes = () => {
         <Route path="/pdf/split"          element={<SplitPdf />} />
         <Route path="/pdf/images-to-pdf"  element={<ImagesToPdf />} />
         <Route path="/pdf/pdf-to-images"  element={<PdfToImages />} />
+        <Route path="/pdf/resize"          element={<PdfResize />} />
       </Route>
     </Routes>
   );

@@ -35,9 +35,11 @@ const SharePdfs = () => {
   const [copied,   setCopied]   = useState(false);
   const [toast,    setToast]    = useState(false);
   const [,         setTick]     = useState(0);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const resultRef    = useRef<HTMLDivElement>(null);
-  const timerRef     = useRef<ReturnType<typeof setInterval> | null>(null);
+  const fileInputRef  = useRef<HTMLInputElement>(null);
+  const resultRef     = useRef<HTMLDivElement>(null);
+  const timerRef      = useRef<ReturnType<typeof setInterval> | null>(null);
+  const shareButtonRef = useRef<HTMLButtonElement>(null);
+  const [addedToast, setAddedToast] = useState<string | null>(null);
 
   const addFiles = useCallback((incoming: File[]) => {
     setErrors([]);
@@ -62,6 +64,10 @@ const SharePdfs = () => {
       return combined;
     });
     if (clientErrors.length) setErrors(clientErrors);
+    if (valid.length > 0) {
+      setAddedToast(`${valid.length} PDF${valid.length !== 1 ? "s" : ""} selected`);
+      setTimeout(() => shareButtonRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
+    }
   }, []);
 
   const onDrop = (e: DragEvent<HTMLDivElement>) => { e.preventDefault(); setDragging(false); addFiles(Array.from(e.dataTransfer.files)); };
@@ -117,6 +123,7 @@ const SharePdfs = () => {
       title="Share PDFs"
       description="Upload up to 25 PDF files, 25 MB each, 250 MB total. Download link expires in 15 minutes."
     >
+      {addedToast && <Toast message={addedToast} onClose={() => setAddedToast(null)} />}
       {toast && <Toast message="PDFs uploaded successfully!" onClose={() => setToast(false)} />}
       {!result ? (
         <>
@@ -182,7 +189,7 @@ const SharePdfs = () => {
             <ProgressBar value={progress} tone="amber" label="Uploading…" />
           )}
 
-          <button className={s.primaryBtn} onClick={upload} disabled={loading || files.length === 0}>
+          <button ref={shareButtonRef} className={s.primaryBtn} onClick={upload} disabled={loading || files.length === 0}>
             {loading ? "Uploading…" : `Share ${files.length || ""} PDF${files.length !== 1 ? "s" : ""}`}
           </button>
         </>

@@ -185,13 +185,15 @@ const ReceiveContent = () => {
                     value={share.content}
                     style={{ resize: "vertical" }}
                   />
-                  <button
-                    style={{ minWidth: "7.5rem" }}
-                    className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary}
-                    onClick={copyText}
-                  >
-                    {copied ? "Copied!" : "Copy Text"}
-                  </button>
+                  <div className={tp.actionsStack}>
+                    <button
+                      style={{ minWidth: "7.5rem" }}
+                      className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary}
+                      onClick={copyText}
+                    >
+                      {copied ? "Copied!" : "Copy Text"}
+                    </button>
+                  </div>
                 </>
               )}
 

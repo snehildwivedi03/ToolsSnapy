@@ -41,10 +41,12 @@ const ShareFiles = () => {
   const [copied,   setCopied]   = useState(false);
   const [toast,    setToast]    = useState(false);
   const [tick,     setTick]     = useState(0);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef   = useRef<HTMLInputElement>(null);
   const folderInputRef = useRef<HTMLInputElement>(null);
-  const resultRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const resultRef      = useRef<HTMLDivElement>(null);
+  const timerRef       = useRef<ReturnType<typeof setInterval> | null>(null);
+  const shareButtonRef = useRef<HTMLButtonElement>(null);
+  const [addedToast, setAddedToast] = useState<string | null>(null);
 
   const addFiles = useCallback((incoming: File[]) => {
     setErrors([]);
@@ -70,6 +72,10 @@ const ShareFiles = () => {
       return combined;
     });
     if (clientErrors.length) setErrors(clientErrors);
+    if (valid.length > 0) {
+      setAddedToast(`${valid.length} file${valid.length !== 1 ? "s" : ""} selected`);
+      setTimeout(() => shareButtonRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
+    }
   }, []);
 
   const onDrop = (e: DragEvent<HTMLDivElement>) => {
@@ -156,6 +162,7 @@ const ShareFiles = () => {
       title="Share Files"
       description="Upload files or an entire folder. Get a 6-character code. All content is auto-deleted after 15 minutes."
     >
+      {addedToast && <Toast message={addedToast} onClose={() => setAddedToast(null)} />}
       {toast && <Toast message="Files uploaded successfully!" onClose={() => setToast(false)} />}
       {!result ? (
         <>
@@ -255,6 +262,7 @@ const ShareFiles = () => {
           )}
 
           <button
+            ref={shareButtonRef}
             className={s.primaryBtn}
             onClick={upload}
             disabled={loading || files.length === 0}
