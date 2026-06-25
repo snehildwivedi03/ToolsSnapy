@@ -155,6 +155,7 @@ const CaseConverter = () => {
               />
               <div className={s.actions}>
                 <button
+                  style={{ minWidth: "8.5rem" }}
                   className={
                     copied
                       ? `${s.btnSecondary} ${s.btnCopied}`

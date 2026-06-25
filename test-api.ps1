@@ -91,16 +91,200 @@ Test-Endpoint "JSON Formatter - Valid JSON" {
     $r.success -and $r.data.formattedJson -like "*name*"
 }
 
+# ═══════════════════════════════════════════════════════════════
+# JSON VALIDATOR & REPAIR TESTS
+# ═══════════════════════════════════════════════════════════════
+
+# --- Analyze (POST /api/text/json-validator) ---
+
 Test-Endpoint "JSON Validator - Valid JSON" {
-    $body = @{ text = '{"valid": true}' } | ConvertTo-Json
+    $body = @{ text = '{"valid": true, "count": 42}' } | ConvertTo-Json
     $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true -and $r.data.issues.Count -eq 0
+}
+
+Test-Endpoint "JSON Validator - Unquoted Key Detected" {
+    $body = @{ text = '{name: "test"}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $false -and ($r.data.issues | Where-Object { $_.message -like "*Unquoted key*" }).Count -gt 0
+}
+
+Test-Endpoint "JSON Validator - Trailing Comma Detected" {
+    $body = @{ text = '{"name": "test", "active": true,}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $false -and ($r.data.issues | Where-Object { $_.message -like "*Trailing comma*" }).Count -gt 0
+}
+
+Test-Endpoint "JSON Validator - Double Comma Detected" {
+    $body = @{ text = '{"tags": ["admin",, "user"]}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $false -and ($r.data.issues | Where-Object { $_.message -like "*Double comma*" }).Count -gt 0
+}
+
+Test-Endpoint "JSON Validator - JS Comment Detected" {
+    $faultyJson = "{`n  `"name`": `"test`" // this is a comment`n}"
+    $body = @{ text = $faultyJson } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $false -and ($r.data.issues | Where-Object { $_.message -like "*comment*" }).Count -gt 0
+}
+
+Test-Endpoint "JSON Validator - Unclosed String Detected" {
+    $faultyJson = @'
+{
+  "name": "unclosed string
+  "age": 30
+}
+'@
+    $body = @{ text = $faultyJson } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $false -and ($r.data.issues | Where-Object { $_.message -like "*Unclosed string*" }).Count -gt 0
+}
+
+Test-Endpoint "JSON Validator - Missing Comma Between Properties Detected" {
+    $faultyJson = @'
+{
+  "name": "test"
+  "age": 30
+}
+'@
+    $body = @{ text = $faultyJson } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $false -and ($r.data.issues | Where-Object { $_.message -like "*Missing comma*" }).Count -gt 0
+}
+
+Test-Endpoint "JSON Validator - Bareword Value Detected" {
+    $body = @{ text = '{"active": enabled}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $false -and ($r.data.issues | Where-Object { $_.message -like "*enabled*" }).Count -gt 0
+}
+
+Test-Endpoint "JSON Validator - Leading Zero Detected" {
+    $body = @{ text = '{"code": 0123}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $false -and ($r.data.issues | Where-Object { $_.message -like "*leading zero*" }).Count -gt 0
+}
+
+Test-Endpoint "JSON Validator - Block Comment Detected" {
+    $faultyJson = @'
+{
+  /* block comment */
+  "name": "test"
+}
+'@
+    $body = @{ text = $faultyJson } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $false -and ($r.data.issues | Where-Object { $_.message -like "*Block comment*" }).Count -gt 0
+}
+
+Test-Endpoint "JSON Validator - Missing Text Field (Should 400)" {
+    try {
+        $body = @{ input = '{"valid": true}' } | ConvertTo-Json
+        Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
+        $false
+    } catch {
+        $_.Exception.Response.StatusCode.value__ -eq 400
+    }
+}
+
+# --- Repair (POST /api/text/json-repair) ---
+
+Test-Endpoint "JSON Repair - Already Valid JSON" {
+    $body = @{ text = '{"valid": true, "count": 42}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
     $r.success -and $r.data.valid -eq $true
 }
 
-Test-Endpoint "JSON Validator - Invalid JSON" {
-    $body = @{ text = '{invalid}' } | ConvertTo-Json
-    $r = Invoke-RestMethod "$baseUrl/api/text/json-validator" -Method POST -Body $body -ContentType "application/json"
-    $r.success -and $r.data.valid -eq $false
+Test-Endpoint "JSON Repair - Fix Trailing Comma" {
+    $body = @{ text = '{"name": "test", "active": true,}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true -and $r.data.repairedJson -ne $null
+}
+
+Test-Endpoint "JSON Repair - Fix Double Comma in Array" {
+    $body = @{ text = '{"tags": ["admin",, "user",, "editor"]}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true -and ($r.data.repairedJson | ConvertFrom-Json).tags.Count -eq 3
+}
+
+Test-Endpoint "JSON Repair - Fix Unquoted Keys" {
+    $body = @{ text = '{name: "test", age: 30}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true -and ($r.data.repairedJson | ConvertFrom-Json).name -eq "test"
+}
+
+Test-Endpoint "JSON Repair - Fix JS Comment" {
+    $faultyJson = "{`n  `"name`": `"test`" // inline comment`n}"
+    $body = @{ text = $faultyJson } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true
+}
+
+Test-Endpoint "JSON Repair - Fix Unclosed String" {
+    $faultyJson = @'
+{
+  "name": "unclosed string
+  "age": 30
+}
+'@
+    $body = @{ text = $faultyJson } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true
+}
+
+Test-Endpoint "JSON Repair - Fix Missing Comma Between Properties" {
+    $faultyJson = @'
+{
+  "name": "test"
+  "age": 30
+  "active": true
+}
+'@
+    $body = @{ text = $faultyJson } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true -and ($r.data.repairedJson | ConvertFrom-Json).age -eq 30
+}
+
+Test-Endpoint "JSON Repair - Fix Leading Zeros" {
+    $body = @{ text = '{"code": 0123, "zip": 00456}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true
+}
+
+Test-Endpoint "JSON Repair - Fix Bareword Values (enabled/disabled)" {
+    $body = @{ text = '{"active": enabled, "debug": disabled}' } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true -and ($r.data.repairedJson | ConvertFrom-Json).active -eq $true -and ($r.data.repairedJson | ConvertFrom-Json).debug -eq $false
+}
+
+Test-Endpoint "JSON Repair - Fix Block Comment" {
+    $faultyJson = @'
+{
+  /* user record */
+  "name": "test",
+  "age": 30
+}
+'@
+    $body = @{ text = $faultyJson } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true
+}
+
+Test-Endpoint "JSON Repair - Complex Multi-Issue JSON" {
+    # Combines: unclosed string, double comma in array, missing comma between props, bareword value
+    $faultyJson = @'
+{
+  "name": "Test User
+  "email": "user@example.com",
+  "roles": ["admin", "user",, "editor"],
+  "settings": {
+    "theme": "dark"
+    "notifications": enabled
+  }
+}
+'@
+    $body = @{ text = $faultyJson } | ConvertTo-Json
+    $r = Invoke-RestMethod "$baseUrl/api/text/json-repair" -Method POST -Body $body -ContentType "application/json"
+    $r.success -and $r.data.valid -eq $true
 }
 
 Test-Endpoint "Random Paragraph - Generate 3" {

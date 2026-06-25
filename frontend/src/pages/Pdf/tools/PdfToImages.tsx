@@ -368,6 +368,7 @@ const PdfToImages = () => {
                   <span className={ls.shareCodeValue}>{shareCode}</span>
                   <div className={ls.shareActions}>
                     <button
+                      style={{ minWidth: "7.5rem" }}
                       className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary}
                       onClick={copyCode}
                     >

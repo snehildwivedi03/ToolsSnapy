@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+﻿import { useState, useRef, useEffect } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import {
@@ -33,6 +33,15 @@ const RandomParagraph = () => {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const outputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-resize the output textarea to fit its content
+  useEffect(() => {
+    const ta = outputRef.current;
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = `${ta.scrollHeight}px`;
+  }, [paragraphs]);
 
   // Derived values   never mutate state just for these
   const numericValue = parseInt(raw, 10);
@@ -214,10 +223,11 @@ const RandomParagraph = () => {
                 : `${paragraphs.length} paragraphs generated`}
             </span>
             <textarea
+              ref={outputRef}
               className={s.textarea}
-              value={paragraphs.join("\n")}
+              value={paragraphs.join("\n\n")}
               readOnly
-              rows={Math.max(10, paragraphs.length * 6)}
+              style={{ overflow: "hidden", resize: "none" }}
               aria-label="Generated Lorem Ipsum paragraphs"
             />
           </div>

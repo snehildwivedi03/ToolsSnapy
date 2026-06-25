@@ -186,6 +186,7 @@ const ReceiveContent = () => {
                     style={{ resize: "vertical" }}
                   />
                   <button
+                    style={{ minWidth: "7.5rem" }}
                     className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary}
                     onClick={copyText}
                   >

@@ -130,8 +130,44 @@ Run these tests before deployment to ensure everything works.
 
 #### 5. JSON Validator
 
-- [ ] Paste valid JSON - shows valid
-- [ ] Paste invalid JSON - shows error location
+**Valid input:**
+- [ ] Paste valid JSON → shows "Valid JSON ✓", no issues listed
+
+**Analyze — fault detection:**
+- [ ] Paste JSON with trailing comma `{"a":1,}` → issue flagged: "Trailing comma before '}'"
+- [ ] Paste JSON with double comma `["a",,"b"]` → issue flagged: "Double comma (,,)"
+- [ ] Paste JSON with unquoted key `{name:"test"}` → issue flagged: "Unquoted key: name"
+- [ ] Paste JSON with JS comment `{"a":1 // comment}` → issue flagged: "Single-line comment (//) is not valid"
+- [ ] Paste JSON with block comment `{/* note */"a":1}` → issue flagged: "Block comment (* */) is not valid"
+- [ ] Paste JSON with unclosed string `{"name":"unclosed` → issue flagged: "Unclosed string literal"
+- [ ] Paste JSON with missing comma between properties → issue flagged: "Missing comma after property value"
+- [ ] Paste JSON with bareword value `{"active":enabled}` → issue flagged: "Unquoted value: enabled (did you mean true?)"
+- [ ] Paste JSON with leading zero `{"code":0123}` → issue flagged: "Number with leading zero"
+- [ ] Error location shows correct line number in all cases above
+
+**Repair flow:**
+- [ ] Click "Correct It" on any invalid result → diff view appears in the editor (removed lines in red, added lines in green)
+- [ ] Click "Apply correction" → editor updates with repaired JSON, diff clears
+- [ ] Re-validate repaired JSON → shows valid
+- [ ] Click "Reset" → returns to original faulty input
+- [ ] Download repaired JSON works
+- [ ] Copy JSON button works (shows "Copied!", width does not shift adjacent buttons)
+- [ ] Share via ToolsSnapy works
+
+**Complex faulty JSON (combines all fault types):**
+```json
+{
+  "name": "Test User
+  "email": "user@example.com",
+  "roles": ["admin", "user",, "editor"],
+  "settings": {
+    "theme": "dark"
+    "notifications": enabled
+  }
+}
+```
+- [ ] All issues detected in analyze view
+- [ ] Repair produces valid, pretty-printed JSON with all fixes listed
 
 #### 6. Random Paragraph Generator
 

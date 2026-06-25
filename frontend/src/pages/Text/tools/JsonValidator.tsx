@@ -470,6 +470,7 @@ const JsonValidator = () => {
                     Reset
                   </button>
                   <button
+                    style={{ minWidth: "7.5rem" }}
                     className={copiedCorrected ? `${s.btnSecondary} ${s.btnCopied}` : s.btnSecondary}
                     onClick={handleCopyCorrected}
                   >

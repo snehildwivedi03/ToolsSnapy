@@ -94,6 +94,7 @@ const ShareTextViaToolSnapy = ({ getText, disabled }: Props) => {
           <span className={s.shareCodeValue}>{code}</span>
           <div className={s.shareActions}>
             <button
+              style={{ minWidth: "7.5rem" }}
               className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary}
               onClick={copyCode}
             >
