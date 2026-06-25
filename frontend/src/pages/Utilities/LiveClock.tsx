@@ -43,11 +43,16 @@ function buildCalendar(year: number, month: number): (number | null)[][] {
   return weeks;
 }
 
+const MIN_CAL_YEAR = 1800;
+
 const LiveClock = () => {
   const [now, setNow] = useState(new Date());
   const [format24, setFormat24] = useState(true);
+  const [yearError, setYearError] = useState<string | null>(null);
 
   const today = istDate(now);
+  // Max year grows by 10 for every real-world year that passes after 2026
+  const maxCalYear = 2200 + Math.max(0, today.year - 2026) * 10;
   const [calYear, setCalYear] = useState(today.year);
   const [calMonth, setCalMonth] = useState(today.month);
   const [goYearInput, setGoYearInput] = useState(String(today.year));
@@ -57,9 +62,9 @@ const LiveClock = () => {
     return () => clearInterval(id);
   }, []);
 
-  const hh = fmt(now, { hour: "2-digit", hour12: false });
-  const mm = fmt(now, { minute: "2-digit" });
-  const ss = fmt(now, { second: "2-digit" });
+  const hh = fmt(now, { hour: "2-digit", hour12: false }).padStart(2, "0");
+  const mm = fmt(now, { minute: "2-digit" }).padStart(2, "0");
+  const ss = fmt(now, { second: "2-digit" }).padStart(2, "0");
   const hh12Raw = fmt(now, { hour: "2-digit", hour12: true });
   const hh12 = hh12Raw.replace(/\s?(AM|PM)$/i, "").padStart(2, "0");
   const ampm = /AM/i.test(hh12Raw) ? "AM" : "PM";
@@ -68,24 +73,40 @@ const LiveClock = () => {
   const weeks = buildCalendar(calYear, calMonth);
 
   const prevMonth = () => {
-    if (calMonth === 0) { setCalYear(y => y - 1); setCalMonth(11); }
-    else setCalMonth(m => m - 1);
+    if (calMonth === 0) {
+      if (calYear <= MIN_CAL_YEAR) return;
+      setCalYear(y => y - 1); setCalMonth(11);
+    } else {
+      setCalMonth(m => m - 1);
+    }
   };
   const nextMonth = () => {
-    if (calMonth === 11) { setCalYear(y => y + 1); setCalMonth(0); }
-    else setCalMonth(m => m + 1);
+    if (calMonth === 11) {
+      if (calYear >= maxCalYear) return;
+      setCalYear(y => y + 1); setCalMonth(0);
+    } else {
+      setCalMonth(m => m + 1);
+    }
   };
   const goToday = () => {
     const t = istDate(now);
     setCalYear(t.year);
     setCalMonth(t.month);
     setGoYearInput(String(t.year));
+    setYearError(null);
   };
 
   const handleGoYear = () => {
     const y = parseInt(goYearInput, 10);
-    if (!isNaN(y) && y >= 1 && y <= 9999) setCalYear(y);
-    else setGoYearInput(String(calYear));
+    if (isNaN(y)) { setGoYearInput(String(calYear)); setYearError(null); return; }
+    if (y < MIN_CAL_YEAR) {
+      setYearError(`Year must be ${MIN_CAL_YEAR} or later`);
+    } else if (y > maxCalYear) {
+      setYearError(`Year must be ${maxCalYear} or earlier`);
+    } else {
+      setCalYear(y);
+      setYearError(null);
+    }
   };
 
   const isToday = (d: number | null) =>
@@ -199,6 +220,11 @@ const LiveClock = () => {
             )}
           </div>
 
+          {/* Supported range note */}
+          <p style={{ fontSize: "0.6875rem", color: "var(--color-text-muted)", textAlign: "center", margin: "0.25rem 0 0" }}>
+            Supports years {MIN_CAL_YEAR}–{maxCalYear}
+          </p>
+
           {/* Go to date row */}
           <div className={styles.goToRow}>
             <span className={styles.goToLabel}>Year:</span>
@@ -206,12 +232,13 @@ const LiveClock = () => {
               type="number"
               className={styles.goToYear}
               value={goYearInput}
-              onChange={e => setGoYearInput(e.target.value)}
+              onChange={e => { setGoYearInput(e.target.value); setYearError(null); }}
               onBlur={handleGoYear}
               onKeyDown={e => { if (e.key === "Enter") handleGoYear(); }}
-              min={1}
-              max={9999}
+              min={MIN_CAL_YEAR}
+              max={maxCalYear}
               aria-label="Go to year"
+              style={yearError ? { borderColor: "#dc2626" } : undefined}
             />
             <button
               className={styles.calTodayBtn}
@@ -222,6 +249,11 @@ const LiveClock = () => {
               Back to today
             </button>
           </div>
+          {yearError && (
+            <p style={{ fontSize: "0.6875rem", color: "#dc2626", margin: "0.25rem 0 0", fontWeight: 600 }}>
+              {yearError}
+            </p>
+          )}
         </div>
 
       </div>

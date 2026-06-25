@@ -46,6 +46,9 @@ function inString(idx: number, ranges: Array<[number, number]>): boolean {
 // ── analyzeJson ───────────────────────────────────────────────────────────────
 
 export function analyzeJson(text: string): JsonValidatorResult {
+  // Normalize line endings so Windows CRLF input works correctly
+  text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
   // Fast path: valid JSON → no issues
   let parseError: SyntaxError | null = null;
   try {
@@ -237,6 +240,9 @@ function closeUnclosedStrings(text: string): string {
 // ── repairJson ────────────────────────────────────────────────────────────────
 
 export function repairJson(text: string): JsonRepairResult {
+  // Normalize line endings so Windows CRLF input works correctly
+  text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
   const fixes: string[] = [];
 
   // ── Step 0: targeted pre-fixes that jsonrepair sometimes misses ───────────
