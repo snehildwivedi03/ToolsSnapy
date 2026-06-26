@@ -1,0 +1,251 @@
+/* ── Legal page layout ──────────────────────────────────────────────── */
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2rem var(--container-px, 1.25rem) 5rem;
+  /* Explicit colours so page never shows blank on mobile */
+  background-color: #F5F3FF;
+  color: #1A1523;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Back button ── */
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #6B5E7A);
+  text-decoration: none;
+  margin-bottom: 2rem;
+  padding: 0.4rem 0.875rem;
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-surface, #ffffff);
+  border: 1.5px solid var(--color-border, #E0D9F5);
+  transition: color 150ms, border-color 150ms, box-shadow 150ms;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.backLink:hover {
+  color: var(--color-accent, #7C3AED);
+  border-color: rgba(124, 58, 237, 0.4);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+}
+
+/* ── Hero ── */
+
+.hero {
+  margin-bottom: 1.75rem;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7C3AED;
+  background: #EDE9FE;
+  border: 1px solid #DDD6FE;
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem;
+  margin-bottom: 0.875rem;
+}
+
+.title {
+  font-size: clamp(1.625rem, 5vw, 2.375rem);
+  font-weight: 800;
+  color: #1A1523;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+
+.meta {
+  font-size: 0.875rem;
+  color: #9B8EAA;
+  margin: 0;
+}
+
+/* ── Content card ── */
+
+.content {
+  background: #ffffff;
+  border: 1.5px solid #E0D9F5;
+  border-radius: 16px;
+  padding: 1.875rem 2rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+/* ── Sections ── */
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1A1523;
+  margin: 0 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-left: 3px solid #7C3AED;
+  padding-left: 0.625rem;
+}
+
+/* ── Body text ── */
+
+.body {
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: #6B5E7A;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.body p {
+  margin: 0 0 0.875rem;
+}
+
+.body p:last-child {
+  margin-bottom: 0;
+}
+
+.body ul,
+.body ol {
+  margin: 0.25rem 0 0.875rem 1.375rem;
+  padding: 0;
+}
+
+.body li {
+  margin-bottom: 0.4rem;
+}
+
+.body strong {
+  color: #1A1523;
+  font-weight: 700;
+}
+
+.body a {
+  color: #7C3AED;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.body a:hover {
+  color: #6D28D9;
+}
+
+/* ── Divider ── */
+
+.divider {
+  border: none;
+  border-top: 1.5px solid #E0D9F5;
+  margin: 1.5rem 0;
+}
+
+/* ── Callout: purple highlight ── */
+
+.highlight {
+  background: rgba(124, 58, 237, 0.06);
+  border: 1px solid rgba(124, 58, 237, 0.22);
+  border-radius: 10px;
+  padding: 1rem 1.125rem;
+  margin-bottom: 0.875rem;
+}
+
+.highlight p {
+  margin: 0;
+  color: #1A1523;
+  font-size: 0.9125rem;
+  line-height: 1.65;
+}
+
+.highlight strong {
+  color: #7C3AED;
+}
+
+/* ── Callout: green ── */
+
+.calloutGreen {
+  background: rgba(5, 150, 105, 0.06);
+  border: 1px solid rgba(5, 150, 105, 0.25);
+  border-radius: 10px;
+  padding: 1rem 1.125rem;
+  margin-bottom: 0.875rem;
+}
+
+.calloutGreen p {
+  margin: 0;
+  color: #065f46;
+  font-size: 0.9125rem;
+  line-height: 1.65;
+}
+
+.calloutGreen strong {
+  color: #047857;
+}
+
+/* ── Callout: amber warning ── */
+
+.calloutAmber {
+  background: rgba(245, 158, 11, 0.07);
+  border: 1px solid rgba(245, 158, 11, 0.32);
+  border-radius: 10px;
+  padding: 1rem 1.125rem;
+  margin-bottom: 0.875rem;
+}
+
+.calloutAmber p {
+  margin: 0;
+  font-size: 0.9125rem;
+  line-height: 1.65;
+  color: #78350f;
+}
+
+.calloutAmber strong {
+  color: #92400e;
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 600px) {
+  .page {
+    padding: 1.25rem 1rem 4rem;
+  }
+
+  .title {
+    font-size: 1.625rem;
+  }
+
+  .content {
+    padding: 1.25rem 1rem;
+    border-radius: 12px;
+  }
+
+  .section {
+    margin-bottom: 1.5rem;
+  }
+
+  .body {
+    font-size: 0.875rem;
+  }
+
+  .highlight,
+  .calloutGreen,
+  .calloutAmber {
+    padding: 0.875rem 0.875rem;
+  }
+}

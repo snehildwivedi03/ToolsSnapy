@@ -49,6 +49,8 @@ import ShareFiles from "../pages/Share/tools/ShareFiles";
 import ShareImages from "../pages/Share/tools/ShareImages";
 import SharePdfs from "../pages/Share/tools/SharePdfs";
 import ReceiveContent from "../pages/Share/tools/ReceiveContent";
+import PrivacyPolicy from "../pages/Legal/PrivacyPolicy";
+import TermsOfService from "../pages/Legal/TermsOfService";
 
 const AppRoutes = () => {
   return (
@@ -124,6 +126,10 @@ const AppRoutes = () => {
         <Route path="/pdf/images-to-pdf"  element={<ImagesToPdf />} />
         <Route path="/pdf/pdf-to-images"  element={<PdfToImages />} />
         <Route path="/pdf/resize"          element={<PdfResize />} />
+
+        {/* Legal */}
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms"           element={<TermsOfService />} />
 
       </Route>
     </Routes>

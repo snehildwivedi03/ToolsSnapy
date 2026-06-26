@@ -335,6 +335,34 @@
   letter-spacing: 0.005em;
 }
 
+/* ── "Read full policy" links ────────────────────────────── */
+.policyLinks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.policyDot {
+  color: #3d3660;
+  font-size: 0.875rem;
+}
+
+.policyLink {
+  font-size: 0.75rem;
+  color: #6b7395;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(255, 255, 255, 0.15);
+  transition: color 150ms;
+}
+
+.policyLink:hover {
+  color: #a78bfa;
+  text-decoration-color: rgba(167, 139, 250, 0.5);
+}
+
 /* ── Mobile ───────────────────────────────────────────────── */
 @media (max-width: 520px) {
   .overlay {

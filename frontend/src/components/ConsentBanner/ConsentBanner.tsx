@@ -1,18 +1,31 @@
 import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import s from "./ConsentBanner.module.css";
+
+// Pages where the consent popup should NOT appear
+const LEGAL_PATHS = ["/privacy-policy", "/terms"];
+
+// sessionStorage key — persists across reloads in the SAME tab,
+// resets when the user opens a new tab (industry-standard per-session consent).
+const SESSION_KEY = "toolsnapy_consent_v1";
 
 const ConsentBanner = () => {
   const [visible, setVisible] = useState(false);
   const [checkedPrivacy, setCheckedPrivacy] = useState(false);
   const [checkedTerms, setCheckedTerms] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
+    // Already accepted in this tab session — never show again until new tab
+    if (sessionStorage.getItem(SESSION_KEY) === "accepted") return;
     const t = setTimeout(() => setVisible(true), 400);
     return () => clearTimeout(t);
   }, []);
 
   const canAccept = checkedPrivacy && checkedTerms;
 
+  // Hide on legal pages — user is reading the policy
+  if (LEGAL_PATHS.includes(location.pathname)) return null;
   if (!visible) return null;
 
   return (
@@ -155,11 +168,21 @@ const ConsentBanner = () => {
         {/* ── Accept button ── */}
         <button
           className={canAccept ? s.btnAccept : s.btnAcceptDisabled}
-          onClick={() => canAccept && setVisible(false)}
+          onClick={() => {
+            if (!canAccept) return;
+            sessionStorage.setItem(SESSION_KEY, "accepted");
+            setVisible(false);
+          }}
           disabled={!canAccept}
         >
           {canAccept ? "Accept & Continue" : "Please check both boxes above to continue"}
         </button>
+
+        <div className={s.policyLinks}>
+          <Link to="/privacy-policy" className={s.policyLink}>Read full Privacy Policy</Link>
+          <span className={s.policyDot} aria-hidden="true">·</span>
+          <Link to="/terms" className={s.policyLink}>Read full Terms of Service</Link>
+        </div>
 
       </div>
     </div>

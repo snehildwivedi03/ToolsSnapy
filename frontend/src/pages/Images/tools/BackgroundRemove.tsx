@@ -73,7 +73,7 @@ const BackgroundRemove = () => {
   // Canvas editing
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [activeTool, setActiveTool] = useState<EditTool>("none");
-  const [brushSize, setBrushSize] = useState(20);
+  const [brushSize, setBrushSize] = useState(40);
 
   // Refs for the painting hot path — no React re-renders during drag
   const activeToolRef = useRef<EditTool>("none");
@@ -286,15 +286,42 @@ const BackgroundRemove = () => {
     downloadBytesRef.current.clear();
     inferenceStartedRef.current = false;
     clearTimer();
+
+    let fallbackId: ReturnType<typeof setTimeout> | null = null;
+
+    /** Start the inference elapsed counter — idempotent, safe to call multiple times. */
+    const startInferenceTimer = () => {
+      if (inferenceStartedRef.current) return;
+      if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
+      inferenceStartedRef.current = true;
+      inferenceStartRef.current = Date.now();
+      setIsComputing(true);
+      setStage("Removing background…");
+      setTimeDisplay("0:00 elapsed");
+      clearTimer();
+      timerRef.current = setInterval(() => {
+        const secs = Math.floor((Date.now() - inferenceStartRef.current) / 1000);
+        const m = Math.floor(secs / 60);
+        const sec = secs % 60;
+        setTimeDisplay(`${m}:${String(sec).padStart(2, "0")} elapsed`);
+      }, 1000);
+    };
+
+    // Fallback: if the model is cached and no progress events fire at all,
+    // auto-start the inference timer after 1.2 s so the user always sees a timer.
+    fallbackId = setTimeout(startInferenceTimer, 1200);
+
     try {
       const blob = await removeBackground(src.file, {
-        model: "isnet_quint8", // Fastest quantized model
+        model: "isnet_fp16", // Half-precision — better edge & shape accuracy than quint8
         output: { format: "image/png", quality: 1 },
         progress: (key, current, total) => {
           if (key.includes("fetch")) {
-            // ── Download phase ───────────────────────────────────────────
-            // Track bytes per file separately, then aggregate.
-            // This prevents the bar from cycling 0→100% per file.
+            // ── Download phase ─────────────────────────────────────────
+            // Cancel fallback — events are firing, we'll handle the transition.
+            if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
+
+            // Track bytes per file, aggregate into one 0→100% bar.
             const map = downloadBytesRef.current;
             if (!map.has(key)) {
               map.set(key, { current: 0, total: total || 0 });
@@ -314,40 +341,32 @@ const BackgroundRemove = () => {
             setProgress(pct);
             setStage("Downloading AI model…");
 
-            // Estimate remaining time from download speed
-            const elapsed = (Date.now() - downloadStartRef.current) / 1000;
-            if (totalCurrent > 1024 && totalTotal > totalCurrent && elapsed > 0.3) {
-              const speed = totalCurrent / elapsed;
+            // Speed-based remaining estimate
+            const dlElapsed = (Date.now() - downloadStartRef.current) / 1000;
+            if (totalCurrent > 1024 && totalTotal > totalCurrent && dlElapsed > 0.3) {
+              const speed = totalCurrent / dlElapsed;
               const remaining = (totalTotal - totalCurrent) / speed;
               setTimeDisplay(remaining > 1 ? `~${Math.ceil(remaining)}s remaining` : "Almost done…");
             } else {
               setTimeDisplay("");
             }
+
+            // Transition to inference timer as soon as download is complete.
+            if (pct >= 100) startInferenceTimer();
           } else {
-            // ── Inference phase ───────────────────────────────────────────
-            if (!inferenceStartedRef.current) {
-              inferenceStartedRef.current = true;
-              inferenceStartRef.current = Date.now();
-              setIsComputing(true);
-              setStage("Removing background…");
-              setTimeDisplay("0:00 elapsed");
-              clearTimer();
-              timerRef.current = setInterval(() => {
-                const secs = Math.floor((Date.now() - inferenceStartRef.current) / 1000);
-                const m = Math.floor(secs / 60);
-                const s = secs % 60;
-                setTimeDisplay(`${m}:${String(s).padStart(2, "0")} elapsed`);
-              }, 1000);
-            }
+            // ── Non-fetch event = inference starting ───────────────────
+            startInferenceTimer();
           }
         },
       });
+      if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
       const url = URL.createObjectURL(blob);
       await loadImage(url);
       if (result) URL.revokeObjectURL(result.url);
       const filename = `${baseName(src.file.name)}-no-bg.png`;
       setResult({ blob, url, filename });
     } catch {
+      if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
       setError("Background removal failed. Please try a different image or check your connection.");
     } finally {
       setBusy(false);
@@ -520,7 +539,7 @@ const BackgroundRemove = () => {
                     <input
                       type="range"
                       min={5}
-                      max={80}
+                      max={150}
                       value={brushSize}
                       onChange={e => setBrushSize(Number(e.target.value))}
                       className={ls.brushSlider}
