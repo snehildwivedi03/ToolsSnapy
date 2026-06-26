@@ -289,15 +289,11 @@ const BackgroundRemove = () => {
 
     let fallbackId: ReturnType<typeof setTimeout> | null = null;
 
-    /** Start the inference elapsed counter — idempotent, safe to call multiple times. */
-    const startInferenceTimer = () => {
+    /** Start the elapsed counter — idempotent. */
+    const startComputeTimer = () => {
       if (inferenceStartedRef.current) return;
-      if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
       inferenceStartedRef.current = true;
       inferenceStartRef.current = Date.now();
-      setIsComputing(true);
-      setStage("Removing background…");
-      setTimeDisplay("0:00 elapsed");
       clearTimer();
       timerRef.current = setInterval(() => {
         const secs = Math.floor((Date.now() - inferenceStartRef.current) / 1000);
@@ -307,21 +303,21 @@ const BackgroundRemove = () => {
       }, 1000);
     };
 
-    // Fallback: if the model is cached and no progress events fire at all,
-    // auto-start the inference timer after 1.2 s so the user always sees a timer.
-    fallbackId = setTimeout(startInferenceTimer, 1200);
+    // Fallback: cached model with no events at all → show indeterminate after 1.2 s.
+    fallbackId = setTimeout(() => {
+      startComputeTimer();
+      setStage("Removing background…");
+    }, 1200);
 
     try {
       const blob = await removeBackground(src.file, {
         model: "isnet_fp16", // Half-precision — better edge & shape accuracy than quint8
         output: { format: "image/png", quality: 1 },
         progress: (key, current, total) => {
-          if (key.includes("fetch")) {
+          if (key.startsWith("fetch:")) {
             // ── Download phase ─────────────────────────────────────────
-            // Cancel fallback — events are firing, we'll handle the transition.
             if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
 
-            // Track bytes per file, aggregate into one 0→100% bar.
             const map = downloadBytesRef.current;
             if (!map.has(key)) {
               map.set(key, { current: 0, total: total || 0 });
@@ -337,25 +333,41 @@ const BackgroundRemove = () => {
             });
 
             const pct = totalTotal > 0 ? Math.round((totalCurrent / totalTotal) * 100) : 0;
-            setIsComputing(false);
-            setProgress(pct);
             setStage("Downloading AI model…");
 
-            // Speed-based remaining estimate
-            const dlElapsed = (Date.now() - downloadStartRef.current) / 1000;
-            if (totalCurrent > 1024 && totalTotal > totalCurrent && dlElapsed > 0.3) {
-              const speed = totalCurrent / dlElapsed;
-              const remaining = (totalTotal - totalCurrent) / speed;
-              setTimeDisplay(remaining > 1 ? `~${Math.ceil(remaining)}s remaining` : "Almost done…");
+            if (totalTotal > 0) {
+              setIsComputing(false);
+              setProgress(pct);
+              // Speed-based remaining estimate
+              const dlElapsed = (Date.now() - downloadStartRef.current) / 1000;
+              if (totalCurrent > 1024 && totalTotal > totalCurrent && dlElapsed > 0.3) {
+                const speed = totalCurrent / dlElapsed;
+                const remaining = (totalTotal - totalCurrent) / speed;
+                setTimeDisplay(remaining > 1 ? `~${Math.ceil(remaining)}s remaining` : "Almost done…");
+              } else {
+                setTimeDisplay("");
+              }
             } else {
+              // Unknown content-length — indeterminate sweep
+              setIsComputing(true);
               setTimeDisplay("");
             }
 
-            // Transition to inference timer as soon as download is complete.
-            if (pct >= 100) startInferenceTimer();
+          } else if (key.startsWith("compute:")) {
+            // ── Compute phase (decode → inference → mask → encode) ─────
+            // Library fires (current, total) = (0,4) … (4,4) across the steps.
+            if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
+            startComputeTimer();
+
+            const computePct = total > 0 ? Math.round((current / total) * 100) : 0;
+            setIsComputing(false);
+            setProgress(computePct);
+            setStage("Removing background…");
           } else {
-            // ── Non-fetch event = inference starting ───────────────────
-            startInferenceTimer();
+            // Unknown event type — fall back to indeterminate
+            if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
+            startComputeTimer();
+            setStage("Removing background…");
           }
         },
       });
