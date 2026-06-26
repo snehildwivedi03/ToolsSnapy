@@ -58,3 +58,30 @@
   color: var(--color-text-muted);
   margin: 0;
 }
+
+.legalLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legalLink {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 150ms;
+}
+
+.legalLink:hover {
+  color: var(--color-text-primary, #ffffff);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legalDot {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}

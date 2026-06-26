@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./Footer.module.css";
 
 // Static footer   brand, USP, and auto-updated copyright
@@ -15,6 +16,11 @@ const Footer = () => {
           No tracking &nbsp;&middot;&nbsp; No history &nbsp;&middot;&nbsp; No saves.
           <span className={styles.taglineBreak}>You exit, we exit.</span>
         </p>
+        <nav className={styles.legalLinks} aria-label="Legal">
+          <Link to="/privacy-policy" className={styles.legalLink}>Privacy Policy</Link>
+          <span className={styles.legalDot} aria-hidden="true">&middot;</span>
+          <Link to="/terms" className={styles.legalLink}>Terms of Service</Link>
+        </nav>
         <p className={styles.copy}>
           &copy; {year} ToolSnapy. Built for speed, built for privacy.
         </p>
