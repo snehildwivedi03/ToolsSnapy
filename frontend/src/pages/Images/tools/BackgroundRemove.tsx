@@ -31,23 +31,45 @@ interface ResultState {
 
 type EditTool = "none" | "eraser" | "restore";
 
+/** Convert browser client coordinates to canvas pixel coordinates. */
+function clientToCanvas(
+  clientX: number,
+  clientY: number,
+  canvas: HTMLCanvasElement,
+): { x: number; y: number } {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (clientX - rect.left) * (canvas.width / rect.width),
+    y: (clientY - rect.top) * (canvas.height / rect.height),
+  };
+}
+
 const BackgroundRemove = () => {
   const [src, setSrc] = useState<SourceState | null>(null);
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isComputing, setIsComputing] = useState(false);
   const [stage, setStage] = useState("");
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Canvas editing state
+  // Canvas editing
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [originalImgRef, setOriginalImgRef] = useState<HTMLImageElement | null>(null);
   const [activeTool, setActiveTool] = useState<EditTool>("none");
   const [brushSize, setBrushSize] = useState(20);
-  const [isPainting, setIsPainting] = useState(false);
+
+  // Refs for the painting hot path — no React re-renders during drag
+  const activeToolRef = useRef<EditTool>("none");
+  const brushSizeRef = useRef(20);
+  const origImgRef = useRef<HTMLImageElement | null>(null);
+  const isPaintingRef = useRef(false);
   const lastPos = useRef<{ x: number; y: number } | null>(null);
+
+  // Keep painting refs in sync with state
+  useEffect(() => { activeToolRef.current = activeTool; }, [activeTool]);
+  useEffect(() => { brushSizeRef.current = brushSize; }, [brushSize]);
 
   const reset = () => {
     if (src) URL.revokeObjectURL(src.url);
@@ -56,8 +78,12 @@ const BackgroundRemove = () => {
     setResult(null);
     setError("");
     setProgress(0);
+    setIsComputing(false);
     setActiveTool("none");
-    setOriginalImgRef(null);
+    activeToolRef.current = "none";
+    origImgRef.current = null;
+    isPaintingRef.current = false;
+    lastPos.current = null;
   };
 
   const loadFile = (file: File) => {
@@ -102,101 +128,121 @@ const BackgroundRemove = () => {
 
   // Keep the original image element for restore tool
   useEffect(() => {
-    if (!src) return;
+    if (!src) { origImgRef.current = null; return; }
     const img = new Image();
-    img.onload = () => setOriginalImgRef(img);
+    img.onload = () => { origImgRef.current = img; };
     img.src = src.url;
   }, [src]);
 
-  const getCanvasPoint = (
-    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>,
-    canvas: HTMLCanvasElement,
+  // Core paint function — reads only refs, zero React overhead during drag
+  const paintAt = useCallback((
+    x: number,
+    y: number,
+    from?: { x: number; y: number },
   ) => {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    let clientX: number, clientY: number;
-    if ("touches" in e) {
-      const t = e.touches[0];
-      if (!t) return null;
-      clientX = t.clientX;
-      clientY = t.clientY;
-    } else {
-      clientX = e.clientX;
-      clientY = e.clientY;
-    }
-    return {
-      x: (clientX - rect.left) * scaleX,
-      y: (clientY - rect.top) * scaleY,
-    };
-  };
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const tool = activeToolRef.current;
+    const size = brushSizeRef.current;
 
-  const paint = useCallback(
-    (x: number, y: number) => {
-      const canvas = canvasRef.current;
-      if (!canvas || activeTool === "none") return;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
+    const drawDot = (cx: number, cy: number) => {
       ctx.save();
-      // Draw a circle at position
       ctx.beginPath();
-      ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
-
-      if (activeTool === "eraser") {
+      ctx.arc(cx, cy, size / 2, 0, Math.PI * 2);
+      if (tool === "eraser") {
         ctx.globalCompositeOperation = "destination-out";
         ctx.fillStyle = "rgba(0,0,0,1)";
         ctx.fill();
-      } else if (activeTool === "restore" && originalImgRef) {
+      } else if (tool === "restore" && origImgRef.current) {
         ctx.globalCompositeOperation = "source-over";
         ctx.clip();
-        ctx.drawImage(originalImgRef, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(origImgRef.current, 0, 0, canvas.width, canvas.height);
       }
       ctx.restore();
-    },
-    [activeTool, brushSize, originalImgRef],
-  );
+    };
 
-  const onPointerDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (activeTool === "none") return;
-    setIsPainting(true);
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const pt = getCanvasPoint(e, canvas);
-    if (!pt) return;
-    lastPos.current = pt;
-    paint(pt.x, pt.y);
-  };
-
-  const onPointerMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isPainting || activeTool === "none") return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const pt = getCanvasPoint(e, canvas);
-    if (!pt) return;
-    // Interpolate for smooth strokes
-    if (lastPos.current) {
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        const dx = pt.x - lastPos.current.x;
-        const dy = pt.y - lastPos.current.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const steps = Math.max(1, Math.floor(dist / (brushSize / 4)));
-        for (let i = 0; i <= steps; i++) {
-          paint(
-            lastPos.current.x + (dx * i) / steps,
-            lastPos.current.y + (dy * i) / steps,
-          );
-        }
+    if (from) {
+      const dx = x - from.x;
+      const dy = y - from.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const steps = Math.max(1, Math.floor(dist / Math.max(1, size / 4)));
+      for (let i = 0; i <= steps; i++) {
+        drawDot(from.x + (dx * i) / steps, from.y + (dy * i) / steps);
       }
+    } else {
+      drawDot(x, y);
     }
-    lastPos.current = pt;
-  };
+  }, []); // Empty deps — reads only stable refs
 
-  const onPointerUp = () => {
-    setIsPainting(false);
+  const onMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (activeToolRef.current === "none") return;
+    isPaintingRef.current = true;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const pt = clientToCanvas(e.clientX, e.clientY, canvas);
+    lastPos.current = pt;
+    paintAt(pt.x, pt.y);
+  }, [paintAt]);
+
+  const onMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isPaintingRef.current || activeToolRef.current === "none") return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const pt = clientToCanvas(e.clientX, e.clientY, canvas);
+    paintAt(pt.x, pt.y, lastPos.current ?? undefined);
+    lastPos.current = pt;
+  }, [paintAt]);
+
+  const onMouseUp = useCallback(() => {
+    isPaintingRef.current = false;
     lastPos.current = null;
-  };
+  }, []);
+
+  // Native touch listeners — { passive: false } lets us call preventDefault()
+  // to block page scroll while painting on mobile
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !result) return;
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (activeToolRef.current === "none") return;
+      e.preventDefault();
+      const touch = e.changedTouches[0];
+      if (!touch) return;
+      isPaintingRef.current = true;
+      const pt = clientToCanvas(touch.clientX, touch.clientY, canvas);
+      lastPos.current = pt;
+      paintAt(pt.x, pt.y);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!isPaintingRef.current || activeToolRef.current === "none") return;
+      e.preventDefault();
+      const touch = e.changedTouches[0];
+      if (!touch) return;
+      const pt = clientToCanvas(touch.clientX, touch.clientY, canvas);
+      paintAt(pt.x, pt.y, lastPos.current ?? undefined);
+      lastPos.current = pt;
+    };
+
+    const onTouchEnd = () => {
+      isPaintingRef.current = false;
+      lastPos.current = null;
+    };
+
+    canvas.addEventListener("touchstart", onTouchStart, { passive: false });
+    canvas.addEventListener("touchmove", onTouchMove, { passive: false });
+    canvas.addEventListener("touchend", onTouchEnd);
+    canvas.addEventListener("touchcancel", onTouchEnd);
+    return () => {
+      canvas.removeEventListener("touchstart", onTouchStart);
+      canvas.removeEventListener("touchmove", onTouchMove);
+      canvas.removeEventListener("touchend", onTouchEnd);
+      canvas.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [result, paintAt]);
 
   // Export canvas back to blob for download / share
   const getCanvasBlob = (): Promise<Blob> =>
@@ -215,15 +261,23 @@ const BackgroundRemove = () => {
     setBusy(true);
     setError("");
     setProgress(0);
+    setIsComputing(true); // Start with indeterminate sweep while loading
     setStage("Preparing…");
     try {
       const blob = await removeBackground(src.file, {
-        model: "isnet_fp16",
+        model: "isnet_quant", // Fastest quantized model
         output: { format: "image/png", quality: 1 },
         progress: (key, current, total) => {
-          const pct = total ? Math.round((current / total) * 100) : 0;
-          setProgress(pct);
-          setStage(key.startsWith("fetch") ? "Downloading AI model…" : "Removing background…");
+          if (key.includes("fetch")) {
+            // Model download — show real byte progress
+            setIsComputing(false);
+            setProgress(total > 0 ? Math.round((current / total) * 100) : 0);
+            setStage("Downloading AI model…");
+          } else {
+            // AI inference fires sparse events — indeterminate looks better
+            setIsComputing(true);
+            setStage("Removing background…");
+          }
         },
       });
       const url = URL.createObjectURL(blob);
@@ -235,6 +289,7 @@ const BackgroundRemove = () => {
       setError("Background removal failed. Please try a different image or check your connection.");
     } finally {
       setBusy(false);
+      setIsComputing(false);
     }
   };
 
@@ -322,7 +377,7 @@ const BackgroundRemove = () => {
               <span className={ls.processingTitle}>
                 {stage === "Downloading AI model…" ? "Getting the AI ready…" : "Removing the background…"}
               </span>
-              <ProgressBar value={progress} tone="purple" label={stage || "Working…"} />
+              <ProgressBar value={isComputing ? undefined : progress} tone="purple" label={stage || "Working…"} />
               <span className={ls.dropHint}>
                 {stage === "Downloading AI model…"
                   ? "First run downloads the AI model (one time). This can take a moment on slower connections."
@@ -355,10 +410,10 @@ const BackgroundRemove = () => {
                 <canvas
                   ref={canvasRef}
                   className={`${ls.resultCanvas} ${activeTool !== "none" ? (activeTool === "eraser" ? ls.cursorEraser : ls.cursorRestore) : ""}`}
-                  onMouseDown={onPointerDown}
-                  onMouseMove={onPointerMove}
-                  onMouseUp={onPointerUp}
-                  onMouseLeave={onPointerUp}
+                  onMouseDown={onMouseDown}
+                  onMouseMove={onMouseMove}
+                  onMouseUp={onMouseUp}
+                  onMouseLeave={onMouseUp}
                   style={{ touchAction: activeTool !== "none" ? "none" : "auto" }}
                 />
               </div>
