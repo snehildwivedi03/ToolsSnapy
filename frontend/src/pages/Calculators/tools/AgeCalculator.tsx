@@ -303,7 +303,7 @@ const AgeCalculator = () => {
       title="Age & Date Calculator"
       description="Calculate exact age or find the live duration between any two dates."
     >
-      <div className={s.workspace}>
+      <div className={`${s.workspace} ${s.workspaceSplit}`}>
         <div className={s.card}>
           <div className={s.chipRow}>
             <button className={`${s.chip} ${mode === "age"  ? s.chipActive : ""}`}
