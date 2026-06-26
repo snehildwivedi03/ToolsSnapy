@@ -289,12 +289,12 @@ const AgeCalculator = () => {
     setDiffResult({ totalDays, years, months, days, weeks: Math.floor(totalDays / 7), weekdays, weekends });
   };
 
-  /* Start/stop live tick when diff result is showing and dateB is today */
+  /* Start/stop live tick when age result is showing and toDate is today */
   useEffect(() => {
-    if (mode !== "diff" || !diffResult || dateB !== todayStr) return;
+    if (mode !== "age" || !ageResult || toDate !== todayStr) return;
     const id = setInterval(() => setNowMs(Date.now()), 1000);
     return () => clearInterval(id);
-  }, [mode, diffResult, dateB, todayStr]);
+  }, [mode, ageResult, toDate, todayStr]);
 
   return (
     <ToolPageShell
@@ -327,7 +327,15 @@ const AgeCalculator = () => {
           )}
         </div>
 
-        {mode === "age" && ageResult && (
+        {mode === "age" && ageResult && (() => {
+          const startMs = dob ? new Date(dob + "T00:00:00").getTime() : 0;
+          const endMs   = toDate === todayStr ? nowMs : new Date(toDate + "T00:00:00").getTime();
+          const liveMs  = Math.max(0, endMs - startMs);
+          const liveH   = Math.floor(liveMs / 3600000);
+          const liveM   = Math.floor((liveMs % 3600000) / 60000);
+          const liveS   = Math.floor((liveMs % 60000) / 1000);
+          const isLive  = toDate === todayStr;
+          return (
           <div className={s.card}>
             <span className={s.cardTitle}>Your Age</span>
             <div className={`${s.resultGrid} ${s.resultGrid3}`}>
@@ -354,6 +362,33 @@ const AgeCalculator = () => {
                 <div className={s.resultLabel}>Total Months</div>
               </div>
             </div>
+
+            {/* Live H : M : S counter */}
+            <div className={s.cardTitle} style={{ marginTop: "0.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              {isLive && (
+                <span style={{
+                  display: "inline-block", width: 8, height: 8,
+                  borderRadius: "50%", background: "#059669",
+                  boxShadow: "0 0 6px #059669", flexShrink: 0,
+                }} />
+              )}
+              {isLive ? "Live Age" : "Age in Time"}
+            </div>
+            <div className={`${s.resultGrid} ${s.resultGrid3}`}>
+              <div className={`${s.resultCard} ${s.resultCardBlue}`}>
+                <div className={s.resultValue}>{liveH.toLocaleString()}</div>
+                <div className={s.resultLabel}>Hours</div>
+              </div>
+              <div className={`${s.resultCard} ${s.resultCardGreen}`}>
+                <div className={s.resultValue}>{liveM}</div>
+                <div className={s.resultLabel}>Minutes</div>
+              </div>
+              <div className={`${s.resultCard} ${s.resultCardOrange}`}>
+                <div className={s.resultValue}>{liveS}</div>
+                <div className={s.resultLabel}>Seconds</div>
+              </div>
+            </div>
+
             <div className={`${s.resultGrid} ${s.resultGrid2}`}>
               <div className={`${s.resultCard} ${s.resultCardOrange}`}>
                 <div className={s.resultValue}>{ageResult.nextBirthday}</div>
@@ -365,17 +400,10 @@ const AgeCalculator = () => {
               </div>
             </div>
           </div>
-        )}
+          );
+        })()}
 
         {mode === "diff" && diffResult && (() => {
-          /* Compute live elapsed ms: tick in real-time if dateB is today */
-          const startMs = dateA ? new Date(dateA + "T00:00:00").getTime() : 0;
-          const endMs   = dateB === todayStr ? nowMs : new Date(dateB + "T00:00:00").getTime();
-          const liveMs  = Math.max(0, endMs - startMs);
-          const liveH   = Math.floor(liveMs / 3600000);
-          const liveM   = Math.floor((liveMs % 3600000) / 60000);
-          const liveS   = Math.floor((liveMs % 60000) / 1000);
-          const isLive  = dateB === todayStr;
           return (
           <div className={s.card}>
             <span className={s.cardTitle}>Duration</span>
@@ -395,32 +423,6 @@ const AgeCalculator = () => {
               <div className={s.resultCard}>
                 <div className={s.resultValue}>{diffResult.days}</div>
                 <div className={s.resultLabel}>Rem. Days</div>
-              </div>
-            </div>
-
-            {/* Live H : M : S counter */}
-            <div className={s.cardTitle} style={{ marginTop: "0.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              {isLive && (
-                <span style={{
-                  display: "inline-block", width: 8, height: 8,
-                  borderRadius: "50%", background: "#059669",
-                  boxShadow: "0 0 6px #059669", flexShrink: 0,
-                }} />
-              )}
-              {isLive ? "Live Duration" : "Duration in Time"}
-            </div>
-            <div className={`${s.resultGrid} ${s.resultGrid3}`}>
-              <div className={`${s.resultCard} ${s.resultCardBlue}`}>
-                <div className={s.resultValue}>{liveH.toLocaleString()}</div>
-                <div className={s.resultLabel}>Hours</div>
-              </div>
-              <div className={`${s.resultCard} ${s.resultCardGreen}`}>
-                <div className={s.resultValue}>{liveM}</div>
-                <div className={s.resultLabel}>Minutes</div>
-              </div>
-              <div className={`${s.resultCard} ${s.resultCardOrange}`}>
-                <div className={s.resultValue}>{liveS}</div>
-                <div className={s.resultLabel}>Seconds</div>
               </div>
             </div>
 
