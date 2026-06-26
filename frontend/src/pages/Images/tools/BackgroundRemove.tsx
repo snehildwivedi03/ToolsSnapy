@@ -50,10 +50,25 @@ const BackgroundRemove = () => {
   const [progress, setProgress] = useState(0);
   const [isComputing, setIsComputing] = useState(false);
   const [stage, setStage] = useState("");
+  const [timeDisplay, setTimeDisplay] = useState("");
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Refs for progress tracking
+  const downloadBytesRef = useRef<Map<string, { current: number; total: number }>>(new Map());
+  const downloadStartRef = useRef<number>(0);
+  const inferenceStartRef = useRef<number>(0);
+  const inferenceStartedRef = useRef(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearTimer = () => {
+    if (timerRef.current !== null) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
 
   // Canvas editing
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -79,11 +94,15 @@ const BackgroundRemove = () => {
     setError("");
     setProgress(0);
     setIsComputing(false);
+    setTimeDisplay("");
     setActiveTool("none");
     activeToolRef.current = "none";
     origImgRef.current = null;
     isPaintingRef.current = false;
     lastPos.current = null;
+    clearTimer();
+    downloadBytesRef.current.clear();
+    inferenceStartedRef.current = false;
   };
 
   const loadFile = (file: File) => {
@@ -261,22 +280,65 @@ const BackgroundRemove = () => {
     setBusy(true);
     setError("");
     setProgress(0);
-    setIsComputing(true); // Start with indeterminate sweep while loading
+    setTimeDisplay("");
+    setIsComputing(true);
     setStage("Preparing…");
+    downloadBytesRef.current.clear();
+    inferenceStartedRef.current = false;
+    clearTimer();
     try {
       const blob = await removeBackground(src.file, {
-        model: "isnet_quant", // Fastest quantized model
+        model: "isnet_quint8", // Fastest quantized model
         output: { format: "image/png", quality: 1 },
         progress: (key, current, total) => {
           if (key.includes("fetch")) {
-            // Model download — show real byte progress
+            // ── Download phase ───────────────────────────────────────────
+            // Track bytes per file separately, then aggregate.
+            // This prevents the bar from cycling 0→100% per file.
+            const map = downloadBytesRef.current;
+            if (!map.has(key)) {
+              map.set(key, { current: 0, total: total || 0 });
+              if (map.size === 1) downloadStartRef.current = Date.now();
+            }
+            map.set(key, { current, total: total || 0 });
+
+            let totalCurrent = 0;
+            let totalTotal = 0;
+            map.forEach(({ current: c, total: t }) => {
+              totalCurrent += c;
+              totalTotal += t;
+            });
+
+            const pct = totalTotal > 0 ? Math.round((totalCurrent / totalTotal) * 100) : 0;
             setIsComputing(false);
-            setProgress(total > 0 ? Math.round((current / total) * 100) : 0);
+            setProgress(pct);
             setStage("Downloading AI model…");
+
+            // Estimate remaining time from download speed
+            const elapsed = (Date.now() - downloadStartRef.current) / 1000;
+            if (totalCurrent > 1024 && totalTotal > totalCurrent && elapsed > 0.3) {
+              const speed = totalCurrent / elapsed;
+              const remaining = (totalTotal - totalCurrent) / speed;
+              setTimeDisplay(remaining > 1 ? `~${Math.ceil(remaining)}s remaining` : "Almost done…");
+            } else {
+              setTimeDisplay("");
+            }
           } else {
-            // AI inference fires sparse events — indeterminate looks better
-            setIsComputing(true);
-            setStage("Removing background…");
+            // ── Inference phase ───────────────────────────────────────────
+            if (!inferenceStartedRef.current) {
+              inferenceStartedRef.current = true;
+              inferenceStartRef.current = Date.now();
+              setIsComputing(true);
+              setStage("Removing background…");
+              setTimeDisplay("0:00 elapsed");
+              clearTimer();
+              timerRef.current = setInterval(() => {
+                const secs = Math.floor((Date.now() - inferenceStartRef.current) / 1000);
+                const m = Math.floor(secs / 60);
+                const s = secs % 60;
+                setTimeDisplay(`${m}:${String(s).padStart(2, "0")} elapsed`);
+              }, 1000);
+            }
           }
         },
       });
@@ -290,6 +352,8 @@ const BackgroundRemove = () => {
     } finally {
       setBusy(false);
       setIsComputing(false);
+      clearTimer();
+      setTimeDisplay("");
     }
   };
 
@@ -378,6 +442,9 @@ const BackgroundRemove = () => {
                 {stage === "Downloading AI model…" ? "Getting the AI ready…" : "Removing the background…"}
               </span>
               <ProgressBar value={isComputing ? undefined : progress} tone="purple" label={stage || "Working…"} />
+              {timeDisplay && (
+                <span className={ls.processingTimer}>{timeDisplay}</span>
+              )}
               <span className={ls.dropHint}>
                 {stage === "Downloading AI model…"
                   ? "First run downloads the AI model (one time). This can take a moment on slower connections."

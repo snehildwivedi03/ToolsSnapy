@@ -547,6 +547,14 @@
   color: var(--color-text-secondary);
 }
 
+.processingTimer {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+  letter-spacing: 0.01em;
+}
+
 /* ── Share result card ───────────────────────────────────── */
 .shareResult {
   width: 100%;
