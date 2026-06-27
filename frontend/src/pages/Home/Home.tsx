@@ -281,10 +281,10 @@ const Home = () => {
           <li className={styles.uspItem}>
             <span className={styles.uspNum} aria-hidden="true">04</span>
             <div>
-              <h3 className={styles.uspHeading}>No files saved.</h3>
+              <h3 className={styles.uspHeading}>No permanent saves.</h3>
               <p className={styles.uspDesc}>
                 Upload, process, download. Your files
-                never touch our servers.
+                are never stored permanently on our servers.
               </p>
             </div>
           </li>
