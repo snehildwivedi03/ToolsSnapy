@@ -1,7 +1,10 @@
-Recieve content download button at the side not UX friendly. A dedicated download button
+Tools to add
 
-Image resize should also include crop button also
+--Add readme viewer
+--URL masker
 
-Image convertor should have more UI friendly quality bar
+Improvements
 
-Downlaod.txt button is not consistent
+The animation in the bg remover is not working fine and the progess bar is zero and suddenly flies to 75%
+Cursor and eraser is not working the eraser is scrollig somewher elese and reasing somewhere else
+Background is froze when the background is being removed
