@@ -5,7 +5,7 @@ Tools to add
 
 Improvements
 
-The animation in the bg remover is not working fine and the progress bar is zero and suddenly flies to 75%.
+The animation in the bg remover is not working properly when image's background being removed it looks like it is being froze there should be animation on whole image and the progress bar is zero and suddenly flies to 75%.
 
 Cursor and eraser is not working, the eraser is scrolling somewhere else and erasing somewhere else.
 
