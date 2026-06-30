@@ -7,6 +7,7 @@ import t from "./ShareTool.module.css";
 import tp from "../../../styles/toolpage.module.css";
 import { shareFiles } from "../../../services/shareApi";
 import { incrementFiles } from "../../../services/shareCounter";
+import { usePasteImage } from "../../../hooks/usePasteImage";
 
 const ALLOWED_EXTS = [".png", ".jpg", ".jpeg", ".webp"];
 const MAX_FILES = 50;
@@ -71,6 +72,9 @@ const ShareImages = () => {
       setTimeout(() => shareButtonRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
     }
   }, []);
+
+  // Paste image(s) from the clipboard (Ctrl/Cmd+V) to add them.
+  usePasteImage((files) => addFiles(files), !result);
 
   const onDrop = (e: DragEvent<HTMLDivElement>) => { e.preventDefault(); setDragging(false); addFiles(Array.from(e.dataTransfer.files)); };
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => { if (e.target.files) { addFiles(Array.from(e.target.files)); e.target.value = ""; } };

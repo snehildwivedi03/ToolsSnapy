@@ -5,6 +5,7 @@ import s from "../../../styles/calc.module.css";
 import ls from "./imageTools.module.css";
 import ShareViaToolSnapy from "./ShareViaToolSnapy";
 import Toast from "../../../components/Toast/Toast";
+import { usePasteImage } from "../../../hooks/usePasteImage";
 import {
   baseName,
   canvasToBlob,
@@ -88,6 +89,12 @@ const ImageResizeDimensions = () => {
     if (file) void loadFile(file);
     e.target.value = "";
   };
+
+  // Paste an image from the clipboard (Ctrl/Cmd+V) while on the upload screen.
+  usePasteImage((files) => {
+    const file = files[0];
+    if (file) void loadFile(file);
+  }, !src);
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();

@@ -61,6 +61,7 @@
 .indeterminate {
   position: absolute;
   top: 0;
+  left: 0;
   height: 100%;
   width: 42%;
   border-radius: var(--radius-full, 999px);
@@ -72,6 +73,7 @@
     var(--bar-soft) 65%,
     transparent 100%
   );
+  will-change: transform;
   animation: slide 1.15s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
 
@@ -81,8 +83,8 @@
 }
 
 @keyframes slide {
-  0% { left: -45%; }
-  100% { left: 100%; }
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(330%); }
 }
 
 @keyframes fadeIn {

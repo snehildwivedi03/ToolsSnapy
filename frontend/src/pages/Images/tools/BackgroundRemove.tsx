@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { removeBackground } from "@imgly/background-removal";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
@@ -7,6 +6,8 @@ import ls from "./imageTools.module.css";
 import ShareViaToolSnapy from "./ShareViaToolSnapy";
 import ImageDownloadMenu from "./ImageDownloadMenu";
 import { baseName, formatBytes, loadImage } from "./imageUtils";
+import type { BgRemoveRequest, BgRemoveResponse } from "./bgRemoveWorker";
+import { usePasteImage } from "../../../hooks/usePasteImage";
 
 const Icon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
@@ -38,9 +39,17 @@ function clientToCanvas(
   canvas: HTMLCanvasElement,
 ): { x: number; y: number } {
   const rect = canvas.getBoundingClientRect();
+  // The canvas is shown with `object-fit: contain`, so the bitmap can be
+  // letterboxed inside the element box. Map clicks against the *visible*
+  // image area, not the full element, otherwise the brush lands off-target.
+  const scale = Math.min(rect.width / canvas.width, rect.height / canvas.height);
+  const drawnW = canvas.width * scale;
+  const drawnH = canvas.height * scale;
+  const padX = (rect.width - drawnW) / 2;
+  const padY = (rect.height - drawnH) / 2;
   return {
-    x: (clientX - rect.left) * (canvas.width / rect.width),
-    y: (clientY - rect.top) * (canvas.height / rect.height),
+    x: (clientX - rect.left - padX) / scale,
+    y: (clientY - rect.top - padY) / scale,
   };
 }
 
@@ -62,6 +71,7 @@ const BackgroundRemove = () => {
   const inferenceStartRef = useRef<number>(0);
   const inferenceStartedRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const workerRef = useRef<Worker | null>(null);
 
   const clearTimer = () => {
     if (timerRef.current !== null) {
@@ -86,9 +96,14 @@ const BackgroundRemove = () => {
   useEffect(() => { activeToolRef.current = activeTool; }, [activeTool]);
   useEffect(() => { brushSizeRef.current = brushSize; }, [brushSize]);
 
+  // Terminate any running worker when the component unmounts
+  useEffect(() => () => { workerRef.current?.terminate(); }, []);
+
   const reset = () => {
     if (src) URL.revokeObjectURL(src.url);
     if (result) URL.revokeObjectURL(result.url);
+    workerRef.current?.terminate();
+    workerRef.current = null;
     setSrc(null);
     setResult(null);
     setError("");
@@ -121,6 +136,12 @@ const BackgroundRemove = () => {
     if (file) loadFile(file);
     e.target.value = "";
   };
+
+  // Paste an image from the clipboard (Ctrl/Cmd+V) while on the upload screen.
+  usePasteImage((files) => {
+    const file = files[0];
+    if (file) loadFile(file);
+  }, !src);
 
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -275,7 +296,7 @@ const BackgroundRemove = () => {
       );
     });
 
-  const remove = async () => {
+  const remove = () => {
     if (!src) return;
     setBusy(true);
     setError("");
@@ -288,6 +309,9 @@ const BackgroundRemove = () => {
     clearTimer();
 
     let fallbackId: ReturnType<typeof setTimeout> | null = null;
+    const clearFallback = () => {
+      if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
+    };
 
     /** Start the elapsed counter — idempotent. */
     const startComputeTimer = () => {
@@ -309,83 +333,107 @@ const BackgroundRemove = () => {
       setStage("Removing background…");
     }, 1200);
 
-    try {
-      const blob = await removeBackground(src.file, {
-        model: "isnet_fp16", // Half-precision — better edge & shape accuracy than quint8
-        output: { format: "image/png", quality: 1 },
-        progress: (key, current, total) => {
-          if (key.startsWith("fetch:")) {
-            // ── Download phase ─────────────────────────────────────────
-            if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
+    /** Translate the worker's progress events into UI state. */
+    const handleProgress = (key: string, current: number, total: number) => {
+      if (key.startsWith("fetch:")) {
+        // ── Download phase ─────────────────────────────────────────
+        clearFallback();
 
-            const map = downloadBytesRef.current;
-            if (!map.has(key)) {
-              map.set(key, { current: 0, total: total || 0 });
-              if (map.size === 1) downloadStartRef.current = Date.now();
-            }
-            map.set(key, { current, total: total || 0 });
+        const map = downloadBytesRef.current;
+        if (!map.has(key)) {
+          map.set(key, { current: 0, total: total || 0 });
+          if (map.size === 1) downloadStartRef.current = Date.now();
+        }
+        map.set(key, { current, total: total || 0 });
 
-            let totalCurrent = 0;
-            let totalTotal = 0;
-            map.forEach(({ current: c, total: t }) => {
-              totalCurrent += c;
-              totalTotal += t;
-            });
+        let totalCurrent = 0;
+        let totalTotal = 0;
+        map.forEach(({ current: c, total: t }) => {
+          totalCurrent += c;
+          totalTotal += t;
+        });
 
-            const pct = totalTotal > 0 ? Math.round((totalCurrent / totalTotal) * 100) : 0;
-            setStage("Downloading AI model…");
+        const pct = totalTotal > 0 ? Math.round((totalCurrent / totalTotal) * 100) : 0;
+        setStage("Downloading AI model…");
 
-            if (totalTotal > 0) {
-              setIsComputing(false);
-              setProgress(pct);
-              // Speed-based remaining estimate
-              const dlElapsed = (Date.now() - downloadStartRef.current) / 1000;
-              if (totalCurrent > 1024 && totalTotal > totalCurrent && dlElapsed > 0.3) {
-                const speed = totalCurrent / dlElapsed;
-                const remaining = (totalTotal - totalCurrent) / speed;
-                setTimeDisplay(remaining > 1 ? `~${Math.ceil(remaining)}s remaining` : "Almost done…");
-              } else {
-                setTimeDisplay("");
-              }
-            } else {
-              // Unknown content-length — indeterminate sweep
-              setIsComputing(true);
-              setTimeDisplay("");
-            }
-
-          } else if (key.startsWith("compute:")) {
-            // ── Compute phase (decode → inference → mask → encode) ─────
-            // Library fires (current, total) = (0,4) … (4,4) across the steps.
-            if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
-            startComputeTimer();
-
-            const computePct = total > 0 ? Math.round((current / total) * 100) : 0;
-            setIsComputing(false);
-            setProgress(computePct);
-            setStage("Removing background…");
+        if (totalTotal > 0) {
+          setIsComputing(false);
+          setProgress(pct);
+          // Speed-based remaining estimate
+          const dlElapsed = (Date.now() - downloadStartRef.current) / 1000;
+          if (totalCurrent > 1024 && totalTotal > totalCurrent && dlElapsed > 0.3) {
+            const speed = totalCurrent / dlElapsed;
+            const remaining = (totalTotal - totalCurrent) / speed;
+            setTimeDisplay(remaining > 1 ? `~${Math.ceil(remaining)}s remaining` : "Almost done…");
           } else {
-            // Unknown event type — fall back to indeterminate
-            if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
-            startComputeTimer();
-            setStage("Removing background…");
+            setTimeDisplay("");
           }
-        },
-      });
-      if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
-      const url = URL.createObjectURL(blob);
-      await loadImage(url);
-      if (result) URL.revokeObjectURL(result.url);
-      const filename = `${baseName(src.file.name)}-no-bg.png`;
-      setResult({ blob, url, filename });
-    } catch {
-      if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
-      setError("Background removal failed. Please try a different image or check your connection.");
-    } finally {
+        } else {
+          // Unknown content-length — indeterminate sweep
+          setIsComputing(true);
+          setTimeDisplay("");
+        }
+
+      } else if (key.startsWith("compute:")) {
+        // ── Compute phase (decode → inference → mask → encode) ─────
+        // Inference now runs in a Web Worker, so the main thread stays free
+        // and the indeterminate bar animates smoothly the whole time.
+        clearFallback();
+        startComputeTimer();
+        setIsComputing(true);
+        setStage("Removing background…");
+      } else {
+        // Unknown event type — fall back to indeterminate
+        clearFallback();
+        startComputeTimer();
+        setStage("Removing background…");
+      }
+    };
+
+    const finish = () => {
+      clearFallback();
+      workerRef.current?.terminate();
+      workerRef.current = null;
       setBusy(false);
       setIsComputing(false);
       clearTimer();
       setTimeDisplay("");
-    }
+    };
+
+    const fail = () => {
+      setError("Background removal failed. Please try a different image or check your connection.");
+      finish();
+    };
+
+    // Offload the heavy ONNX inference to a worker thread so the UI never freezes.
+    const worker = new Worker(new URL("./bgRemoveWorker.ts", import.meta.url), { type: "module" });
+    workerRef.current = worker;
+
+    worker.onmessage = (e: MessageEvent<BgRemoveResponse>) => {
+      const msg = e.data;
+      if (msg.type === "progress") {
+        handleProgress(msg.key, msg.current, msg.total);
+      } else if (msg.type === "done") {
+        clearFallback();
+        const url = URL.createObjectURL(msg.blob);
+        loadImage(url)
+          .catch(() => {})
+          .finally(() => {
+            const filename = `${baseName(src.file.name)}-no-bg.png`;
+            setResult({ blob: msg.blob, url, filename });
+            finish();
+          });
+      } else {
+        fail();
+      }
+    };
+
+    worker.onerror = fail;
+
+    worker.postMessage({
+      file: src.file,
+      config: { model: "isnet_fp16", output: { format: "image/png", quality: 1 } },
+    } satisfies BgRemoveRequest);
   };
 
   const shareFile = async (): Promise<File> => {

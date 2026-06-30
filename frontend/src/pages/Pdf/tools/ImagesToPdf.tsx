@@ -8,6 +8,7 @@ import ShareViaToolSnapy from "../../Images/tools/ShareViaToolSnapy";
 import Toast from "../../../components/Toast/Toast";
 import { downloadBlob, formatBytes, readArrayBuffer } from "./pdfUtils";
 import { canvasToBlob, drawToCanvas, loadImage } from "../../Images/tools/imageUtils";
+import { usePasteImage } from "../../../hooks/usePasteImage";
 
 const Icon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
@@ -87,6 +88,9 @@ const ImagesToPdf = () => {
       })),
     ]);
   };
+
+  // Paste image(s) from the clipboard (Ctrl/Cmd+V) to add them.
+  usePasteImage((files) => addFiles(files));
 
   const onPick = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) addFiles(e.target.files);
