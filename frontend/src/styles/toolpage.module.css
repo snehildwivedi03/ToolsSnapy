@@ -88,7 +88,7 @@
 .textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
 }
 
 .textarea::placeholder {
@@ -356,7 +356,7 @@
 
 .lineNumContainer:focus-within {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
 }
 
 .lineGutter {
@@ -560,7 +560,7 @@
 .numberInput:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
 }
 
 .numberInputError {

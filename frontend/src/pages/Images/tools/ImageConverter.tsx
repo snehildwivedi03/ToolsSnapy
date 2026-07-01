@@ -187,8 +187,8 @@ const ImageConverter = () => {
       backTo="/images"
       backLabel="Image Tools"
       icon={<Icon />}
-      iconColor="#7c3aed"
-      iconBg="#f5f3ff"
+      iconColor="#6f4e37"
+      iconBg="#faf6f1"
       title="Image Converter"
       description="Convert images between PNG, JPG, WebP, AVIF and SVG. Everything stays in your browser."
     >

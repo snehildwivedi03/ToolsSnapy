@@ -18,7 +18,7 @@
 
 .inputBox:focus-within {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
 }
 
 .icon {

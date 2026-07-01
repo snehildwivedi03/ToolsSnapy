@@ -98,7 +98,7 @@
 }
 
 /* Color tones */
-.tonePurple { --bar-strong: #7c3aed; --bar-soft: #c084fc; }
+.tonePurple { --bar-strong: #6f4e37; --bar-soft: #c2a182; }
 .toneRed    { --bar-strong: #dc2626; --bar-soft: #f87171; }
 .toneAmber  { --bar-strong: #d97706; --bar-soft: #fbbf24; }
 .toneGreen  { --bar-strong: #16a34a; --bar-soft: #4ade80; }

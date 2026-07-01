@@ -184,7 +184,7 @@
   cursor: pointer;
   transition: background var(--transition-fast);
 }
-.copyBtn:hover { background: #6d28d9; }
+.copyBtn:hover { background: #5a3a28; }
 
 .receiveBtn {
   padding: 0.4375rem 1rem;

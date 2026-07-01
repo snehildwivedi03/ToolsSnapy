@@ -100,7 +100,7 @@
 .input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
 }
 
 /* Prevent browser autofill solid-color overlay */
@@ -124,7 +124,7 @@
   cursor: pointer;
   appearance: none;
   width: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239B8EAA' stroke-width='2.5' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239C8A7A' stroke-width='2.5' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
@@ -133,7 +133,7 @@
 .select:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
 }
 
 /* ── Toggle / Radio buttons ─────────────────────────────── */
@@ -378,8 +378,8 @@
   width: 100%;
 }
 .primaryBtn:hover:not(:disabled) {
-  background: #6d28d9;
-  box-shadow: 0 2px 10px rgba(124, 58, 237, 0.3);
+  background: #5a3a28;
+  box-shadow: 0 2px 10px rgba(111, 78, 55, 0.3);
 }
 .primaryBtn:disabled {
   opacity: 0.5;
@@ -460,7 +460,7 @@
 .textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
 }
 
 .rowBetween {

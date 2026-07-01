@@ -79,8 +79,8 @@ const CATEGORIES = [
     description: "Resize, crop, convert and optimise images.",
     icon: <ImageIcon />,
     toolCount: 5,
-    iconColor: "#7c3aed",
-    iconBg: "#f5f3ff",
+    iconColor: "#6f4e37",
+    iconBg: "#faf6f1",
   },
   {
     id: "pdf",

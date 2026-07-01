@@ -29,7 +29,7 @@
 .textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
 }
 
 .textareaReadonly {
@@ -113,7 +113,7 @@
 }
 
 .headerColor { color: #dc2626; }
-.payloadColor { color: #7c3aed; }
+.payloadColor { color: #6f4e37; }
 .sigColor     { color: #059669; }
 
 .jwtPre {

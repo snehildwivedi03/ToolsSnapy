@@ -181,7 +181,7 @@ const CalorieCalculator = () => {
               Weight Gain / Muscle
             </div>
 
-            <div className={s.resultCard} style={{ background: "#fdf4ff", borderColor: "#e9d5ff" }}>
+            <div className={s.resultCard} style={{ background: "#faf6f1", borderColor: "#e3d5c5" }}>
               <div className={`${s.resultValue} ${s.resultValueLg}`}>{result.surplus.toLocaleString()} kcal</div>
               <div className={s.resultLabel}>Surplus (TDEE +500)</div>
               <div className={s.resultSub}>≈ 0.5 kg/week muscle gain (with training)</div>

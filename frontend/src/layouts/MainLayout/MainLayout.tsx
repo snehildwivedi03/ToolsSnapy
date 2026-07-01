@@ -19,23 +19,23 @@ interface GeoShape {
 
 const GEO_SHAPES: GeoShape[] = [
   // Large blurred ambient circle   top right
-  { id: 1, type: "circle",  size: 520, top: -14, left: 62,  color: "#7c3aed", opacity: 0.09,  depth: 1.2, blur: 60  },
+  { id: 1, type: "circle",  size: 520, top: -14, left: 62,  color: "#6f4e37", opacity: 0.09,  depth: 1.2, blur: 60  },
   // Crisp upward triangle   lower left
   { id: 2, type: "tri",     size: 280, top: 62,  left: -5,  color: "#ec4899", opacity: 0.10,  depth: 2.0, blur: 0   },
   // Crisp diamond   upper left
-  { id: 3, type: "diamond", size: 360, top: 4,   left: -7,  color: "#4338ca", opacity: 0.07,  depth: 1.5, blur: 0   },
+  { id: 3, type: "diamond", size: 360, top: 4,   left: -7,  color: "#7b5137", opacity: 0.07,  depth: 1.5, blur: 0   },
   // Small blurred circle   lower right
   { id: 4, type: "circle",  size: 220, top: 72,  left: 80,  color: "#f472b6", opacity: 0.09,  depth: 2.5, blur: 40  },
   // Rotated square   mid left
-  { id: 5, type: "square",  size: 155, top: 40,  left: 3,   color: "#7c3aed", opacity: 0.07,  depth: 3.0, blur: 0   },
+  { id: 5, type: "square",  size: 155, top: 40,  left: 3,   color: "#6f4e37", opacity: 0.07,  depth: 3.0, blur: 0   },
   // Hexagon   mid right
-  { id: 6, type: "hex",     size: 255, top: 36,  left: 76,  color: "#6d28d9", opacity: 0.08,  depth: 1.8, blur: 0   },
+  { id: 6, type: "hex",     size: 255, top: 36,  left: 76,  color: "#5a3a28", opacity: 0.08,  depth: 1.8, blur: 0   },
   // Small triangle   bottom centre
-  { id: 7, type: "tri",     size: 140, top: 82,  left: 47,  color: "#a78bfa", opacity: 0.09,  depth: 2.2, blur: 0   },
+  { id: 7, type: "tri",     size: 140, top: 82,  left: 47,  color: "#b89a7a", opacity: 0.09,  depth: 2.2, blur: 0   },
   // Tiny blurred circle   upper centre
   { id: 8, type: "circle",  size: 105, top: 8,   left: 38,  color: "#ec4899", opacity: 0.08,  depth: 2.8, blur: 20  },
   // Downward triangle   right edge
-  { id: 9, type: "tridown", size: 190, top: 18,  left: 87,  color: "#7c3aed", opacity: 0.07,  depth: 1.6, blur: 0   },
+  { id: 9, type: "tridown", size: 190, top: 18,  left: 87,  color: "#6f4e37", opacity: 0.07,  depth: 1.6, blur: 0   },
 ];
 
 /* ── Tool icon image data ────────────────────────────────── */

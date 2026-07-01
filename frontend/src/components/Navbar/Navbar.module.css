@@ -3,7 +3,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: rgba(245, 243, 255, 0.92);
+  background-color: rgba(250, 246, 241, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
@@ -77,5 +77,6 @@
   font-size: 1.125rem;
   font-weight: 800;
   color: var(--color-text);
+  font-family: var(--font-display);
   letter-spacing: -0.02em;
 }

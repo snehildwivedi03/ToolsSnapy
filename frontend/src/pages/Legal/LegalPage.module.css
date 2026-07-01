@@ -5,8 +5,8 @@
   margin: 0 auto;
   padding: 2rem var(--container-px, 1.25rem) 5rem;
   /* Explicit colours so page never shows blank on mobile */
-  background-color: #F5F3FF;
-  color: #1A1523;
+  background-color: #FAF6F1;
+  color: #211711;
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -19,22 +19,22 @@
   gap: 0.4rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-text-secondary, #6B5E7A);
+  color: var(--color-text-secondary, #6B5A4C);
   text-decoration: none;
   margin-bottom: 2rem;
   padding: 0.4rem 0.875rem;
   border-radius: var(--radius-md, 10px);
   background: var(--color-surface, #ffffff);
-  border: 1.5px solid var(--color-border, #E0D9F5);
+  border: 1.5px solid var(--color-border, #E7DBCD);
   transition: color 150ms, border-color 150ms, box-shadow 150ms;
   cursor: pointer;
   font-family: inherit;
 }
 
 .backLink:hover {
-  color: var(--color-accent, #7C3AED);
-  border-color: rgba(124, 58, 237, 0.4);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+  color: var(--color-accent, #6F4E37);
+  border-color: rgba(111, 78, 55, 0.4);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.08);
 }
 
 /* ── Hero ── */
@@ -49,9 +49,9 @@
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #7C3AED;
-  background: #EDE9FE;
-  border: 1px solid #DDD6FE;
+  color: #6F4E37;
+  background: #F3EBE3;
+  border: 1px solid #E3D5C5;
   border-radius: 6px;
   padding: 0.2rem 0.6rem;
   margin-bottom: 0.875rem;
@@ -60,7 +60,7 @@
 .title {
   font-size: clamp(1.625rem, 5vw, 2.375rem);
   font-weight: 800;
-  color: #1A1523;
+  color: #211711;
   line-height: 1.2;
   letter-spacing: -0.02em;
   margin: 0 0 0.5rem;
@@ -68,7 +68,7 @@
 
 .meta {
   font-size: 0.875rem;
-  color: #9B8EAA;
+  color: #9C8A7A;
   margin: 0;
 }
 
@@ -76,7 +76,7 @@
 
 .content {
   background: #ffffff;
-  border: 1.5px solid #E0D9F5;
+  border: 1.5px solid #E7DBCD;
   border-radius: 16px;
   padding: 1.875rem 2rem;
   box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
@@ -95,12 +95,12 @@
 .sectionTitle {
   font-size: 1rem;
   font-weight: 700;
-  color: #1A1523;
+  color: #211711;
   margin: 0 0 0.75rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border-left: 3px solid #7C3AED;
+  border-left: 3px solid #6F4E37;
   padding-left: 0.625rem;
 }
 
@@ -109,7 +109,7 @@
 .body {
   font-size: 0.9375rem;
   line-height: 1.75;
-  color: #6B5E7A;
+  color: #6B5A4C;
   overflow-wrap: break-word;
   word-break: break-word;
 }
@@ -133,34 +133,34 @@
 }
 
 .body strong {
-  color: #1A1523;
+  color: #211711;
   font-weight: 700;
 }
 
 .body a {
-  color: #7C3AED;
+  color: #6F4E37;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .body a:hover {
-  color: #6D28D9;
+  color: #5A3A28;
 }
 
 /* ── Divider ── */
 
 .divider {
   border: none;
-  border-top: 1.5px solid #E0D9F5;
+  border-top: 1.5px solid #E7DBCD;
   margin: 1.5rem 0;
 }
 
 /* ── Callout: purple highlight ── */
 
 .highlight {
-  background: rgba(124, 58, 237, 0.06);
-  border: 1px solid rgba(124, 58, 237, 0.22);
+  background: rgba(111, 78, 55, 0.06);
+  border: 1px solid rgba(111, 78, 55, 0.22);
   border-radius: 10px;
   padding: 1rem 1.125rem;
   margin-bottom: 0.875rem;
@@ -168,13 +168,13 @@
 
 .highlight p {
   margin: 0;
-  color: #1A1523;
+  color: #211711;
   font-size: 0.9125rem;
   line-height: 1.65;
 }
 
 .highlight strong {
-  color: #7C3AED;
+  color: #6F4E37;
 }
 
 /* ── Callout: green ── */

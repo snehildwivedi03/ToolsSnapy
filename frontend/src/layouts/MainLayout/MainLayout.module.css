@@ -69,7 +69,7 @@
     saturate(0.45)
     brightness(1.1)
     hue-rotate(200deg)
-    drop-shadow(0 0 22px rgba(124, 58, 237, 0.6));
+    drop-shadow(0 0 22px rgba(111, 78, 55, 0.6));
 }
 
 /* On touch devices keep images fully static (no parallax, no extra rules needed —

@@ -9,7 +9,7 @@ import { getStats, type ShareStats } from "../../services/shareCounter";
 const OTHER_CATEGORIES = [
   { to: "/utilities",   label: "Utilities & Dev", color: "#d97706" },
   { to: "/pdf",         label: "PDF Tools",        color: "#dc2626" },
-  { to: "/images",      label: "Image Tools",      color: "#7c3aed" },
+  { to: "/images",      label: "Image Tools",      color: "#6f4e37" },
   { to: "/text",        label: "Text Tools",        color: "#2563eb" },
   { to: "/calculators", label: "Calculators",       color: "#059669" },
 ];

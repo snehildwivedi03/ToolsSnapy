@@ -31,12 +31,12 @@
 .dpTrigger:focus-visible {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
 }
 
 .dpTriggerOpen {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
 }
 
 .dpValue {
@@ -57,7 +57,7 @@
   background: var(--color-surface);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-xl);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13), 0 2px 8px rgba(124, 58, 237, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13), 0 2px 8px rgba(111, 78, 55, 0.08);
   padding: 1rem;
   width: 284px;
   max-width: calc(100vw - 2rem);

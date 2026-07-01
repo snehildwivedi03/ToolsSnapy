@@ -157,8 +157,8 @@ const ShareFiles = () => {
           <polyline points="13 2 13 9 20 9"/>
         </svg>
       }
-      iconColor="#7c3aed"
-      iconBg="#f5f3ff"
+      iconColor="#6f4e37"
+      iconBg="#faf6f1"
       title="Share Files"
       description="Upload files or an entire folder. Get a 6-character code. All content is auto-deleted after 15 minutes."
     >

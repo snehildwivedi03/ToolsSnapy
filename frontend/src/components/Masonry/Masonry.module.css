@@ -32,7 +32,7 @@
    purple UI, ordered (warm/cool scattered) so no two adjacent cards — left,
    right, above or below — ever share a color in 2-, 3- or 4-column layouts.
    The value inherits down into each card via the --card-accent variable. */
-.grid > *:nth-child(9n + 1) { --card-accent: #7c3aed; } /* violet */
+.grid > *:nth-child(9n + 1) { --card-accent: #6f4e37; } /* coffee */
 .grid > *:nth-child(9n + 2) { --card-accent: #0891b2; } /* cyan */
 .grid > *:nth-child(9n + 3) { --card-accent: #db2777; } /* pink */
 .grid > *:nth-child(9n + 4) { --card-accent: #2563eb; } /* blue */

@@ -1,6 +1,6 @@
 ﻿/* ─────────────────────────────────────────────────────────
    Home page   layout + component styles
-   Uses Nunito font and purple design tokens from index.css
+   Uses Hanken/Bricolage fonts and coffee design tokens from index.css
 ───────────────────────────────────────────────────────── */
 
 .page {
@@ -74,7 +74,7 @@
   user-select: none;
   -webkit-user-drag: none;
   will-change: transform;
-  filter: drop-shadow(0 2px 8px rgba(124, 58, 237, 0.12));
+  filter: drop-shadow(0 2px 8px rgba(111, 78, 55, 0.12));
 }
 
 /* Mobile positions + sizes */
@@ -173,13 +173,13 @@
   transition: background-color var(--transition-fast),
               transform var(--transition-fast),
               box-shadow var(--transition-fast);
-  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.28);
+  box-shadow: 0 2px 12px rgba(111, 78, 55, 0.28);
 }
 
 .ctaPrimary:hover {
   background-color: var(--color-accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 18px rgba(124, 58, 237, 0.36);
+  box-shadow: 0 4px 18px rgba(111, 78, 55, 0.36);
 }
 
 .ctaPrimary:focus-visible {
@@ -213,7 +213,7 @@
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: var(--radius-xl);
-  box-shadow: 0 4px 24px rgba(124, 58, 237, 0.08), inset 0 1px 0 rgba(255,255,255,0.35);
+  box-shadow: 0 4px 24px rgba(111, 78, 55, 0.08), inset 0 1px 0 rgba(255,255,255,0.35);
 }
 
 .clockTime {
@@ -313,7 +313,7 @@
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius-lg);
   padding: 1rem 1rem 1.125rem;
-  box-shadow: 0 4px 18px -8px rgba(124, 58, 237, 0.18);
+  box-shadow: 0 4px 18px -8px rgba(111, 78, 55, 0.18);
   transition: box-shadow var(--transition-base),
               border-color var(--transition-base),
               transform var(--transition-base);
@@ -321,7 +321,7 @@
 
 .uspItem:hover {
   box-shadow: var(--shadow-card-hover);
-  border-color: rgba(124, 58, 237, 0.35);
+  border-color: rgba(111, 78, 55, 0.35);
   transform: translateY(-2px);
 }
 
@@ -364,13 +364,13 @@
   overflow: hidden;
   background: linear-gradient(
     135deg,
-    rgba(124, 58, 237, 0.16),
-    rgba(124, 58, 237, 0.06)
+    rgba(111, 78, 55, 0.16),
+    rgba(111, 78, 55, 0.06)
   );
   backdrop-filter: blur(18px) saturate(180%);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 8px 32px -12px rgba(124, 58, 237, 0.3),
+  box-shadow: 0 8px 32px -12px rgba(111, 78, 55, 0.3),
               inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 

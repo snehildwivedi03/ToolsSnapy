@@ -126,8 +126,8 @@ const ImageResize = () => {
       backTo="/images"
       backLabel="Image Tools"
       icon={<Icon />}
-      iconColor="#7c3aed"
-      iconBg="#f5f3ff"
+      iconColor="#6f4e37"
+      iconBg="#faf6f1"
       title="Resize to Target Size"
       description="Compress any image to an exact file size. Pick a size, and we hit it precisely."
     >

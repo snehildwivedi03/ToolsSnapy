@@ -181,8 +181,8 @@ const ImageToText = () => {
       backTo="/images"
       backLabel="Image Tools"
       icon={<Icon />}
-      iconColor="#7c3aed"
-      iconBg="#f5f3ff"
+      iconColor="#6f4e37"
+      iconBg="#faf6f1"
       title="Image to Text (OCR)"
       description="Extract text from images using optical character recognition. Supports multiple languages. Runs privately in your browser."
     >

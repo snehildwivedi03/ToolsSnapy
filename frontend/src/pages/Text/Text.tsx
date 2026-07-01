@@ -53,7 +53,7 @@ const TEXT_TOOLS = [
 
 const OTHER_CATEGORIES = [
   { to: "/pdf",         label: "PDF Tools",             color: "#dc2626" },
-  { to: "/images",      label: "Image Tools",            color: "#7c3aed" },
+  { to: "/images",      label: "Image Tools",            color: "#6f4e37" },
   { to: "/calculators", label: "Calculators",            color: "#059669" },
   { to: "/utilities",   label: "Instant Share",          color: "#d97706" },
   { to: "/developer",   label: "Utilities & Dev Tools",  color: "#0891b2" },

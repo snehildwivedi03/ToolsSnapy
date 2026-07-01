@@ -3,6 +3,7 @@ import { join, dirname, extname, basename } from "path";
 import type { Express } from "express";
 import { generateShareCode } from "../../utils/generateShareCode.js";
 import { sanitizeName, validateFile } from "../../utils/fileValidation.js";
+import { inspectArchive } from "../../utils/archiveSafety.js";
 import { createZip } from "../../utils/zipFiles.js";
 import type { ShareMetadata, FileInfo } from "../../types/share.types.js";
 import { EXPIRY_MS } from "../../types/share.types.js";
@@ -94,6 +95,15 @@ export async function createFileShare(
     const validationErr = validateFile(basename(safePath), firstBytes);
     if (validationErr) {
       errors.push(`${f.originalname}: ${validationErr.reason}`);
+      continue;
+    }
+
+    // Decompression-bomb guard: inspect archive metadata only (no extraction).
+    // Rejects tiny archives that declare a huge expansion or nest other archives
+    // ("compressed multiple times") before we ever store or serve them.
+    const archiveVerdict = inspectArchive(f.originalname, f.buffer);
+    if (!archiveVerdict.safe) {
+      errors.push(`${f.originalname}: ${archiveVerdict.reason}`);
       continue;
     }
 

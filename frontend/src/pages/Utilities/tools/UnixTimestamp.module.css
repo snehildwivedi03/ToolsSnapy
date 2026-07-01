@@ -23,7 +23,7 @@
 .nowBtn:hover {
   background: var(--color-accent);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 2px 8px rgba(111, 78, 55, 0.3);
 }
 
 .resultList {

@@ -54,7 +54,7 @@ const Icon = () => (
 );
 
 const ColorPicker = () => {
-  const [hex,    setHex]    = useState("#7C3AED");
+  const [hex,    setHex]    = useState("#6F4E37");
   const [copied, setCopied] = useState<string | null>(null);
 
   const rgb  = hexToRgb(hex);
@@ -96,7 +96,7 @@ const ColorPicker = () => {
           <label className={ls.colorSwatch} aria-label="Color picker">
             <input
               type="color"
-              value={hex.length === 7 ? hex : "#7C3AED"}
+              value={hex.length === 7 ? hex : "#6F4E37"}
               onChange={e => setHex(e.target.value)}
               className={ls.colorInput}
             />
@@ -119,7 +119,7 @@ const ColorPicker = () => {
               className={s.input}
               value={hex}
               onChange={e => handleHexInput(e.target.value)}
-              placeholder="#7C3AED"
+              placeholder="#6F4E37"
               spellCheck={false}
             />
           </div>

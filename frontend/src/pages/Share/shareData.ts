@@ -21,8 +21,8 @@ export const SHARE_TOOLS: ShareToolMeta[] = [
     title: "Share Files",
     description: "Upload files or an entire folder. Up to 500 MB, 100 files, 15-minute link.",
     to: "/share/files",
-    iconColor: "#7c3aed",
-    iconBg: "#f5f3ff",
+    iconColor: "#6f4e37",
+    iconBg: "#faf6f1",
   },
   {
     id: "share-images",
