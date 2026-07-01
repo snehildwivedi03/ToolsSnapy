@@ -103,6 +103,13 @@ export const DEV_TOOLS: ToolMeta[] = [
     description: "Convert between Unix timestamps and human-readable dates in any timezone.",
     section: "developer",
   },
+  {
+    id: "zip-tool",
+    to: "/utilities/zip-tool",
+    title: "Zip / Unzip Files",
+    description: "Compress files and folders into a ZIP or safely extract one — with built-in zip-bomb and size protection.",
+    section: "developer",
+  },
 ];
 
 export const ALL_UTIL_TOOLS: ToolMeta[] = [...UTIL_TOOLS, ...DEV_TOOLS];

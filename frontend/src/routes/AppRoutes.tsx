@@ -43,6 +43,7 @@ import Base64Tool from "../pages/Utilities/tools/Base64Tool";
 import Sha256 from "../pages/Utilities/tools/Sha256";
 import UrlEncoderDecoder from "../pages/Utilities/tools/UrlEncoderDecoder";
 import UnixTimestamp from "../pages/Utilities/tools/UnixTimestamp";
+import ZipTool from "../pages/Utilities/tools/ZipTool";
 import SharePage from "../pages/Share/Share";
 import ShareText from "../pages/Share/tools/ShareText";
 import ShareFiles from "../pages/Share/tools/ShareFiles";
@@ -99,6 +100,7 @@ const AppRoutes = () => {
         <Route path="/utilities/sha256"             element={<Sha256 />} />
         <Route path="/utilities/url-encoder"        element={<UrlEncoderDecoder />} />
         <Route path="/utilities/unix-timestamp"     element={<UnixTimestamp />} />
+        <Route path="/utilities/zip-tool"           element={<ZipTool />} />
 
         {/* Legacy /developer route — redirect to unified page */}
         <Route path="/developer" element={<Utilities />} />
