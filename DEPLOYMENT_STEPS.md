@@ -47,19 +47,19 @@ Complete guide to deploy ToolSnapy for FREE and get it live with a custom domain
 
 ### Frontend (Static Site)
 
-| Platform | Free Tier | Best For |
-|----------|-----------|----------|
+| Platform                 | Free Tier                        | Best For           |
+| ------------------------ | -------------------------------- | ------------------ |
 | **Vercel** (Recommended) | 100GB bandwidth, unlimited sites | React/Next.js apps |
-| Netlify | 100GB bandwidth, 300 build mins | Static sites |
-| Cloudflare Pages | Unlimited bandwidth | Global CDN |
+| Netlify                  | 100GB bandwidth, 300 build mins  | Static sites       |
+| Cloudflare Pages         | Unlimited bandwidth              | Global CDN         |
 
 ### Backend (Node.js API)
 
-| Platform | Free Tier | Limitations |
-|----------|-----------|-------------|
+| Platform                 | Free Tier       | Limitations                    |
+| ------------------------ | --------------- | ------------------------------ |
 | **Render** (Recommended) | 750 hours/month | Sleeps after 15 min inactivity |
-| Railway | $5 credit/month | ~500 hours |
-| Fly.io | 3 shared VMs | 256MB RAM |
+| Railway                  | $5 credit/month | ~500 hours                     |
+| Fly.io                   | 3 shared VMs    | 256MB RAM                      |
 
 **Recommended Stack: Vercel (frontend) + Render (backend)**
 
@@ -70,8 +70,9 @@ Complete guide to deploy ToolSnapy for FREE and get it live with a custom domain
 ### Step 1: Prepare Your Code
 
 1. Push your code to GitHub:
+
 ```bash
-cd C:\Users\Crosslynx93\Desktop\My-Folder\ToolsSnapy
+cd C:\Users\Crosslynx93\Desktop\My-Folder\ToolSnapy
 git init
 git add .
 git commit -m "Initial commit"
@@ -100,11 +101,11 @@ git push -u origin main
 
 Click "Environment Variables" and add:
 
-| Key | Value |
-|-----|-------|
-| `VITE_API_URL` | `https://your-backend.onrender.com` (add after backend deploy) |
-| `VITE_ENABLE_ADS` | `false` |
-| `VITE_APP_NAME` | `ToolSnapy` |
+| Key               | Value                                                          |
+| ----------------- | -------------------------------------------------------------- |
+| `VITE_API_URL`    | `https://your-backend.onrender.com` (add after backend deploy) |
+| `VITE_ENABLE_ADS` | `false`                                                        |
+| `VITE_APP_NAME`   | `ToolSnapy`                                                    |
 
 ### Step 5: Deploy
 
@@ -138,14 +139,14 @@ Click "Environment Variables" and add:
 
 Click "Environment" and add:
 
-| Key | Value |
-|-----|-------|
-| `NODE_ENV` | `production` |
-| `PORT` | `10000` |
-| `CLIENT_ORIGIN` | `https://your-frontend.vercel.app` |
-| `RATE_LIMIT_MAX` | `100` |
-| `SHARE_EXPIRY_MS` | `900000` |
-| `CLEANUP_INTERVAL_MS` | `21600000` |
+| Key                   | Value                              |
+| --------------------- | ---------------------------------- |
+| `NODE_ENV`            | `production`                       |
+| `PORT`                | `10000`                            |
+| `CLIENT_ORIGIN`       | `https://your-frontend.vercel.app` |
+| `RATE_LIMIT_MAX`      | `100`                              |
+| `SHARE_EXPIRY_MS`     | `900000`                           |
+| `CLEANUP_INTERVAL_MS` | `21600000`                         |
 
 ### Step 4: Deploy
 
@@ -156,6 +157,7 @@ Click "Environment" and add:
 ### Step 5: Update Frontend
 
 Go back to Vercel and update:
+
 - `VITE_API_URL` = `https://toolsnapy-api.onrender.com`
 
 Redeploy frontend.
@@ -166,23 +168,23 @@ Redeploy frontend.
 
 ### Cheapest Domain Registrars (2024)
 
-| Registrar | .com Price/Year | Best Deal |
-|-----------|-----------------|-----------|
-| **Porkbun** | $9.73 | Cheapest renewal |
-| Namecheap | $9.98 | Free WhoisGuard |
-| Cloudflare | $9.77 | At-cost pricing |
-| Google Domains | $12 | Easy setup |
-| GoDaddy | $12.99 | Avoid (upsells) |
+| Registrar      | .com Price/Year | Best Deal        |
+| -------------- | --------------- | ---------------- |
+| **Porkbun**    | $9.73           | Cheapest renewal |
+| Namecheap      | $9.98           | Free WhoisGuard  |
+| Cloudflare     | $9.77           | At-cost pricing  |
+| Google Domains | $12             | Easy setup       |
+| GoDaddy        | $12.99          | Avoid (upsells)  |
 
 ### Alternative TLDs (Even Cheaper)
 
-| TLD | Price/Year | Example |
-|-----|------------|---------|
-| `.xyz` | $1-2 | toolsnapy.xyz |
-| `.site` | $1-3 | toolsnapy.site |
-| `.online` | $1-3 | toolsnapy.online |
-| `.tech` | $2-5 | toolsnapy.tech |
-| `.io` | $30+ | Expensive, skip |
+| TLD       | Price/Year | Example          |
+| --------- | ---------- | ---------------- |
+| `.xyz`    | $1-2       | toolsnapy.xyz    |
+| `.site`   | $1-3       | toolsnapy.site   |
+| `.online` | $1-3       | toolsnapy.online |
+| `.tech`   | $2-5       | toolsnapy.tech   |
+| `.io`     | $30+       | Expensive, skip  |
 
 **Recommendation**: Get `.com` from **Porkbun** (~$10/year)
 
@@ -227,17 +229,20 @@ Redeploy frontend.
 5. Wait 5-30 minutes for DNS propagation
 
 ### Final URLs:
+
 - Frontend: `https://toolsnapy.com`
 - Backend API: `https://api.toolsnapy.com`
 
 ### Update Environment Variables
 
 **Vercel (Frontend):**
+
 ```
 VITE_API_URL=https://api.toolsnapy.com
 ```
 
 **Render (Backend):**
+
 ```
 CLIENT_ORIGIN=https://toolsnapy.com,https://www.toolsnapy.com
 ```
@@ -297,19 +302,21 @@ CLIENT_ORIGIN=https://toolsnapy.com,https://www.toolsnapy.com
 ## Cost Summary
 
 ### Free Setup
-| Item | Cost |
-|------|------|
-| Vercel Hosting | $0/month |
-| Render Backend | $0/month |
-| **Total** | **$0/month** |
+
+| Item           | Cost         |
+| -------------- | ------------ |
+| Vercel Hosting | $0/month     |
+| Render Backend | $0/month     |
+| **Total**      | **$0/month** |
 
 ### With Custom Domain
-| Item | Cost |
-|------|------|
-| Vercel Hosting | $0/month |
-| Render Backend | $0/month |
-| Domain (.com) | ~$10/year |
-| **Total** | **~$0.83/month** |
+
+| Item           | Cost             |
+| -------------- | ---------------- |
+| Vercel Hosting | $0/month         |
+| Render Backend | $0/month         |
+| Domain (.com)  | ~$10/year        |
+| **Total**      | **~$0.83/month** |
 
 ---
 
@@ -320,6 +327,7 @@ CLIENT_ORIGIN=https://toolsnapy.com,https://www.toolsnapy.com
 Free Render instances sleep after 15 minutes of inactivity. First request after sleep takes ~30 seconds.
 
 **Solutions:**
+
 1. Accept the delay (it's free!)
 2. Use a cron job to ping `/api/health` every 14 minutes
 3. Upgrade to paid tier ($7/month)
@@ -327,6 +335,7 @@ Free Render instances sleep after 15 minutes of inactivity. First request after 
 ### CORS Errors
 
 If you see CORS errors:
+
 1. Check `CLIENT_ORIGIN` in Render includes your frontend URL
 2. Make sure URLs don't have trailing slashes
 3. Redeploy backend

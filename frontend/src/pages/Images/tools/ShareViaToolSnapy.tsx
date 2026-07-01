@@ -14,7 +14,7 @@ interface Props {
   disabled?: boolean;
 }
 
-/** "Share via ToolsSnapy" button + result card, reused across image and PDF tools. */
+/** "Share via ToolSnapy" button + result card, reused across image and PDF tools. */
 const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
   const [sharing, setSharing] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -71,9 +71,15 @@ const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
         ) : (
           <>
             <svg
-              width="15" height="15" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2"
-              strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
             >
               <circle cx="18" cy="5" r="3" />
               <circle cx="6" cy="12" r="3" />
@@ -81,7 +87,7 @@ const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
               <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
               <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
             </svg>
-            Share via ToolsSnapy
+            Share via ToolSnapy
           </>
         )}
       </button>
@@ -98,12 +104,17 @@ const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
           <span className={ls.shareCodeValue}>{code}</span>
           <div className={ls.shareActions}>
             <button
-              className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary}
+              className={
+                copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary
+              }
               onClick={copyCode}
             >
               {copied ? "Copied!" : "Copy Code"}
             </button>
-            <button className={ls.receiveBtn} onClick={() => navigate("/share/receive")}>
+            <button
+              className={ls.receiveBtn}
+              onClick={() => navigate("/share/receive")}
+            >
               Open Receive Page →
             </button>
           </div>

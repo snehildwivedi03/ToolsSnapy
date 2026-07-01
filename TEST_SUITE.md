@@ -14,7 +14,7 @@ Run these tests before deployment to ensure everything works.
 - [ ] Set target: 200 KB
 - [ ] Click Resize - verify output is ~200KB
 - [ ] Download works
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 - [ ] Change image button works
 
 #### 2. Image Resizer
@@ -24,7 +24,7 @@ Run these tests before deployment to ensure everything works.
 - [ ] Toggle aspect ratio lock
 - [ ] Use quick presets (50%, 75%)
 - [ ] Download works
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 #### 3. Background Remover
 
@@ -32,7 +32,7 @@ Run these tests before deployment to ensure everything works.
 - [ ] Wait for AI processing (progress bar shows)
 - [ ] Verify transparent background
 - [ ] Download PNG
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 #### 4. Image Converter
 
@@ -41,7 +41,7 @@ Run these tests before deployment to ensure everything works.
 - [ ] Convert to WebP
 - [ ] Convert to AVIF (if browser supports)
 - [ ] Download works
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 #### 5. Image to Text (OCR)
 
@@ -51,7 +51,7 @@ Run these tests before deployment to ensure everything works.
 - [ ] Verify text extracted correctly
 - [ ] Copy button works (shows "Copied!")
 - [ ] Download .txt works
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 ---
 
@@ -64,7 +64,7 @@ Run these tests before deployment to ensure everything works.
 - [ ] Remove one file
 - [ ] Click Merge
 - [ ] Download works
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 #### 2. Split & Extract PDF
 
@@ -73,7 +73,7 @@ Run these tests before deployment to ensure everything works.
 - [ ] Click Extract
 - [ ] Verify correct pages in output
 - [ ] Download works
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 #### 3. Images to PDF
 
@@ -81,7 +81,7 @@ Run these tests before deployment to ensure everything works.
 - [ ] Reorder images
 - [ ] Click Convert
 - [ ] Download PDF
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 #### 4. PDF to Images
 
@@ -118,7 +118,7 @@ Run these tests before deployment to ensure everything works.
 - [ ] Test camelCase
 - [ ] Test snake_case
 - [ ] Copy result works
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 #### 4. JSON Formatter
 
@@ -126,19 +126,21 @@ Run these tests before deployment to ensure everything works.
 - [ ] Test 2-space indent
 - [ ] Test 4-space indent
 - [ ] Copy works
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 #### 5. JSON Validator
 
 **Valid input:**
+
 - [ ] Paste valid JSON → shows "Valid JSON ✓", no issues listed
 
 **Analyze — fault detection:**
+
 - [ ] Paste JSON with trailing comma `{"a":1,}` → issue flagged: "Trailing comma before '}'"
 - [ ] Paste JSON with double comma `["a",,"b"]` → issue flagged: "Double comma (,,)"
 - [ ] Paste JSON with unquoted key `{name:"test"}` → issue flagged: "Unquoted key: name"
 - [ ] Paste JSON with JS comment `{"a":1 // comment}` → issue flagged: "Single-line comment (//) is not valid"
-- [ ] Paste JSON with block comment `{/* note */"a":1}` → issue flagged: "Block comment (* */) is not valid"
+- [ ] Paste JSON with block comment `{/* note */"a":1}` → issue flagged: "Block comment (\* \*/) is not valid"
 - [ ] Paste JSON with unclosed string `{"name":"unclosed` → issue flagged: "Unclosed string literal"
 - [ ] Paste JSON with missing comma between properties → issue flagged: "Missing comma after property value"
 - [ ] Paste JSON with bareword value `{"active":enabled}` → issue flagged: "Unquoted value: enabled (did you mean true?)"
@@ -146,15 +148,17 @@ Run these tests before deployment to ensure everything works.
 - [ ] Error location shows correct line number in all cases above
 
 **Repair flow:**
+
 - [ ] Click "Correct It" on any invalid result → diff view appears in the editor (removed lines in red, added lines in green)
 - [ ] Click "Apply correction" → editor updates with repaired JSON, diff clears
 - [ ] Re-validate repaired JSON → shows valid
 - [ ] Click "Reset" → returns to original faulty input
 - [ ] Download repaired JSON works
 - [ ] Copy JSON button works (shows "Copied!", width does not shift adjacent buttons)
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 **Complex faulty JSON (combines all fault types):**
+
 ```json
 {
   "name": "Test User
@@ -166,6 +170,7 @@ Run these tests before deployment to ensure everything works.
   }
 }
 ```
+
 - [ ] All issues detected in analyze view
 - [ ] Repair produces valid, pretty-printed JSON with all fixes listed
 
@@ -176,7 +181,7 @@ Run these tests before deployment to ensure everything works.
 - [ ] Try 20 (max)
 - [ ] Try >20 (should cap at 20)
 - [ ] Copy all works
-- [ ] Share via ToolsSnapy works
+- [ ] Share via ToolSnapy works
 
 ---
 
@@ -581,6 +586,6 @@ Write-Host "`n=== Test Suite Complete ===" -ForegroundColor Cyan
 Run with:
 
 ```powershell
-cd /path/to/your/My-Folder/ToolsSnapy
+cd /path/to/your/My-Folder/ToolSnapy
 .\test-api.ps1
 ```
