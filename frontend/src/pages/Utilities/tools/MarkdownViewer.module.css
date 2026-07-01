@@ -1,0 +1,228 @@
+/* Styles for the Markdown Viewer tool */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.spacer { flex: 1; }
+
+.tbBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color var(--transition-fast),
+    color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.tbBtn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+/* Fixed width so the label swap ("Copy HTML" -> "Copied!") never shifts the row */
+.tbCopy {
+  min-width: 6.75rem;
+  justify-content: center;
+}
+
+.tbBtnDone {
+  border-color: #22c55e;
+  color: #15803d;
+  background: #dcfce7;
+}
+
+/* ── Split layout ── */
+.split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 860px) {
+  .splitBoth { grid-template-columns: 1fr 1fr; }
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.paneLabel {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.editor {
+  width: 100%;
+  min-height: 26rem;
+  height: 100%;
+  padding: 1rem 1.1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  resize: vertical;
+  tab-size: 2;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.editor:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(111, 78, 55, 0.1);
+}
+
+.preview {
+  min-height: 26rem;
+  padding: 1.25rem 1.4rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.placeholder {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+/* ── Rendered markdown typography ── */
+.preview :first-child { margin-top: 0; }
+.preview :last-child { margin-bottom: 0; }
+
+.preview h1,
+.preview h2,
+.preview h3,
+.preview h4,
+.preview h5,
+.preview h6 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+  margin: 1.6rem 0 0.75rem;
+}
+
+.preview h1 { font-size: 1.8rem; padding-bottom: 0.35rem; border-bottom: 2px solid var(--color-border); }
+.preview h2 { font-size: 1.45rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--color-border); }
+.preview h3 { font-size: 1.2rem; }
+.preview h4 { font-size: 1.05rem; }
+.preview h5 { font-size: 0.95rem; }
+.preview h6 { font-size: 0.85rem; color: var(--color-text-secondary); }
+
+.preview p { margin: 0.75rem 0; line-height: 1.75; }
+
+.preview a {
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.preview a:hover { color: var(--color-accent-hover); }
+
+.preview ul,
+.preview ol { margin: 0.75rem 0; padding-left: 1.6rem; line-height: 1.7; }
+.preview li { margin: 0.3rem 0; }
+.preview li > input[type="checkbox"] { margin-right: 0.5rem; }
+
+.preview blockquote {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  border-left: 4px solid var(--color-accent);
+  background: var(--color-accent-light);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  color: var(--color-text-secondary);
+}
+.preview blockquote p { margin: 0.35rem 0; }
+
+.preview code {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.85em;
+  background: var(--color-bg-muted);
+  padding: 0.12em 0.4em;
+  border-radius: 5px;
+  color: #9a3412;
+}
+
+.preview pre {
+  margin: 1rem 0;
+  padding: 1rem 1.1rem;
+  background: #241a12;
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+}
+.preview pre code {
+  background: transparent;
+  padding: 0;
+  color: #f0e4d5;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+}
+.preview th,
+.preview td {
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.preview th {
+  background: var(--color-bg-subtle);
+  font-weight: 800;
+}
+.preview tr:nth-child(even) td { background: var(--color-bg-subtle); }
+
+.preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+.preview hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1.5rem 0;
+}
+
+/* ── Footer stats ── */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  margin-top: 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+.stats span { display: inline-flex; align-items: center; gap: 0.3rem; }

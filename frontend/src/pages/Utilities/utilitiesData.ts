@@ -110,6 +110,13 @@ export const DEV_TOOLS: ToolMeta[] = [
     description: "Compress files and folders into a ZIP or safely extract one — with built-in zip-bomb and size protection.",
     section: "developer",
   },
+  {
+    id: "markdown-viewer",
+    to: "/utilities/markdown-viewer",
+    title: "Markdown Viewer",
+    description: "Write or paste Markdown and see a clean live preview. Supports tables, task lists and code blocks.",
+    section: "developer",
+  },
 ];
 
 export const ALL_UTIL_TOOLS: ToolMeta[] = [...UTIL_TOOLS, ...DEV_TOOLS];
