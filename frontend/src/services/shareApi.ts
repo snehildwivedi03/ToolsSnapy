@@ -61,6 +61,23 @@ export interface ShareReceiveResult {
   message?: string;
 }
 
+export interface ShareStatsData {
+  files: number;
+  texts: number;
+}
+
+/** Fetch the real, server-side share counters. Returns null on any failure. */
+export async function fetchShareStats(): Promise<ShareStatsData | null> {
+  try {
+    const res = await fetch(`${BASE}/api/share/stats`);
+    const data = await safeJson<{ success: boolean; stats?: ShareStatsData }>(res);
+    if (!res.ok || !data?.success || !data.stats) return null;
+    return data.stats;
+  } catch {
+    return null;
+  }
+}
+
 export async function shareText(text: string): Promise<ShareUploadResult> {
   try {
     const res = await fetch(`${BASE}/api/share/text`, {

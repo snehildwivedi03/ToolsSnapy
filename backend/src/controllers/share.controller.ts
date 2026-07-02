@@ -10,6 +10,11 @@ import {
   LIMITS_PDFS,
 } from "../services/share/shareFiles.service.js";
 import { SHARE_ROOT } from "../services/share/shareText.service.js";
+import {
+  getShareStats,
+  addTextShare,
+  addFileShares,
+} from "../services/share/shareStats.service.js";
 
 function safeCode(raw: unknown): string | null {
   const value = Array.isArray(raw) ? raw[0] : raw;
@@ -33,6 +38,7 @@ export async function shareText(req: Request, res: Response): Promise<void> {
 
   try {
     const meta = await createTextShare(text.trim());
+    try { await addTextShare(); } catch { /* stats are best-effort */ }
     res.status(201).json({
       success: true,
       code: meta.code,
@@ -62,6 +68,7 @@ export async function shareFiles(req: Request, res: Response): Promise<void> {
       res.status(400).json({ success: false, message: "No valid files.", errors });
       return;
     }
+    try { await addFileShares(meta.fileCount ?? 0); } catch { /* stats are best-effort */ }
     res.status(201).json({ success: true, code: meta.code, expiresAt: meta.expiresAt, errors });
   } catch (err) {
     console.error("[share/files]", err);
@@ -83,6 +90,7 @@ export async function shareImages(req: Request, res: Response): Promise<void> {
       res.status(400).json({ success: false, message: "No valid images.", errors });
       return;
     }
+    try { await addFileShares(meta.fileCount ?? 0); } catch { /* stats are best-effort */ }
     res.status(201).json({ success: true, code: meta.code, expiresAt: meta.expiresAt, errors });
   } catch (err) {
     console.error("[share/images]", err);
@@ -104,6 +112,7 @@ export async function sharePdfs(req: Request, res: Response): Promise<void> {
       res.status(400).json({ success: false, message: "No valid PDFs.", errors });
       return;
     }
+    try { await addFileShares(meta.fileCount ?? 0); } catch { /* stats are best-effort */ }
     res.status(201).json({ success: true, code: meta.code, expiresAt: meta.expiresAt, errors });
   } catch (err) {
     console.error("[share/pdfs]", err);
@@ -112,6 +121,16 @@ export async function sharePdfs(req: Request, res: Response): Promise<void> {
 }
 
 /* ── GET /api/share/:code ───────────────────────────────── */
+export async function shareStats(_req: Request, res: Response): Promise<void> {
+  try {
+    const stats = await getShareStats();
+    res.json({ success: true, stats });
+  } catch (err) {
+    console.error("[share/stats]", err);
+    res.status(500).json({ success: false, message: "Could not load stats." });
+  }
+}
+
 export async function receiveShare(req: Request, res: Response): Promise<void> {
   const code = safeCode(req.params["code"] ?? "");
   if (!code) {

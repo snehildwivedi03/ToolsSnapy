@@ -10,6 +10,7 @@ import {
   downloadZip,
   downloadFile,
   deleteShare,
+  shareStats,
 } from "../controllers/share.controller.js";
 
 const router = Router();
@@ -38,6 +39,7 @@ router.post("/images", uploadLimiter, shareUpload.array("files"), shareImages);
 router.post("/pdfs",   uploadLimiter, shareUpload.array("files"), sharePdfs);
 
 // Receive routes
+router.get("/stats",                  receiveLimiter, shareStats);
 router.get("/:code",                  receiveLimiter, receiveShare);
 router.get("/:code/download/zip",     receiveLimiter, downloadZip);
 router.get("/:code/download/file",    receiveLimiter, downloadFile);

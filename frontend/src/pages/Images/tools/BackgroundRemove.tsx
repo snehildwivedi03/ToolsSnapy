@@ -432,7 +432,7 @@ const BackgroundRemove = () => {
 
     worker.postMessage({
       file: src.file,
-      config: { model: "isnet_fp16", output: { format: "image/png", quality: 1 } },
+      config: { model: "isnet", output: { format: "image/png", quality: 1 } },
     } satisfies BgRemoveRequest);
   };
 

@@ -4,7 +4,7 @@ import ToolCard from "../../components/ToolCard/ToolCard";
 import Masonry from "../../components/Masonry/Masonry";
 import { SHARE_TOOLS } from "./shareData";
 import styles from "./Share.module.css";
-import { getStats, type ShareStats } from "../../services/shareCounter";
+import { getStats, refreshShareStats, type ShareStats } from "../../services/shareCounter";
 
 const OTHER_CATEGORIES = [
   { to: "/utilities",   label: "Utilities & Dev", color: "#d97706" },
@@ -22,6 +22,8 @@ const SharePage = () => {
     const refresh = () => setStats(getStats());
     window.addEventListener("sharestats", refresh);
     window.addEventListener("storage",    refresh);
+    // Pull the real, server-side value every time the page is shown.
+    void refreshShareStats();
     return () => {
       window.removeEventListener("sharestats", refresh);
       window.removeEventListener("storage",    refresh);
