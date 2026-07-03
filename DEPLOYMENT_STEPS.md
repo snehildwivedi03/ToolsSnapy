@@ -1,6 +1,303 @@
-# ToolSnapy Deployment Guide
+# ToolSnapy — Deployment Guide
+> Stack: **Netlify** (frontend) · **Vercel** (backend API) · **Cloudflare** (DNS + CDN + DDoS) · **Hostinger** (domain registrar)
 
-Complete guide to deploy ToolSnapy for FREE and get it live with a custom domain.
+---
+
+## Table of Contents
+
+1. [Architecture Overview](#1-architecture-overview)
+2. [Push Code to GitHub](#2-push-code-to-github)
+3. [Deploy Frontend to Netlify](#3-deploy-frontend-to-netlify)
+4. [Deploy Backend to Vercel](#4-deploy-backend-to-vercel)
+5. [Set Up Cloudflare (Free)](#5-set-up-cloudflare-free)
+6. [Point Hostinger Domain to Cloudflare](#6-point-hostinger-domain-to-cloudflare)
+7. [Add DNS Records in Cloudflare](#7-add-dns-records-in-cloudflare)
+8. [Configure Cloudflare Caching Rules](#8-configure-cloudflare-caching-rules)
+9. [Update Environment Variables](#9-update-environment-variables)
+10. [Post-Deployment Checklist](#10-post-deployment-checklist)
+11. [SEO Submission](#11-seo-submission)
+
+---
+
+## 1. Architecture Overview
+
+```
+                         YOUR USERS
+                              │
+                              ▼
+                    ┌─────────────────┐
+                    │   Cloudflare    │  ← DDoS shield, CDN, Free SSL,
+                    │  (DNS + CDN)    │    caching, analytics
+                    └────────┬────────┘
+               ┌─────────────┴─────────────┐
+               ▼                           ▼
+    ┌─────────────────────┐   ┌──────────────────────────┐
+    │      Netlify        │   │         Vercel           │
+    │  toolsnapy.com      │   │  api.toolsnapy.com       │
+    │  React + Vite SPA   │   │  Express + Node.js API   │
+    │  (FREE tier)        │   │  (FREE tier)             │
+    └─────────────────────┘   └──────────────────────────┘
+```
+
+**Why Cloudflare in the middle?**
+- Global CDN — serves your static files from the nearest edge location
+- Free DDoS protection and Web Application Firewall (WAF)
+- Automatic HTTPS at the edge (no cert management)
+- Cache rules — browser assets cached for 1 year, HTML never
+- Free analytics without any tracking scripts
+- Zero-downtime domain migration
+
+---
+
+## 2. Push Code to GitHub
+
+```bash
+cd "C:\Users\Crosslynx93\Desktop\My-Folder\ToolsSnapy"
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/toolsnapy.git
+git push -u origin main
+```
+
+For subsequent deployments, just run:
+```bash
+git add .
+git commit -m "Your message"
+git push
+```
+Both Netlify and Vercel auto-deploy on every push to `main`.
+
+---
+
+## 3. Deploy Frontend to Netlify
+
+### Step 1 — Sign up
+1. Go to [app.netlify.com](https://app.netlify.com)
+2. Click **Sign up with GitHub**
+
+### Step 2 — Import project
+1. Click **Add new site → Import an existing project**
+2. Select your GitHub repository
+3. Configure build settings:
+
+| Setting | Value |
+|---------|-------|
+| Base directory | `frontend` |
+| Build command | `npm run build` |
+| Publish directory | `dist` |
+
+### Step 3 — Environment variables
+In **Site settings → Environment variables**, add:
+
+| Key | Value |
+|-----|-------|
+| `VITE_API_URL` | `https://api.toolsnapy.com` (set after Step 7) |
+
+### Step 4 — Deploy
+Click **Deploy site**. Your site is live at `xxx.netlify.app` in ~2 minutes.
+
+> The `frontend/netlify.toml` file already in the repo handles SPA routing (`/*` → `index.html`) and sets aggressive caching headers for hashed assets (`/assets/*`).
+
+---
+
+## 4. Deploy Backend to Vercel
+
+### Step 1 — Sign up
+1. Go to [vercel.com](https://vercel.com)
+2. Click **Sign up with GitHub**
+
+### Step 2 — Import project
+1. Click **Add New → Project**
+2. Select your repository
+3. Configure:
+
+| Setting | Value |
+|---------|-------|
+| Root directory | `backend` |
+| Framework | Other |
+| Build command | *(leave blank — tsx handles it)* |
+| Output directory | *(leave blank)* |
+
+### Step 3 — Environment variables
+In **Settings → Environment Variables**, add:
+
+| Key | Value |
+|-----|-------|
+| `NODE_ENV` | `production` |
+| `CLIENT_ORIGIN` | `https://toolsnapy.com,https://www.toolsnapy.com` |
+| `RATE_LIMIT_MAX` | `100` |
+| `SHARE_EXPIRY_MS` | `900000` |
+| `CLEANUP_INTERVAL_MS` | `21600000` |
+| `TRUST_PROXY` | `1` |
+
+### Step 4 — Deploy
+Click **Deploy**. Your API is live at `toolsnapy-api.vercel.app`.
+
+> The `backend/vercel.json` in the repo routes all traffic to the Express server via `@vercel/node`.
+
+> **Note on file storage**: Vercel serverless functions have an ephemeral `/tmp` filesystem (512 MB max, wiped between invocations). Instant Share files currently write to `backend/temp/share/`. This works for demos, but for production with real users, migrate file storage to **Cloudflare R2** or **AWS S3** using presigned upload URLs to avoid data loss between function cold starts.
+
+---
+
+## 5. Set Up Cloudflare (Free)
+
+1. Go to [cloudflare.com](https://cloudflare.com) and create a free account
+2. Click **Add a site**
+3. Enter your domain: `toolsnapy.com`
+4. Select the **Free** plan
+5. Cloudflare scans your existing DNS records — review them (you can clear all and add fresh ones in Step 7)
+6. Cloudflare gives you **two nameservers**, e.g.:
+   ```
+   vera.ns.cloudflare.com
+   zod.ns.cloudflare.com
+   ```
+   Copy these — you need them in Step 6.
+
+---
+
+## 6. Point Hostinger Domain to Cloudflare
+
+1. Log into [hpanel.hostinger.com](https://hpanel.hostinger.com)
+2. Go to **Domains → Manage** next to your domain
+3. Click **DNS / Nameservers** → **Change nameservers**
+4. Replace Hostinger's default nameservers with the two Cloudflare nameservers from Step 5:
+   ```
+   vera.ns.cloudflare.com
+   zod.ns.cloudflare.com
+   ```
+5. Save. Propagation takes **5–30 minutes** (can take up to 24 h in rare cases).
+
+> After this, **all DNS is managed in Cloudflare**, not Hostinger. The domain is still registered at Hostinger (you pay renewal there), but DNS authority is fully with Cloudflare.
+
+---
+
+## 7. Add DNS Records in Cloudflare
+
+Once Cloudflare shows your domain as **Active**, go to **DNS → Records** and add:
+
+### Frontend (Netlify)
+
+| Type | Name | Value | Proxy |
+|------|------|-------|-------|
+| `CNAME` | `@` (root) | `your-site.netlify.app` | ☁️ Proxied |
+| `CNAME` | `www` | `your-site.netlify.app` | ☁️ Proxied |
+
+> Netlify also requires you to add the custom domain in **Site settings → Domain management → Add custom domain**. Add both `toolsnapy.com` and `www.toolsnapy.com`. Netlify auto-provisions SSL.
+
+### Backend (Vercel)
+
+| Type | Name | Value | Proxy |
+|------|------|-------|-------|
+| `CNAME` | `api` | `cname.vercel-dns.com` | ☁️ Proxied |
+
+> In Vercel, go to **Settings → Domains** and add `api.toolsnapy.com`. Vercel auto-provisions SSL.
+
+### Email (keep Hostinger email if you have it)
+
+If you use Hostinger email, add back the MX records Cloudflare scanned during setup — they should already be there. **Do not proxy MX records** (DNS-only, grey cloud).
+
+---
+
+## 8. Configure Cloudflare Caching Rules
+
+In Cloudflare dashboard → **Caching → Cache Rules**, create:
+
+**Rule 1 — Cache hashed assets forever**
+- Expression: `http.request.uri.path matches "^/assets/.*"`
+- Cache TTL: `1 year`
+- Browser TTL: `1 year`
+
+**Rule 2 — Never cache HTML**
+- Expression: `http.request.uri.path eq "/"`
+- Cache TTL: `Bypass`
+
+**Other recommended settings:**
+
+| Setting | Location | Value |
+|---------|----------|-------|
+| SSL/TLS mode | SSL/TLS → Overview | **Full (strict)** |
+| Always Use HTTPS | SSL/TLS → Edge Certs | **On** |
+| Auto Minify | Speed → Optimization | JS ✓ CSS ✓ HTML ✓ |
+| Brotli | Speed → Optimization | **On** |
+| Rocket Loader | Speed → Optimization | **Off** (breaks React) |
+| Bot Fight Mode | Security → Bots | **On** |
+
+---
+
+## 9. Update Environment Variables
+
+After completing Steps 3–7, update these:
+
+**Netlify** (Site settings → Environment variables):
+```
+VITE_API_URL = https://api.toolsnapy.com
+```
+Trigger a redeploy: **Deploys → Trigger deploy → Deploy site**.
+
+**Vercel** (Settings → Environment variables):
+```
+CLIENT_ORIGIN = https://toolsnapy.com,https://www.toolsnapy.com
+```
+Vercel redeploys automatically when you save env vars.
+
+---
+
+## 10. Post-Deployment Checklist
+
+### URLs
+- [ ] `https://toolsnapy.com` loads the site
+- [ ] `https://www.toolsnapy.com` redirects to root
+- [ ] `https://api.toolsnapy.com/api/health` returns `200 OK`
+
+### Security
+- [ ] HTTPS padlock on all URLs
+- [ ] HTTP redirects to HTTPS automatically
+- [ ] Opening DevTools → Network shows `CF-RAY` header (Cloudflare is proxying)
+- [ ] No sensitive keys in browser console or source
+
+### Performance (Lighthouse)
+Run `https://pagespeed.web.dev` on your URL. Target:
+- Performance ≥ 90
+- Best Practices ≥ 95
+- SEO ≥ 90
+
+### Functionality
+- [ ] All tool categories load
+- [ ] PDF merge / split works
+- [ ] Background remover loads the AI model
+- [ ] Instant Share text + file round-trip
+- [ ] Consent popup appears and locks scroll
+
+---
+
+## 11. SEO Submission
+
+### Google Search Console
+1. [search.google.com/search-console](https://search.google.com/search-console) → Add property
+2. Verify via **DNS TXT record** — add it in Cloudflare DNS (Type: `TXT`, Name: `@`)
+3. Submit sitemap: `https://toolsnapy.com/sitemap.xml`
+
+### Bing Webmaster Tools
+1. [bing.com/webmasters](https://www.bing.com/webmasters) → Import from Google (easiest)
+
+### Google Analytics (optional)
+1. [analytics.google.com](https://analytics.google.com) → Create property → Get `G-XXXXXXXXXX`
+2. Add to Netlify env: `VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX`
+
+---
+
+## Cost Summary
+
+| Service | Free Tier Limit | Notes |
+|---------|----------------|-------|
+| Netlify | 100 GB bandwidth / month | More than enough for a tools site |
+| Vercel | 100 GB bandwidth / month | API-only, so very low usage |
+| Cloudflare | Unlimited bandwidth | Always free for DNS + CDN |
+| Hostinger domain | ~₹800–1,200 / year | Only renewal cost |
+| **Total ongoing** | **~₹800 / year** | Domain renewal only |
+
 
 ---
 

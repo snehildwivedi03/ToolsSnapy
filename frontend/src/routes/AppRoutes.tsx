@@ -1,143 +1,173 @@
-﻿import { Routes, Route } from "react-router-dom";
+﻿import { lazy, Suspense, type ComponentType } from "react";
+import { Routes, Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout/MainLayout";
-import Home from "../pages/Home/Home";
-import Text from "../pages/Text/Text";
-import WordCounter from "../pages/Text/tools/WordCounter";
-import CharacterCounter from "../pages/Text/tools/CharacterCounter";
-import CaseConverter from "../pages/Text/tools/CaseConverter";
-import JsonFormatter from "../pages/Text/tools/JsonFormatter";
-import JsonValidator from "../pages/Text/tools/JsonValidator";
-import RandomParagraph from "../pages/Text/tools/RandomParagraph";
-import Images from "../pages/Images/Images";
-import ImageResize from "../pages/Images/tools/ImageResize";
-import ImageResizeDimensions from "../pages/Images/tools/ImageResizeDimensions";
-import BackgroundRemove from "../pages/Images/tools/BackgroundRemove";
-import ImageConverter from "../pages/Images/tools/ImageConverter";
-import ImageToText from "../pages/Images/tools/ImageToText";
-import Pdf from "../pages/Pdf/Pdf";
-import MergePdf from "../pages/Pdf/tools/MergePdf";
-import SplitPdf from "../pages/Pdf/tools/SplitPdf";
-import ImagesToPdf from "../pages/Pdf/tools/ImagesToPdf";
-import PdfToImages from "../pages/Pdf/tools/PdfToImages";
-import PdfResize from "../pages/Pdf/tools/PdfResize";
-import Calculators from "../pages/Calculators/Calculators";
-import ScientificCalculator from "../pages/Calculators/tools/ScientificCalculator";
-import BmiCalculator from "../pages/Calculators/tools/BmiCalculator";
-import EmiCalculator from "../pages/Calculators/tools/EmiCalculator";
-import SipCalculator from "../pages/Calculators/tools/SipCalculator";
-import CalorieCalculator from "../pages/Calculators/tools/CalorieCalculator";
-import PercentageCalculator from "../pages/Calculators/tools/PercentageCalculator";
-import AgeCalculator from "../pages/Calculators/tools/AgeCalculator";
-import TipCalculator from "../pages/Calculators/tools/TipCalculator";
-import DiscountCalculator from "../pages/Calculators/tools/DiscountCalculator";
-import Utilities from "../pages/Utilities/Utilities";
-import LiveClock from "../pages/Utilities/LiveClock";
-import UnitConverter from "../pages/Utilities/tools/UnitConverter";
-import PasswordGenerator from "../pages/Utilities/tools/PasswordGenerator";
-import UuidGenerator from "../pages/Utilities/tools/UuidGenerator";
-import ColorPicker from "../pages/Utilities/tools/ColorPicker";
-import QrGenerator from "../pages/Utilities/tools/QrGenerator";
-import BarcodeGenerator from "../pages/Utilities/tools/BarcodeGenerator";
-import JwtDecoder from "../pages/Utilities/tools/JwtDecoder";
-import Base64Tool from "../pages/Utilities/tools/Base64Tool";
-import Sha256 from "../pages/Utilities/tools/Sha256";
-import UrlEncoderDecoder from "../pages/Utilities/tools/UrlEncoderDecoder";
-import UnixTimestamp from "../pages/Utilities/tools/UnixTimestamp";
-import ZipTool from "../pages/Utilities/tools/ZipTool";
-import MarkdownViewer from "../pages/Utilities/tools/MarkdownViewer";
-import SharePage from "../pages/Share/Share";
-import ShareText from "../pages/Share/tools/ShareText";
-import ShareFiles from "../pages/Share/tools/ShareFiles";
-import ShareImages from "../pages/Share/tools/ShareImages";
-import SharePdfs from "../pages/Share/tools/SharePdfs";
-import ReceiveContent from "../pages/Share/tools/ReceiveContent";
-import PrivacyPolicy from "../pages/Legal/PrivacyPolicy";
-import TermsOfService from "../pages/Legal/TermsOfService";
 
-const AppRoutes = () => {
-  return (
-    <Routes>
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
+/* ── Lazy page imports ─────────────────────────────────────────────
+   Each route’s JS is only downloaded when the user navigates to it.
+   Heavy vendor libs (pdf-lib, pdfjs, tesseract, mathjs, @imgly,
+   fflate …) land in their own cache-stable chunk (see vite.config.ts). */
 
-        {/* Text Tools */}
-        <Route path="/text" element={<Text />} />
-        <Route path="/text/word-counter" element={<WordCounter />} />
-        <Route path="/text/character-counter" element={<CharacterCounter />} />
-        <Route path="/text/case-converter" element={<CaseConverter />} />
-        <Route path="/text/json-formatter" element={<JsonFormatter />} />
-        <Route path="/text/json-validator" element={<JsonValidator />} />
-        <Route path="/text/random-paragraph" element={<RandomParagraph />} />
+const Home        = lazy(() => import("../pages/Home/Home"));
+const Text        = lazy(() => import("../pages/Text/Text"));
+const Images      = lazy(() => import("../pages/Images/Images"));
+const Pdf         = lazy(() => import("../pages/Pdf/Pdf"));
+const Calculators = lazy(() => import("../pages/Calculators/Calculators"));
+const Utilities   = lazy(() => import("../pages/Utilities/Utilities"));
+const SharePage   = lazy(() => import("../pages/Share/Share"));
 
-        {/* Calculator routes (9 tools — converters moved to Unit Converter) */}
-        <Route path="/calculators" element={<Calculators />} />
-        <Route path="/calculators/scientific"  element={<ScientificCalculator />} />
-        <Route path="/calculators/bmi"         element={<BmiCalculator />} />
-        <Route path="/calculators/emi"         element={<EmiCalculator />} />
-        <Route path="/calculators/sip"         element={<SipCalculator />} />
-        <Route path="/calculators/calories"    element={<CalorieCalculator />} />
-        <Route path="/calculators/percentage"  element={<PercentageCalculator />} />
-        <Route path="/calculators/age"         element={<AgeCalculator />} />
-        <Route path="/calculators/tip"         element={<TipCalculator />} />
-        <Route path="/calculators/discount"    element={<DiscountCalculator />} />
+const WordCounter      = lazy(() => import("../pages/Text/tools/WordCounter"));
+const CharacterCounter = lazy(() => import("../pages/Text/tools/CharacterCounter"));
+const CaseConverter    = lazy(() => import("../pages/Text/tools/CaseConverter"));
+const JsonFormatter    = lazy(() => import("../pages/Text/tools/JsonFormatter"));
+const JsonValidator    = lazy(() => import("../pages/Text/tools/JsonValidator"));
+const RandomParagraph  = lazy(() => import("../pages/Text/tools/RandomParagraph"));
 
-        {/* Legacy converter routes — redirect to Unit Converter */}
-        <Route path="/calculators/height"      element={<UnitConverter />} />
-        <Route path="/calculators/weight"      element={<UnitConverter />} />
-        <Route path="/calculators/temperature" element={<UnitConverter />} />
+const ImageResize           = lazy(() => import("../pages/Images/tools/ImageResize"));
+const ImageResizeDimensions = lazy(() => import("../pages/Images/tools/ImageResizeDimensions"));
+const BackgroundRemove      = lazy(() => import("../pages/Images/tools/BackgroundRemove"));
+const ImageConverter        = lazy(() => import("../pages/Images/tools/ImageConverter"));
+const ImageToText           = lazy(() => import("../pages/Images/tools/ImageToText"));
 
-        {/* Utilities & Dev Tools */}
-        <Route path="/utilities"                    element={<Utilities />} />
-        <Route path="/utilities/live-clock"         element={<LiveClock />} />
-        <Route path="/utilities/unit-converter"     element={<UnitConverter />} />
-        <Route path="/utilities/password-generator" element={<PasswordGenerator />} />
-        <Route path="/utilities/uuid-generator"     element={<UuidGenerator />} />
-        <Route path="/utilities/color-picker"       element={<ColorPicker />} />
-        <Route path="/utilities/qr-generator"       element={<QrGenerator />} />
-        <Route path="/utilities/barcode-generator"  element={<BarcodeGenerator />} />
-        <Route path="/utilities/jwt-decoder"        element={<JwtDecoder />} />
-        <Route path="/utilities/base64-encoder"     element={<Base64Tool />} />
-        <Route path="/utilities/base64-decoder"     element={<Base64Tool />} />
-        <Route path="/utilities/sha256"             element={<Sha256 />} />
-        <Route path="/utilities/url-encoder"        element={<UrlEncoderDecoder />} />
-        <Route path="/utilities/unix-timestamp"     element={<UnixTimestamp />} />
-        <Route path="/utilities/zip-tool"           element={<ZipTool />} />
-        <Route path="/utilities/markdown-viewer"    element={<MarkdownViewer />} />
+const MergePdf    = lazy(() => import("../pages/Pdf/tools/MergePdf"));
+const SplitPdf    = lazy(() => import("../pages/Pdf/tools/SplitPdf"));
+const ImagesToPdf = lazy(() => import("../pages/Pdf/tools/ImagesToPdf"));
+const PdfToImages = lazy(() => import("../pages/Pdf/tools/PdfToImages"));
+const PdfResize   = lazy(() => import("../pages/Pdf/tools/PdfResize"));
 
-        {/* Legacy /developer route — redirect to unified page */}
-        <Route path="/developer" element={<Utilities />} />
+const ScientificCalculator = lazy(() => import("../pages/Calculators/tools/ScientificCalculator"));
+const BmiCalculator        = lazy(() => import("../pages/Calculators/tools/BmiCalculator"));
+const EmiCalculator        = lazy(() => import("../pages/Calculators/tools/EmiCalculator"));
+const SipCalculator        = lazy(() => import("../pages/Calculators/tools/SipCalculator"));
+const CalorieCalculator    = lazy(() => import("../pages/Calculators/tools/CalorieCalculator"));
+const PercentageCalculator = lazy(() => import("../pages/Calculators/tools/PercentageCalculator"));
+const AgeCalculator        = lazy(() => import("../pages/Calculators/tools/AgeCalculator"));
+const TipCalculator        = lazy(() => import("../pages/Calculators/tools/TipCalculator"));
+const DiscountCalculator   = lazy(() => import("../pages/Calculators/tools/DiscountCalculator"));
 
-        {/* Instant Share */}
-        <Route path="/share"         element={<SharePage />} />
-        <Route path="/share/text"    element={<ShareText />} />
-        <Route path="/share/files"   element={<ShareFiles />} />
-        <Route path="/share/images"  element={<ShareImages />} />
-        <Route path="/share/pdfs"    element={<SharePdfs />} />
-        <Route path="/share/receive" element={<ReceiveContent />} />
+const LiveClock         = lazy(() => import("../pages/Utilities/LiveClock"));
+const UnitConverter     = lazy(() => import("../pages/Utilities/tools/UnitConverter"));
+const PasswordGenerator = lazy(() => import("../pages/Utilities/tools/PasswordGenerator"));
+const UuidGenerator     = lazy(() => import("../pages/Utilities/tools/UuidGenerator"));
+const ColorPicker       = lazy(() => import("../pages/Utilities/tools/ColorPicker"));
+const QrGenerator       = lazy(() => import("../pages/Utilities/tools/QrGenerator"));
+const BarcodeGenerator  = lazy(() => import("../pages/Utilities/tools/BarcodeGenerator"));
+const JwtDecoder        = lazy(() => import("../pages/Utilities/tools/JwtDecoder"));
+const Base64Tool        = lazy(() => import("../pages/Utilities/tools/Base64Tool"));
+const Sha256            = lazy(() => import("../pages/Utilities/tools/Sha256"));
+const UrlEncoderDecoder = lazy(() => import("../pages/Utilities/tools/UrlEncoderDecoder"));
+const UnixTimestamp     = lazy(() => import("../pages/Utilities/tools/UnixTimestamp"));
+const ZipTool           = lazy(() => import("../pages/Utilities/tools/ZipTool"));
+const MarkdownViewer    = lazy(() => import("../pages/Utilities/tools/MarkdownViewer"));
 
-        {/* Image Tools */}
-        <Route path="/images"                    element={<Images />} />
-        <Route path="/images/resize"             element={<ImageResize />} />
-        <Route path="/images/resizer"            element={<ImageResizeDimensions />} />
-        <Route path="/images/background-remover" element={<BackgroundRemove />} />
-        <Route path="/images/converter"          element={<ImageConverter />} />
-        <Route path="/images/text-extractor"     element={<ImageToText />} />
+const ShareText      = lazy(() => import("../pages/Share/tools/ShareText"));
+const ShareFiles     = lazy(() => import("../pages/Share/tools/ShareFiles"));
+const ShareImages    = lazy(() => import("../pages/Share/tools/ShareImages"));
+const SharePdfs      = lazy(() => import("../pages/Share/tools/SharePdfs"));
+const ReceiveContent = lazy(() => import("../pages/Share/tools/ReceiveContent"));
 
-        {/* PDF Tools */}
-        <Route path="/pdf"                element={<Pdf />} />
-        <Route path="/pdf/merge"          element={<MergePdf />} />
-        <Route path="/pdf/split"          element={<SplitPdf />} />
-        <Route path="/pdf/images-to-pdf"  element={<ImagesToPdf />} />
-        <Route path="/pdf/pdf-to-images"  element={<PdfToImages />} />
-        <Route path="/pdf/resize"          element={<PdfResize />} />
+const PrivacyPolicy  = lazy(() => import("../pages/Legal/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("../pages/Legal/TermsOfService"));
 
-        {/* Legal */}
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms"           element={<TermsOfService />} />
+/* ── Spinner shown in the content area while a chunk loads ───
+   MainLayout (navbar + footer) stays mounted the whole time.      */
+const PageLoader = () => (
+  <div style={{
+    display: "flex", justifyContent: "center", alignItems: "center",
+    minHeight: "60vh", padding: "3rem",
+  }}>
+    <div style={{
+      width: 30, height: 30, borderRadius: "50%",
+      border: "3px solid #E3D5C5", borderTopColor: "#6F4E37",
+      animation: "page-spin 0.65s linear infinite",
+    }} />
+    <style>{`@keyframes page-spin { to { transform: rotate(360deg); } }`}</style>
+  </div>
+);
 
-      </Route>
-    </Routes>
-  );
-};
+/* Each route wraps its lazy component in its own Suspense boundary */
+const L = ({ C }: { C: ComponentType<object> }) => (
+  <Suspense fallback={<PageLoader />}><C /></Suspense>
+);
+
+const AppRoutes = () => (
+  <Routes>
+    <Route element={<MainLayout />}>
+      <Route path="/" element={<L C={Home} />} />
+
+      {/* Text Tools */}
+      <Route path="/text"                    element={<L C={Text} />} />
+      <Route path="/text/word-counter"       element={<L C={WordCounter} />} />
+      <Route path="/text/character-counter"  element={<L C={CharacterCounter} />} />
+      <Route path="/text/case-converter"     element={<L C={CaseConverter} />} />
+      <Route path="/text/json-formatter"     element={<L C={JsonFormatter} />} />
+      <Route path="/text/json-validator"     element={<L C={JsonValidator} />} />
+      <Route path="/text/random-paragraph"   element={<L C={RandomParagraph} />} />
+
+      {/* Calculator routes */}
+      <Route path="/calculators"             element={<L C={Calculators} />} />
+      <Route path="/calculators/scientific"  element={<L C={ScientificCalculator} />} />
+      <Route path="/calculators/bmi"         element={<L C={BmiCalculator} />} />
+      <Route path="/calculators/emi"         element={<L C={EmiCalculator} />} />
+      <Route path="/calculators/sip"         element={<L C={SipCalculator} />} />
+      <Route path="/calculators/calories"    element={<L C={CalorieCalculator} />} />
+      <Route path="/calculators/percentage"  element={<L C={PercentageCalculator} />} />
+      <Route path="/calculators/age"         element={<L C={AgeCalculator} />} />
+      <Route path="/calculators/tip"         element={<L C={TipCalculator} />} />
+      <Route path="/calculators/discount"    element={<L C={DiscountCalculator} />} />
+
+      {/* Legacy converter routes — served by Unit Converter */}
+      <Route path="/calculators/height"      element={<L C={UnitConverter} />} />
+      <Route path="/calculators/weight"      element={<L C={UnitConverter} />} />
+      <Route path="/calculators/temperature" element={<L C={UnitConverter} />} />
+
+      {/* Utilities & Dev Tools */}
+      <Route path="/utilities"                    element={<L C={Utilities} />} />
+      <Route path="/utilities/live-clock"         element={<L C={LiveClock} />} />
+      <Route path="/utilities/unit-converter"     element={<L C={UnitConverter} />} />
+      <Route path="/utilities/password-generator" element={<L C={PasswordGenerator} />} />
+      <Route path="/utilities/uuid-generator"     element={<L C={UuidGenerator} />} />
+      <Route path="/utilities/color-picker"       element={<L C={ColorPicker} />} />
+      <Route path="/utilities/qr-generator"       element={<L C={QrGenerator} />} />
+      <Route path="/utilities/barcode-generator"  element={<L C={BarcodeGenerator} />} />
+      <Route path="/utilities/jwt-decoder"        element={<L C={JwtDecoder} />} />
+      <Route path="/utilities/base64-encoder"     element={<L C={Base64Tool} />} />
+      <Route path="/utilities/base64-decoder"     element={<L C={Base64Tool} />} />
+      <Route path="/utilities/sha256"             element={<L C={Sha256} />} />
+      <Route path="/utilities/url-encoder"        element={<L C={UrlEncoderDecoder} />} />
+      <Route path="/utilities/unix-timestamp"     element={<L C={UnixTimestamp} />} />
+      <Route path="/utilities/zip-tool"           element={<L C={ZipTool} />} />
+      <Route path="/utilities/markdown-viewer"    element={<L C={MarkdownViewer} />} />
+      <Route path="/developer"                    element={<L C={Utilities} />} />
+
+      {/* Instant Share */}
+      <Route path="/share"         element={<L C={SharePage} />} />
+      <Route path="/share/text"    element={<L C={ShareText} />} />
+      <Route path="/share/files"   element={<L C={ShareFiles} />} />
+      <Route path="/share/images"  element={<L C={ShareImages} />} />
+      <Route path="/share/pdfs"    element={<L C={SharePdfs} />} />
+      <Route path="/share/receive" element={<L C={ReceiveContent} />} />
+
+      {/* Image Tools */}
+      <Route path="/images"                    element={<L C={Images} />} />
+      <Route path="/images/resize"             element={<L C={ImageResize} />} />
+      <Route path="/images/resizer"            element={<L C={ImageResizeDimensions} />} />
+      <Route path="/images/background-remover" element={<L C={BackgroundRemove} />} />
+      <Route path="/images/converter"          element={<L C={ImageConverter} />} />
+      <Route path="/images/text-extractor"     element={<L C={ImageToText} />} />
+
+      {/* PDF Tools */}
+      <Route path="/pdf"                element={<L C={Pdf} />} />
+      <Route path="/pdf/merge"          element={<L C={MergePdf} />} />
+      <Route path="/pdf/split"          element={<L C={SplitPdf} />} />
+      <Route path="/pdf/images-to-pdf"  element={<L C={ImagesToPdf} />} />
+      <Route path="/pdf/pdf-to-images"  element={<L C={PdfToImages} />} />
+      <Route path="/pdf/resize"         element={<L C={PdfResize} />} />
+
+      {/* Legal */}
+      <Route path="/privacy-policy" element={<L C={PrivacyPolicy} />} />
+      <Route path="/terms"           element={<L C={TermsOfService} />} />
+    </Route>
+  </Routes>
+);
 
 export default AppRoutes;

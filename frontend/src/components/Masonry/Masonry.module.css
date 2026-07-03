@@ -18,6 +18,12 @@
   }
 }
 
+@media (min-width: 1440px) {
+  .grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
 /* Each grid cell (and the card inside it) stretches to a uniform height */
 .grid > * {
   display: flex;

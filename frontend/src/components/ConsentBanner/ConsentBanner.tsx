@@ -25,11 +25,26 @@ const ConsentBanner = () => {
   const canAccept = checkedPrivacy && checkedTerms;
 
   // Hide on legal pages — user is reading the policy
-  if (LEGAL_PATHS.includes(location.pathname)) return null;
+  const onLegalPage = LEGAL_PATHS.includes(location.pathname);
+  const isOpen = visible && !onLegalPage;
+
+  // Lock background scroll while the popup is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [isOpen]);
+
+  if (onLegalPage) return null;
   if (!visible) return null;
 
   return (
     <div className={s.overlay} role="dialog" aria-modal="true" aria-label="Privacy &amp; Terms Agreement">
+      {/* Ambient glow orbs — the glass panel looks through these */}
+      <div className={s.orb1} aria-hidden="true" />
+      <div className={s.orb2} aria-hidden="true" />
+      <div className={s.orb3} aria-hidden="true" />
       <div className={s.modal}>
 
         {/* ── Header ── */}

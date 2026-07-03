@@ -1,7 +1,6 @@
 Tools to add
 
 --Add markdown viewer
---URL masker
 
 Improvements
 

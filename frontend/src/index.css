@@ -60,6 +60,11 @@
 
 @media (min-width: 640px)  { :root { --container-px: 1.75rem; } }
 @media (min-width: 1024px) { :root { --container-px: 2.5rem;  } }
+@media (min-width: 1280px) { :root { --container-px: 3rem;    } }
+/* Wide screens (Acer Nitro 5, 1920×1080 etc.) — expand the container
+   so the layout uses the available space instead of leaving dead margins */
+@media (min-width: 1440px) { :root { --container-max: 1440px; } }
+@media (min-width: 1600px) { :root { --container-max: 1520px; } }
 
 /* ── Reset ──────────────────────────────────────────────── */
 *,
