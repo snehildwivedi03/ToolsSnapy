@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import ShareViaToolSnapy from "../../Images/tools/ShareViaToolSnapy";
 import s from "../../../styles/calc.module.css";
 import ls from "./pdfTools.module.css";
 import st from "./MarkdownToPdf.module.css";
@@ -158,15 +159,12 @@ const MarkdownToPdf = () => {
     if (file) handleFile(file);
   };
 
-  /* ── PDF export (direct download, no print dialog) ───────── */
-  const handleExport = async () => {
-    if (!markdown.trim()) {
-      setError("Please add some Markdown content first.");
-      return;
-    }
-    setError("");
-    setExporting(true);
+  const safeFileName = useCallback((): string => {
+    return (title.trim() || "document").replace(/[^\w\s-]/g, "").trim() || "document";
+  }, [title]);
 
+  /* ── Render the markdown to a paginated jsPDF instance ────── */
+  const buildPdf = useCallback(async () => {
     const rawHtml  = String(marked.parse(markdown));
     const safeHtml = DOMPurify.sanitize(rawHtml, { USE_PROFILES: { html: true } });
 
@@ -234,19 +232,38 @@ const MarkdownToPdf = () => {
         page += 1;
       }
 
-      const fname = (title.trim() || "document")
-        .replace(/[^\w\s-]/g, "").trim() || "document";
-      pdf.save(`${fname}.pdf`);
+      return pdf;
+    } finally {
+      document.head.removeChild(styleEl);
+      document.body.removeChild(container);
+    }
+  }, [markdown, pageSize]);
 
+  /* ── PDF export (direct download, no print dialog) ───────── */
+  const handleExport = async () => {
+    if (!markdown.trim()) {
+      setError("Please add some Markdown content first.");
+      return;
+    }
+    setError("");
+    setExporting(true);
+    try {
+      const pdf = await buildPdf();
+      pdf.save(`${safeFileName()}.pdf`);
       setExported(true);
       setTimeout(() => setExported(false), 2500);
     } catch {
       setError("Export failed. Please try again.");
     } finally {
-      document.head.removeChild(styleEl);
-      document.body.removeChild(container);
       setExporting(false);
     }
+  };
+
+  /* ── Produce the PDF as a File for Share via ToolSnapy ────── */
+  const shareFile = async (): Promise<File> => {
+    const pdf  = await buildPdf();
+    const blob = pdf.output("blob");
+    return new File([blob], `${safeFileName()}.pdf`, { type: "application/pdf" });
   };
 
   /* ── JSX ─────────────────────────────────────────────────── */
@@ -303,6 +320,10 @@ const MarkdownToPdf = () => {
         </div>
 
         {error && <p className={st.errorMsg}>{error}</p>}
+
+        <div className={st.shareRow}>
+          <ShareViaToolSnapy getFile={shareFile} kind="pdfs" disabled={!markdown.trim()} autoRedirect />
+        </div>
       </div>
 
       {/* ── Toolbar ─────────────────────────────────────────── */}

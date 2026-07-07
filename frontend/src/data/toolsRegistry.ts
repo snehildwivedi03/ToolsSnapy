@@ -30,6 +30,7 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: "pdf-images-to-pdf", title: "Images to PDF", description: "Convert JPG, PNG or WebP images into a single PDF.", to: "/pdf/images-to-pdf", category: "PDF Tools", keywords: ["jpg to pdf", "png to pdf", "image", "convert", "pdf"] },
   { id: "pdf-to-images", title: "PDF to Images", description: "Export each PDF page as a PNG or JPG image.", to: "/pdf/pdf-to-images", category: "PDF Tools", keywords: ["pdf to jpg", "pdf to png", "render", "export", "image"] },
   { id: "pdf-resize", title: "Resize PDF to Target Size", description: "Compress a PDF to an exact file size in KB or MB.", to: "/pdf/resize", category: "PDF Tools", keywords: ["compress", "reduce", "size", "target", "shrink", "pdf", "kb", "mb"] },
+  { id: "pdf-markdown-to-pdf", title: "Markdown to PDF", description: "Convert Markdown text or files into a clean, styled PDF.", to: "/pdf/markdown-to-pdf", category: "PDF Tools", keywords: ["markdown", "md", "pdf", "convert", "export", "document"] },
 
   // ── Calculators ─────────────────────────────────────────
   { id: "scientific", title: "Scientific Calculator", description: "Advanced scientific calculator with trig and logs.", to: "/calculators/scientific", category: "Calculators", keywords: ["math", "trig", "log"] },
@@ -55,6 +56,9 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: "sha256", title: "SHA-256 Hash", description: "Generate SHA-256 hashes from text.", to: "/utilities/sha256", category: "Developer Tools", keywords: ["hash", "crypto", "checksum"] },
   { id: "url-encoder", title: "URL Encoder / Decoder", description: "Encode and decode URL components.", to: "/utilities/url-encoder", category: "Developer Tools", keywords: ["uri", "percent", "encode"] },
   { id: "unix-timestamp", title: "Unix Timestamp Converter", description: "Convert between Unix timestamps and dates.", to: "/utilities/unix-timestamp", category: "Developer Tools", keywords: ["epoch", "time", "date"] },
+  { id: "markdown-viewer", title: "Markdown Viewer", description: "Write or paste Markdown and see a clean live preview.", to: "/utilities/markdown-viewer", category: "Developer Tools", keywords: ["markdown", "md", "preview", "render", "viewer"] },
+  { id: "zip-tool", title: "Zip / Unzip Files", description: "Compress files into a ZIP or safely extract one.", to: "/utilities/zip-tool", category: "Developer Tools", keywords: ["zip", "unzip", "compress", "archive", "extract"] },
+  { id: "url-shortener", title: "URL Shortener", description: "Turn any long URL into a short, shareable link.", to: "/utilities/url-shortener", category: "Developer Tools", keywords: ["url", "short", "link", "shorten", "qr"] },
 
   // ── Instant Share ───────────────────────────────────────
   { id: "share-text", title: "Share Text", description: "Share text snippets with a 6-character code.", to: "/share/text", category: "Instant Share", keywords: ["snippet", "paste", "send"] },

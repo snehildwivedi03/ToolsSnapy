@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import Toast from "../../../components/Toast/Toast";
 import s from "../../../styles/calc.module.css";
@@ -46,12 +47,13 @@ const ReceiveContent = () => {
   const [,         setTick]     = useState(0);
   const resultRef = useRef<HTMLDivElement>(null);
   const timerRef  = useRef<ReturnType<typeof setInterval> | null>(null);
+  const location  = useLocation();
 
   // Cleanup timer on unmount
   useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
 
-  const lookup = async () => {
-    const clean = code.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const lookup = async (codeArg?: string) => {
+    const clean = (codeArg ?? code).trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
     if (clean.length !== 6) { setError("Enter a valid 6-character share code."); return; }
 
     setError("");
@@ -72,6 +74,17 @@ const ReceiveContent = () => {
       setLoading(false);
     }
   };
+
+  // Auto-load content when a code is passed in via navigation state (e.g. after sharing from a tool).
+  useEffect(() => {
+    const incoming = (location.state as { code?: string } | null)?.code;
+    if (incoming) {
+      const clean = incoming.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      setCode(clean);
+      lookup(clean);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const copyText = async () => {
     if (!share?.content) return;

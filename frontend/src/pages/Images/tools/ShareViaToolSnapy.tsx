@@ -12,10 +12,12 @@ interface Props {
   /** Which share bucket to upload to. Defaults to "images". */
   kind?: "files" | "images" | "pdfs";
   disabled?: boolean;
+  /** When true, redirect to the Receive page (with the code) instead of showing the inline code card. */
+  autoRedirect?: boolean;
 }
 
 /** "Share via ToolSnapy" button + result card, reused across image and PDF tools. */
-const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
+const ShareViaToolSnapy = ({ getFile, kind = "images", disabled, autoRedirect }: Props) => {
   const [sharing, setSharing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [code, setCode] = useState<string | null>(null);
@@ -32,8 +34,12 @@ const ShareViaToolSnapy = ({ getFile, kind = "images", disabled }: Props) => {
       const file = await getFile();
       const res = await shareFiles([file], kind, undefined, setProgress);
       if (res.success && res.code) {
-        setCode(res.code);
         incrementFiles();
+        if (autoRedirect) {
+          navigate("/share/receive", { state: { code: res.code } });
+          return;
+        }
+        setCode(res.code);
       } else {
         setErr(res.message ?? "We couldn't share that. Please try again.");
       }

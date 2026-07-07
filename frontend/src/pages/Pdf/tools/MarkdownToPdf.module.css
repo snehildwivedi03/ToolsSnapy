@@ -47,6 +47,27 @@
   color: #dc2626;
 }
 
+/* ── Share via ToolSnapy row ────────────────────────────────── */
+.shareRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.shareRow > button {
+  flex: 0 0 auto;
+}
+
+/* Keep the connection/error message compact instead of a full-width red bar. */
+.shareRow > p {
+  width: fit-content;
+  max-width: 100%;
+}
+
 /* ── Responsive: stack the settings row on narrow screens ───── */
 @media (max-width: 620px) {
   .settingsRow {
@@ -173,7 +194,6 @@
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-surface);
-  overflow-y: auto;
   font-size: 0.9375rem;
   line-height: 1.75;
   color: var(--color-text);
