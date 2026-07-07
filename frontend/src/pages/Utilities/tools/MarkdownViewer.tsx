@@ -86,6 +86,7 @@ function buildContainerCss(uid: string): string {
     #${uid} {
       font-family: Georgia,"Times New Roman",serif;
       font-size: 16px; line-height: 1.75; color: #1a1a1a; background: #fff;
+      overflow-wrap: break-word; word-break: break-word;
     }
     #${uid} h1,#${uid} h2,#${uid} h3,#${uid} h4,#${uid} h5,#${uid} h6 {
       font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
@@ -94,26 +95,29 @@ function buildContainerCss(uid: string): string {
     #${uid} h1 { font-size: 2em;   border-bottom: 2px solid #e5e7eb; padding-bottom: 0.2em; margin-top: 0; }
     #${uid} h2 { font-size: 1.5em; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.15em; }
     #${uid} h3 { font-size: 1.25em; } #${uid} h4 { font-size: 1em; }
-    #${uid} p  { margin: 0 0 0.85em; }
-    #${uid} a  { color: #1d4ed8; }
+    #${uid} p  { margin: 0 0 0.85em; overflow-wrap: break-word; word-break: break-word; }
+    #${uid} a  { color: #1d4ed8; overflow-wrap: break-word; word-break: break-word; }
     #${uid} strong { font-weight: 700; } #${uid} em { font-style: italic; }
     #${uid} del { text-decoration: line-through; color: #6b7280; }
     #${uid} code {
       font-family: "Courier New",monospace; background: #f3f4f6;
       padding: 0.1em 0.35em; border-radius: 3px; color: #b91c1c;
+      display: inline-block; max-width: 100%; vertical-align: bottom;
+      word-break: break-all; overflow-wrap: anywhere;
     }
     #${uid} pre {
       background: #1e1e2e; color: #cdd6f4; padding: 0.9em 1.1em;
-      border-radius: 6px; overflow: hidden; margin: 0.85em 0;
+      border-radius: 6px; margin: 0.85em 0;
+      white-space: pre-wrap; overflow-wrap: break-word; word-break: break-word;
     }
-    #${uid} pre code { background: none; color: inherit; padding: 0; }
+    #${uid} pre code { display: inline; background: none; color: inherit; padding: 0; max-width: none; white-space: pre-wrap; word-break: break-all; }
     #${uid} blockquote {
       margin: 0.85em 0; padding: 0.6em 1em;
       border-left: 4px solid #6f4e37; background: #faf6f1; color: #555;
     }
     #${uid} blockquote p:last-child { margin-bottom: 0; }
     #${uid} ul,#${uid} ol { padding-left: 1.75em; margin: 0.4em 0 0.85em; }
-    #${uid} li { margin-bottom: 0.2em; }
+    #${uid} li { margin-bottom: 0.2em; overflow-wrap: break-word; word-break: break-word; }
     #${uid} table { width:100%; border-collapse:collapse; margin:0.85em 0; }
     #${uid} th,#${uid} td { border:1px solid #d1d5db; padding:0.45em 0.75em; text-align:left; }
     #${uid} th { background:#f9fafb; font-weight:700; }
@@ -214,34 +218,58 @@ const MarkdownViewer = () => {
       const usableW = pageW - margin * 2;
       const usableH = pageH - margin * 2;
 
-      const mmPerPx  = usableW / 794;
-      const totalHmm = (canvas.height / 2) * mmPerPx;
+      const mmPerPx = usableW / 794;
+      const pageHpx = Math.floor((usableH / mmPerPx) * 2); // one full page, in canvas pixels
 
-      let yMm  = 0;
+      // Read the rendered pixels so we can choose page breaks that fall in the
+      // blank gaps between lines/blocks — never slicing through text.
+      const readCtx = canvas.getContext("2d", { willReadFrequently: true });
+      const rowIsBlank = (band: Uint8ClampedArray, rowWidth: number, row: number): boolean => {
+        const base = row * rowWidth * 4;
+        for (let x = 0; x < rowWidth; x++) {
+          const p = base + x * 4;
+          // Anything darker than near-white counts as content (text, code box, etc.).
+          if (band[p] < 250 || band[p + 1] < 250 || band[p + 2] < 250) return false;
+        }
+        return true;
+      };
+
+      let srcY = 0;
       let page = 0;
 
-      while (yMm < totalHmm) {
+      while (srcY < canvas.height) {
         if (page > 0) pdf.addPage();
 
-        const sliceHmm = Math.min(usableH, totalHmm - yMm);
-        const srcY     = Math.round((yMm / mmPerPx) * 2);
-        const srcH     = Math.round((sliceHmm / mmPerPx) * 2);
-        const clampedH = Math.min(srcH, canvas.height - srcY);
-        if (clampedH <= 0) break;
+        let sliceH = Math.min(pageHpx, canvas.height - srcY);
+
+        // For every page except the last, pull the cut up to the nearest blank
+        // row so a line of text is never split across two pages.
+        if (srcY + sliceH < canvas.height && readCtx) {
+          const minH = Math.max(1, Math.floor(pageHpx * 0.4));
+          try {
+            const bandTop = srcY + minH;
+            const band = readCtx.getImageData(0, bandTop, canvas.width, sliceH - minH + 1).data;
+            for (let y = sliceH; y >= minH; y--) {
+              if (rowIsBlank(band, canvas.width, y - minH)) { sliceH = y; break; }
+            }
+          } catch {
+            /* tainted canvas (e.g. cross-origin image) — fall back to the hard cut */
+          }
+        }
 
         const crop  = document.createElement("canvas");
         crop.width  = canvas.width;
-        crop.height = clampedH;
+        crop.height = sliceH;
         crop.getContext("2d")!.drawImage(
-          canvas, 0, srcY, canvas.width, clampedH,
+          canvas, 0, srcY, canvas.width, sliceH,
           0,      0, crop.width, crop.height,
         );
 
-        const actualHmm = (clampedH / 2) * mmPerPx;
+        const actualHmm = (sliceH / 2) * mmPerPx;
         pdf.addImage(crop.toDataURL("image/jpeg", 0.93), "JPEG",
           margin, margin, usableW, actualHmm);
 
-        yMm  += actualHmm;
+        srcY += sliceH;
         page += 1;
       }
 
