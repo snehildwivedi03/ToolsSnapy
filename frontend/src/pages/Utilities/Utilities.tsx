@@ -10,6 +10,7 @@ const OTHER_CATEGORIES = [
   { to: "/text",        label: "Text Tools",  color: "#2563eb" },
   { to: "/calculators", label: "Calculators", color: "#059669" },
   { to: "/share",       label: "Instant Share", color: "#d97706" },
+  { to: "/clock",       label: "Clock & Calendar", color: "#6f4e37" },
 ];
 
 const Utilities = () => (

@@ -1,5 +1,5 @@
 ﻿import { lazy, Suspense, type ComponentType } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout/MainLayout";
 
 /* ── Lazy page imports ─────────────────────────────────────────────
@@ -45,7 +45,7 @@ const AgeCalculator        = lazy(() => import("../pages/Calculators/tools/AgeCa
 const TipCalculator        = lazy(() => import("../pages/Calculators/tools/TipCalculator"));
 const DiscountCalculator   = lazy(() => import("../pages/Calculators/tools/DiscountCalculator"));
 
-const LiveClock         = lazy(() => import("../pages/Utilities/LiveClock"));
+const Clock             = lazy(() => import("../pages/Clock/Clock"));
 const UnitConverter     = lazy(() => import("../pages/Utilities/tools/UnitConverter"));
 const PasswordGenerator = lazy(() => import("../pages/Utilities/tools/PasswordGenerator"));
 const UuidGenerator     = lazy(() => import("../pages/Utilities/tools/UuidGenerator"));
@@ -96,6 +96,9 @@ const AppRoutes = () => (
     <Route element={<MainLayout />}>
       <Route path="/" element={<L C={Home} />} />
 
+      {/* Clock & Calendar */}
+      <Route path="/clock" element={<L C={Clock} />} />
+
       {/* Text Tools */}
       <Route path="/text"                    element={<L C={Text} />} />
       <Route path="/text/word-counter"       element={<L C={WordCounter} />} />
@@ -124,7 +127,7 @@ const AppRoutes = () => (
 
       {/* Utilities & Dev Tools */}
       <Route path="/utilities"                    element={<L C={Utilities} />} />
-      <Route path="/utilities/live-clock"         element={<L C={LiveClock} />} />
+      <Route path="/utilities/live-clock"         element={<Navigate to="/clock" replace />} />
       <Route path="/utilities/unit-converter"     element={<L C={UnitConverter} />} />
       <Route path="/utilities/password-generator" element={<L C={PasswordGenerator} />} />
       <Route path="/utilities/uuid-generator"     element={<L C={UuidGenerator} />} />

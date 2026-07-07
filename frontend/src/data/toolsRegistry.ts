@@ -44,7 +44,7 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: "discount", title: "Discount Calculator", description: "Calculate sale prices and savings.", to: "/calculators/discount", category: "Calculators", keywords: ["sale", "off", "price"] },
 
   // ── Utilities & Dev Tools ───────────────────────────────
-  { id: "live-clock", title: "Live Date & Time", description: "Full-screen clock with date and calendar in IST.", to: "/utilities/live-clock", category: "Utilities", keywords: ["time", "world", "date", "calendar"] },
+  { id: "clock", title: "Clock & Calendar", description: "Analog & digital clocks, world clock, stopwatch, timer, alarms and calendar.", to: "/clock", category: "Utilities", keywords: ["time", "clock", "timer", "alarm", "stopwatch", "world clock", "analog", "digital", "calendar", "date", "countdown"] },
   { id: "unit-converter", title: "Unit Converter", description: "Convert length, weight, temperature and more.", to: "/utilities/unit-converter", category: "Utilities", keywords: ["length", "weight", "temperature", "convert"] },
   { id: "password-generator", title: "Password Generator", description: "Generate strong, random passwords.", to: "/utilities/password-generator", category: "Utilities", keywords: ["secure", "random", "strong"] },
   { id: "uuid-generator", title: "UUID Generator", description: "Generate random UUIDs (v4).", to: "/utilities/uuid-generator", category: "Utilities", keywords: ["guid", "id", "random"] },

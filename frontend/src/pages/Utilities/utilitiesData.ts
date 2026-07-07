@@ -10,13 +10,6 @@ export interface ToolMeta {
 
 export const UTIL_TOOLS: ToolMeta[] = [
   {
-    id: "live-clock",
-    to: "/utilities/live-clock",
-    title: "Live Date & Time",
-    description: "Real-time clock and calendar in IST (UTC+5:30) with 12/24-hour toggle.",
-    section: "utilities",
-  },
-  {
     id: "qr-generator",
     to: "/utilities/qr-generator",
     title: "QR Code Generator",

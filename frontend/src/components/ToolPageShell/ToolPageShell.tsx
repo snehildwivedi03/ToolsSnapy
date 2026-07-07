@@ -6,22 +6,26 @@ import { ALL_TOOLS } from "../../data/toolsRegistry";
 interface ToolPageShellProps {
   backTo: string;
   backLabel: string;
+  onBack?: () => void;
   icon: React.ReactNode;
   iconColor: string;
   iconBg: string;
   title: string;
   description: string;
+  hideRelated?: boolean;
   children: React.ReactNode;
 }
 
 const ToolPageShell = ({
   backTo,
   backLabel,
+  onBack,
   icon,
   iconColor,
   iconBg,
   title,
   description,
+  hideRelated,
   children,
 }: ToolPageShellProps) => {
   const { pathname } = useLocation();
@@ -32,26 +36,37 @@ const ToolPageShell = ({
       ).slice(0, 6)
     : [];
 
+  const backIcon = (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="19" y1="12" x2="5" y2="12" />
+      <polyline points="12 19 5 12 12 5" />
+    </svg>
+  );
+
   return (
     <div className={styles.shell}>
       <div className={styles.topBar}>
-        <Link to={backTo} className={styles.backLink}>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <line x1="19" y1="12" x2="5" y2="12" />
-            <polyline points="12 19 5 12 12 5" />
-          </svg>
-          {backLabel}
-        </Link>
+        {onBack ? (
+          <button type="button" onClick={onBack} className={styles.backLink}>
+            {backIcon}
+            {backLabel}
+          </button>
+        ) : (
+          <Link to={backTo} className={styles.backLink}>
+            {backIcon}
+            {backLabel}
+          </Link>
+        )}
 
         <Link to="/" state={{ scrollToTools: true }} className={styles.homeLink} aria-label="Go to home">
           <svg
@@ -88,7 +103,7 @@ const ToolPageShell = ({
       <div className={styles.content}>
         {children}
 
-        {more.length > 0 && current && (
+        {!hideRelated && more.length > 0 && current && (
           <aside className={related.wrap} aria-label={`More ${current.category}`}>
             <p className={related.label}>More {current.category}</p>
             <ul className={related.list} role="list">

@@ -57,6 +57,7 @@ const OTHER_CATEGORIES = [
   { to: "/calculators", label: "Calculators",            color: "#059669" },
   { to: "/share",       label: "Instant Share",          color: "#d97706" },
   { to: "/utilities",   label: "Utilities & Dev Tools",  color: "#0891b2" },
+  { to: "/clock",       label: "Clock & Calendar",       color: "#6f4e37" },
 ];
 
 const Pdf = () => {

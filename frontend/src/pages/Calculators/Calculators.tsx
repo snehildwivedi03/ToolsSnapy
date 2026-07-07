@@ -9,6 +9,7 @@ const OTHER_CATEGORIES = [
   { to: "/text",      label: "Text Tools",          color: "#2563eb" },
   { to: "/utilities", label: "Utilities & Dev Tools", color: "#0891b2" },
   { to: "/share",       label: "Instant Share", color: "#d97706" },
+  { to: "/clock",       label: "Clock & Calendar", color: "#6f4e37" },
 
 ];
 
