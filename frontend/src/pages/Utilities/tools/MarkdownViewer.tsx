@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
@@ -80,6 +80,27 @@ const Icon = () => (
   </svg>
 );
 
+const FullscreenIcon = ({ expanded }: { expanded: boolean }) => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    {expanded ? (
+      <>
+        <path d="M9 3v4a2 2 0 0 1-2 2H3" />
+        <path d="M15 3v4a2 2 0 0 0 2 2h4" />
+        <path d="M9 21v-4a2 2 0 0 0-2-2H3" />
+        <path d="M15 21v-4a2 2 0 0 1 2-2h4" />
+      </>
+    ) : (
+      <>
+        <path d="M3 9V5a2 2 0 0 1 2-2h4" />
+        <path d="M21 9V5a2 2 0 0 0-2-2h-4" />
+        <path d="M3 15v4a2 2 0 0 0 2 2h4" />
+        <path d="M21 15v4a2 2 0 0 1-2 2h-4" />
+      </>
+    )}
+  </svg>
+);
+
 /* ── PDF capture styles (scoped to an off-screen container) ── */
 function buildContainerCss(uid: string): string {
   return `
@@ -102,7 +123,8 @@ function buildContainerCss(uid: string): string {
     #${uid} code {
       font-family: "Courier New",monospace; background: #f3f4f6;
       padding: 0.1em 0.35em; border-radius: 3px; color: #b91c1c;
-      display: inline-block; max-width: 100%; vertical-align: bottom;
+      display: inline-block; max-width: 100%; vertical-align: middle;
+      line-height: 1.35;
       word-break: break-all; overflow-wrap: anywhere;
     }
     #${uid} pre {
@@ -139,9 +161,55 @@ const MarkdownViewer = () => {
   const [copied,      setCopied]      = useState<"html" | "md" | null>(null);
   const [pdfExporting,setPdfExporting]= useState(false);
   const [pdfDone,     setPdfDone]     = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [pendingFs, setPendingFs] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const previewPaneRef = useRef<HTMLDivElement>(null);
+  // Remembers the mode we came from when fullscreen was triggered from Edit mode,
+  // so we can restore it after leaving fullscreen.
+  const restoreModeRef = useRef<ViewMode | null>(null);
 
   const html = useMemo(() => renderMarkdown(source), [source]);
+
+  // Keep the button icon in sync with the actual fullscreen state (also covers
+  // the user pressing Esc to leave fullscreen), and restore the previous mode.
+  useEffect(() => {
+    const onChange = () => {
+      const active = document.fullscreenElement === previewPaneRef.current;
+      setIsFullscreen(active);
+      if (!document.fullscreenElement && restoreModeRef.current) {
+        setMode(restoreModeRef.current);
+        restoreModeRef.current = null;
+      }
+    };
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
+  // When fullscreen is triggered from Edit mode we first switch to Preview so the
+  // preview pane exists, then request fullscreen once it has mounted.
+  useEffect(() => {
+    if (pendingFs && previewPaneRef.current && !document.fullscreenElement) {
+      void previewPaneRef.current.requestFullscreen?.();
+      setPendingFs(false);
+    }
+  }, [pendingFs, mode]);
+
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) {
+      void document.exitFullscreen();
+      return;
+    }
+    if (previewPaneRef.current) {
+      // Preview is already visible (Split / Preview mode).
+      void previewPaneRef.current.requestFullscreen?.();
+    } else {
+      // Edit-only mode: reveal the preview, then go fullscreen once it mounts.
+      restoreModeRef.current = mode;
+      setMode("preview");
+      setPendingFs(true);
+    }
+  };
 
   const words = source.trim() ? source.trim().split(/\s+/).length : 0;
   const chars = source.length;
@@ -332,6 +400,12 @@ const MarkdownViewer = () => {
             onClick={() => copy("html")} disabled={!source}>
             {copied === "html" ? "Copied!" : "Copy HTML"}
           </button>
+          <button type="button" className={`${md.tbBtn} ${md.tbIcon}`}
+            onClick={toggleFullscreen}
+            title={isFullscreen ? "Exit full screen" : "View preview full screen"}
+            aria-label={isFullscreen ? "Exit full screen" : "View preview full screen"}>
+            <FullscreenIcon expanded={isFullscreen} />
+          </button>
           <input ref={fileRef} type="file" accept=".md,.markdown,.txt,text/markdown"
             style={{ display: "none" }}
             onChange={(e) => { importFile(e.target.files); e.target.value = ""; }} />
@@ -352,7 +426,13 @@ const MarkdownViewer = () => {
           )}
 
           {showPreview && (
-            <div className={md.pane}>
+            <div className={md.pane} ref={previewPaneRef}>
+              <button type="button" className={md.fsExit}
+                onClick={toggleFullscreen}
+                title="Exit full screen" aria-label="Exit full screen">
+                <FullscreenIcon expanded={true} />
+                <span>Minimize</span>
+              </button>
               <span className={md.paneLabel}>Preview</span>
               {source.trim() ? (
                 <div className={md.preview} dangerouslySetInnerHTML={{ __html: html }} />
