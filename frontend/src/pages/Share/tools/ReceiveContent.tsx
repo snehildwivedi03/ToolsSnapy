@@ -53,10 +53,16 @@ const ReceiveContent = () => {
   useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
 
   const lookup = async (codeArg?: string) => {
-    const clean = (codeArg ?? code).trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const source = typeof codeArg === "string" ? codeArg : code;
+    const clean = source.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
     if (clean.length !== 6) { setError("Enter a valid 6-character share code."); return; }
 
+    // Clear any previous result and stop its countdown before a new lookup,
+    // so a failed/expired lookup never leaves stale content or a running timer.
     setError("");
+    setShare(null);
+    setDeleted(false);
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
     setLoading(true);
     try {
       const res = await receiveShare(clean);
@@ -106,8 +112,9 @@ const ReceiveContent = () => {
     setDeleting(true);
     try {
       await deleteShare(share.code);
+      if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+      setShare(null);
       setDeleted(true);
-      if (timerRef.current) clearInterval(timerRef.current);
     } catch {
       /* ignore */
     } finally {
@@ -156,8 +163,8 @@ const ReceiveContent = () => {
         </div>
         {error && <div className={t.errorList}><span className={t.errorItem}>{error}</span></div>}
         <button
-          className={s.primaryBtn}
-          onClick={lookup}
+          className={`${s.primaryBtn} ${t.retrieveBtn}`}
+          onClick={() => lookup()}
           disabled={loading || code.length < 6}
         >
           {loading ? "Looking up…" : "Retrieve Content"}

@@ -453,7 +453,8 @@
 }
 
 .errorMsg {
-  width: 100%;
+  width: fit-content;
+  max-width: 100%;
   font-size: 0.8125rem;
   color: #b91c1c;
   font-weight: 600;

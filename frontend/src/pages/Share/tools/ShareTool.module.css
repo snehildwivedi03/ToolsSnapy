@@ -267,3 +267,16 @@
   height: 1px;
   background: var(--color-border);
 }
+
+/* ── Retrieve button — auto width on wider screens, full width on mobile ── */
+/* Doubled class raises specificity to override the shared .primaryBtn width. */
+.retrieveBtn.retrieveBtn {
+  width: auto;
+  min-width: 13rem;
+  align-self: center;
+}
+@media (max-width: 480px) {
+  .retrieveBtn.retrieveBtn {
+    width: 100%;
+  }
+}
