@@ -329,6 +329,9 @@
   align-self: flex-start;
   margin-left: 0.25em;
 }
+.ampmHidden {
+  visibility: hidden;
+}
 .dateLine {
   font-size: 1.05rem;
   font-weight: 700;

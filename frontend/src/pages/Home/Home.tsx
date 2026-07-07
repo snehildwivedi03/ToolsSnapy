@@ -231,7 +231,7 @@ const Home = () => {
           <span className={styles.clockTime}>{timeStr}</span>
           <span className={styles.clockSep} aria-hidden="true">&middot;</span>
           <span className={styles.clockDate}>{dateStr}</span>
-          <Link to="/clock" className={styles.clockFull}>
+          <Link to="/clock?tool=clock" className={styles.clockFull}>
             Full clock
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

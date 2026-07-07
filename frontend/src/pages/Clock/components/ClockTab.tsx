@@ -43,7 +43,9 @@ const ClockTab = () => {
           <span className={c.digit}>{minute}</span>
           <span className={c.colon}>:</span>
           <span className={c.digit}>{second}</span>
-          {hour12 && ampm && <span className={c.ampm}>{ampm}</span>}
+          <span className={`${c.ampm} ${!hour12 ? c.ampmHidden : ""}`}>
+            {hour12 && ampm ? ampm : "AM"}
+          </span>
         </div>
 
         <div className={c.dateLine}>{dateStr}</div>
