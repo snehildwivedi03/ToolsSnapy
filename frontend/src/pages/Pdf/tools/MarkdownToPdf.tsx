@@ -55,71 +55,48 @@ console.log(greet("World"));
 > **Tip:** Switch between *Edit*, *Split*, and *Preview* modes using the buttons above.
 `;
 
-/* ── Helpers ────────────────────────────────────────────────── */
-function escHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-function buildPrintDocument(bodyHtml: string, title: string, pageSize: PageSize): string {
-  const pSize = pageSize === "a4" ? "A4" : "letter";
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<title>${escHtml(title)}</title>
-<style>
-@page { size: ${pSize}; margin: 20mm; }
-*,*::before,*::after { box-sizing: border-box; }
-body {
-  font-family: Georgia,"Times New Roman",serif;
-  font-size: 12pt; line-height: 1.75; color: #1a1a1a; margin: 0; padding: 0;
-}
-h1,h2,h3,h4,h5,h6 {
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  line-height: 1.3; margin: 1.4em 0 0.4em; page-break-after: avoid; color: #111;
-}
-h1 { font-size: 24pt; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.2em; margin-top: 0; }
-h2 { font-size: 18pt; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.15em; }
-h3 { font-size: 14pt; } h4 { font-size: 12pt; }
-h5 { font-size: 11pt; } h6 { font-size: 10pt; color: #555; }
-p { margin: 0 0 0.85em; orphans: 3; widows: 3; }
-a { color: #1d4ed8; }
-a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #6b7280; }
-strong { font-weight: 700; } em { font-style: italic; }
-del { text-decoration: line-through; color: #6b7280; }
-code {
-  font-family: "Courier New",monospace; font-size: 10pt;
-  background: #f3f4f6; padding: 0.1em 0.35em; border-radius: 3px; color: #b91c1c;
-}
-pre {
-  background: #1e1e2e; color: #cdd6f4; padding: 0.9em 1.1em;
-  border-radius: 6px; overflow: hidden; page-break-inside: avoid; margin: 0.85em 0;
-}
-pre code { background: none; color: inherit; padding: 0; font-size: 10pt; }
-blockquote {
-  margin: 0.85em 0; padding: 0.6em 1em;
-  border-left: 4px solid #6f4e37; background: #faf6f1;
-  color: #555; page-break-inside: avoid;
-}
-blockquote p:last-child { margin-bottom: 0; }
-ul,ol { padding-left: 1.75em; margin: 0.4em 0 0.85em; }
-li { margin-bottom: 0.2em; }
-table { width: 100%; border-collapse: collapse; margin: 0.85em 0; page-break-inside: avoid; font-size: 11pt; }
-th,td { border: 1px solid #d1d5db; padding: 0.45em 0.75em; text-align: left; }
-th { background: #f9fafb; font-weight: 700; }
-tr:nth-child(even) td { background: #f9fafb; }
-hr { border: none; border-top: 1px solid #e5e7eb; margin: 1.25em 0; }
-img { max-width: 100%; height: auto; page-break-inside: avoid; }
-input[type="checkbox"] { margin-right: 0.4em; }
-@media print { body { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
-</style>
-</head>
-<body>${bodyHtml}</body>
-</html>`;
+/* ── Scoped CSS injected into the off-screen capture container ── */
+function buildContainerCss(uid: string): string {
+  return `
+    #${uid} {
+      font-family: Georgia,"Times New Roman",serif;
+      font-size: 16px; line-height: 1.75; color: #1a1a1a; background: #fff;
+    }
+    #${uid} h1,#${uid} h2,#${uid} h3,#${uid} h4,#${uid} h5,#${uid} h6 {
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      line-height: 1.3; color: #111; margin: 1.25em 0 0.4em;
+    }
+    #${uid} h1 { font-size: 2em;   border-bottom: 2px solid #e5e7eb; padding-bottom: 0.2em; margin-top: 0; }
+    #${uid} h2 { font-size: 1.5em; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.15em; }
+    #${uid} h3 { font-size: 1.25em; } #${uid} h4 { font-size: 1em; }
+    #${uid} p  { margin: 0 0 0.85em; }
+    #${uid} a  { color: #1d4ed8; }
+    #${uid} strong { font-weight: 700; } #${uid} em { font-style: italic; }
+    #${uid} del { text-decoration: line-through; color: #6b7280; }
+    #${uid} code {
+      font-family: "Courier New",monospace; background: #f3f4f6;
+      padding: 0.1em 0.35em; border-radius: 3px; color: #b91c1c;
+    }
+    #${uid} pre {
+      background: #1e1e2e; color: #cdd6f4; padding: 0.9em 1.1em;
+      border-radius: 6px; overflow: hidden; margin: 0.85em 0;
+    }
+    #${uid} pre code { background: none; color: inherit; padding: 0; }
+    #${uid} blockquote {
+      margin: 0.85em 0; padding: 0.6em 1em;
+      border-left: 4px solid #6f4e37; background: #faf6f1; color: #555;
+    }
+    #${uid} blockquote p:last-child { margin-bottom: 0; }
+    #${uid} ul,#${uid} ol { padding-left: 1.75em; margin: 0.4em 0 0.85em; }
+    #${uid} li { margin-bottom: 0.2em; }
+    #${uid} table { width:100%; border-collapse:collapse; margin:0.85em 0; }
+    #${uid} th,#${uid} td { border:1px solid #d1d5db; padding:0.45em 0.75em; text-align:left; }
+    #${uid} th { background:#f9fafb; font-weight:700; }
+    #${uid} tr:nth-child(even) td { background:#f9fafb; }
+    #${uid} hr { border:none; border-top:1px solid #e5e7eb; margin:1.25em 0; }
+    #${uid} img { max-width:100%; height:auto; }
+    #${uid} input[type="checkbox"] { margin-right:0.4em; }
+  `;
 }
 
 /* ── Icon ───────────────────────────────────────────────────── */
@@ -181,8 +158,8 @@ const MarkdownToPdf = () => {
     if (file) handleFile(file);
   };
 
-  /* ── PDF export ──────────────────────────────────────────── */
-  const handleExport = () => {
+  /* ── PDF export (direct download, no print dialog) ───────── */
+  const handleExport = async () => {
     if (!markdown.trim()) {
       setError("Please add some Markdown content first.");
       return;
@@ -192,36 +169,82 @@ const MarkdownToPdf = () => {
 
     const rawHtml  = String(marked.parse(markdown));
     const safeHtml = DOMPurify.sanitize(rawHtml, { USE_PROFILES: { html: true } });
-    const printDoc = buildPrintDocument(safeHtml, title.trim() || "Document", pageSize);
+
+    // Build a styled off-screen container for html2canvas to capture
+    const uid       = `mdpdf${Date.now()}`;
+    const styleEl   = document.createElement("style");
+    styleEl.textContent = buildContainerCss(uid);
+    const container = document.createElement("div");
+    container.id    = uid;
+    container.style.cssText =
+      "position:absolute;left:-9999px;top:0;width:794px;padding:56px 80px;box-sizing:border-box;background:#fff;";
+    container.innerHTML = safeHtml;
+    document.head.appendChild(styleEl);
+    document.body.appendChild(container);
 
     try {
-      const blob   = new Blob([printDoc], { type: "text/html;charset=utf-8" });
-      const url    = URL.createObjectURL(blob);
-      const iframe = document.createElement("iframe");
-      iframe.style.cssText =
-        "position:fixed;width:0;height:0;border:none;top:0;left:0;opacity:0;pointer-events:none;";
-      iframe.src = url;
+      const [{ jsPDF }, { default: html2canvas }] = await Promise.all([
+        import("jspdf"),
+        import("html2canvas"),
+      ]);
 
-      iframe.addEventListener("load", () => {
-        try {
-          iframe.contentWindow?.focus();
-          iframe.contentWindow?.print();
-        } catch {
-          // Fallback: open in a new tab so the user can Ctrl+P
-          window.open(url, "_blank");
-        }
-        setTimeout(() => {
-          document.body.removeChild(iframe);
-          URL.revokeObjectURL(url);
-          setExporting(false);
-          setExported(true);
-          setTimeout(() => setExported(false), 2500);
-        }, 1500);
-      }, { once: true });
+      const canvas = await html2canvas(container, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        logging: false,
+        width: 794,
+      });
 
-      document.body.appendChild(iframe);
+      const pdf     = new jsPDF({ format: pageSize, unit: "mm", orientation: "p" });
+      const pageW   = pdf.internal.pageSize.getWidth();
+      const pageH   = pdf.internal.pageSize.getHeight();
+      const margin  = 12;
+      const usableW = pageW - margin * 2;
+      const usableH = pageH - margin * 2;
+
+      const mmPerPx  = usableW / 794;
+      const totalHmm = (canvas.height / 2) * mmPerPx;
+
+      let yMm  = 0;
+      let page = 0;
+
+      while (yMm < totalHmm) {
+        if (page > 0) pdf.addPage();
+
+        const sliceHmm = Math.min(usableH, totalHmm - yMm);
+        const srcY     = Math.round((yMm / mmPerPx) * 2);
+        const srcH     = Math.round((sliceHmm / mmPerPx) * 2);
+        const clampedH = Math.min(srcH, canvas.height - srcY);
+        if (clampedH <= 0) break;
+
+        const crop  = document.createElement("canvas");
+        crop.width  = canvas.width;
+        crop.height = clampedH;
+        crop.getContext("2d")!.drawImage(
+          canvas, 0, srcY, canvas.width, clampedH,
+          0,      0, crop.width, crop.height,
+        );
+
+        const actualHmm = (clampedH / 2) * mmPerPx;
+        pdf.addImage(crop.toDataURL("image/jpeg", 0.93), "JPEG",
+          margin, margin, usableW, actualHmm);
+
+        yMm  += actualHmm;
+        page += 1;
+      }
+
+      const fname = (title.trim() || "document")
+        .replace(/[^\w\s-]/g, "").trim() || "document";
+      pdf.save(`${fname}.pdf`);
+
+      setExported(true);
+      setTimeout(() => setExported(false), 2500);
     } catch {
       setError("Export failed. Please try again.");
+    } finally {
+      document.head.removeChild(styleEl);
+      document.body.removeChild(container);
       setExporting(false);
     }
   };
@@ -271,11 +294,11 @@ const MarkdownToPdf = () => {
           </div>
 
           <button
-            className={`${s.calcBtn} ${st.exportBtn} ${exported ? st.exportDone : ""}`}
+            className={`${st.tbBtn} ${st.exportBtn} ${exported ? st.exportDone : ""}`}
             onClick={handleExport}
             disabled={exporting}
           >
-            {exporting ? "Preparing…" : exported ? "Print dialog opened!" : "Export PDF"}
+            {exporting ? "Generating PDF…" : exported ? "Downloaded!" : "Download PDF"}
           </button>
         </div>
 
@@ -313,7 +336,7 @@ const MarkdownToPdf = () => {
               Upload .md
             </button>
             <button
-              className={st.tbBtn}
+              className={`${st.tbBtn} ${markdown === EXAMPLE_MD ? st.tbActive : ""}`}
               onClick={() => { setMarkdown(EXAMPLE_MD); setTitle("Project Report"); setError(""); }}
               title="Load example document"
             >

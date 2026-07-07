@@ -33,9 +33,22 @@
   background: var(--color-accent-light);
 }
 
+/* Active state (e.g. Example button when the example doc is loaded) */
+.tbActive {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
 /* Fixed width so the label swap ("Copy HTML" -> "Copied!") never shifts the row */
 .tbCopy {
   min-width: 6.75rem;
+  justify-content: center;
+}
+
+/* Wider fixed width for the PDF button so its label swaps never shift the row */
+.tbPdf {
+  min-width: 8.75rem;
   justify-content: center;
 }
 

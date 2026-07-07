@@ -45,6 +45,8 @@ export default defineConfig({
           if (id.includes("mathjs"))                    return "vendor-math";
           // Compression / archiving
           if (id.includes("fflate"))                    return "vendor-zip";
+          // PDF generation (direct download, no print dialog)
+          if (id.includes("jspdf") || id.includes("html2canvas")) return "vendor-pdf-gen";
           // Markdown + sanitizer
           if (id.includes("marked") || id.includes("dompurify")) return "vendor-md";
           // QR / barcode rendering

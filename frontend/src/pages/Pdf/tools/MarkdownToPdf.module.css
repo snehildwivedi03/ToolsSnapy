@@ -25,15 +25,19 @@
   max-width: 100%;
 }
 
+/* Download PDF button — consistent with the toolbar/copy button UI */
 .exportBtn {
-  min-width: 10rem;
+  min-width: 10.5rem;
+  justify-content: center;
   margin-top: auto;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.875rem;
 }
 
 .exportDone {
-  background: #22c55e !important;
   border-color: #22c55e !important;
-  color: #fff !important;
+  color: #15803d !important;
+  background: #dcfce7 !important;
 }
 
 .errorMsg {
@@ -41,6 +45,20 @@
   font-size: 0.8125rem;
   font-weight: 600;
   color: #dc2626;
+}
+
+/* ── Responsive: stack the settings row on narrow screens ───── */
+@media (max-width: 620px) {
+  .settingsRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .titleInput { width: 100%; }
+  .exportBtn {
+    width: 100%;
+    margin-top: 0.25rem;
+  }
 }
 
 /* ── Toolbar ────────────────────────────────────────────────── */
@@ -80,6 +98,13 @@
 }
 
 .tbBtn:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+/* Active state (e.g. Example button when the example doc is loaded) */
+.tbActive {
   border-color: #dc2626;
   color: #dc2626;
   background: #fef2f2;
