@@ -5,6 +5,8 @@ import compression from "compression";
 import cors from "cors";
 import textRouter from "./routes/text.routes.js";
 import shareRouter from "./routes/share.routes.js";
+import urlShortenerRouter from "./routes/urlShortener.routes.js";
+import { redirectShortUrl } from "./controllers/urlShortener.controller.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const app: Application = express();
@@ -117,8 +119,12 @@ app.get("/api/health", (_req: Request, res: Response) => {
 });
 
 // Feature routes
-app.use("/api/text", textRouter);
-app.use("/api/share", shareRouter);
+app.use("/api/text",    textRouter);
+app.use("/api/share",   shareRouter);
+app.use("/api/shorten", urlShortenerRouter);
+
+// Short-link redirect — must be below /api routes to avoid conflicts
+app.get("/r/:code", redirectShortUrl);
 
 // 404 handler for unknown routes
 app.use((_req: Request, res: Response) => {

@@ -48,7 +48,7 @@ const Utilities = () => (
       </div>
       <h1 className={styles.title}>Utilities & Dev Tools</h1>
       <p className={styles.description}>
-        15 handy tools: converters, generators, encoders and developer helpers.
+        16 handy tools: converters, generators, encoders and developer helpers.
         Everything runs in your browser, nothing stored.
       </p>
     </div>

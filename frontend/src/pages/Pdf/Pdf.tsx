@@ -42,6 +42,13 @@ const PDF_TOOLS = [
     description:
       "Compress a PDF to an exact file size. Pick a KB or MB target and we hit it precisely. Processed entirely in your browser.",
   },
+  {
+    id: "pdf-markdown-to-pdf",
+    to: "/pdf/markdown-to-pdf",
+    title: "Markdown to PDF",
+    description:
+      "Write or upload a Markdown file and export it as a clean, print-ready PDF — with styled headings, code blocks, tables, and task lists.",
+  },
 ] as const;
 
 const OTHER_CATEGORIES = [

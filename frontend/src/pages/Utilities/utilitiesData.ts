@@ -117,6 +117,13 @@ export const DEV_TOOLS: ToolMeta[] = [
     description: "Write or paste Markdown and see a clean live preview. Supports tables, task lists and code blocks.",
     section: "developer",
   },
+  {
+    id: "url-shortener",
+    to: "/utilities/url-shortener",
+    title: "URL Shortener",
+    description: "Turn any long URL into a short, shareable link. Links include a QR code and expire after 24 hours.",
+    section: "developer",
+  },
 ];
 
 export const ALL_UTIL_TOOLS: ToolMeta[] = [...UTIL_TOOLS, ...DEV_TOOLS];

@@ -28,11 +28,12 @@ const BackgroundRemove      = lazy(() => import("../pages/Images/tools/Backgroun
 const ImageConverter        = lazy(() => import("../pages/Images/tools/ImageConverter"));
 const ImageToText           = lazy(() => import("../pages/Images/tools/ImageToText"));
 
-const MergePdf    = lazy(() => import("../pages/Pdf/tools/MergePdf"));
-const SplitPdf    = lazy(() => import("../pages/Pdf/tools/SplitPdf"));
-const ImagesToPdf = lazy(() => import("../pages/Pdf/tools/ImagesToPdf"));
-const PdfToImages = lazy(() => import("../pages/Pdf/tools/PdfToImages"));
-const PdfResize   = lazy(() => import("../pages/Pdf/tools/PdfResize"));
+const MergePdf       = lazy(() => import("../pages/Pdf/tools/MergePdf"));
+const SplitPdf       = lazy(() => import("../pages/Pdf/tools/SplitPdf"));
+const ImagesToPdf    = lazy(() => import("../pages/Pdf/tools/ImagesToPdf"));
+const PdfToImages    = lazy(() => import("../pages/Pdf/tools/PdfToImages"));
+const PdfResize      = lazy(() => import("../pages/Pdf/tools/PdfResize"));
+const MarkdownToPdf  = lazy(() => import("../pages/Pdf/tools/MarkdownToPdf"));
 
 const ScientificCalculator = lazy(() => import("../pages/Calculators/tools/ScientificCalculator"));
 const BmiCalculator        = lazy(() => import("../pages/Calculators/tools/BmiCalculator"));
@@ -58,6 +59,7 @@ const UrlEncoderDecoder = lazy(() => import("../pages/Utilities/tools/UrlEncoder
 const UnixTimestamp     = lazy(() => import("../pages/Utilities/tools/UnixTimestamp"));
 const ZipTool           = lazy(() => import("../pages/Utilities/tools/ZipTool"));
 const MarkdownViewer    = lazy(() => import("../pages/Utilities/tools/MarkdownViewer"));
+const UrlShortener      = lazy(() => import("../pages/Utilities/tools/UrlShortener"));
 
 const ShareText      = lazy(() => import("../pages/Share/tools/ShareText"));
 const ShareFiles     = lazy(() => import("../pages/Share/tools/ShareFiles"));
@@ -137,6 +139,7 @@ const AppRoutes = () => (
       <Route path="/utilities/unix-timestamp"     element={<L C={UnixTimestamp} />} />
       <Route path="/utilities/zip-tool"           element={<L C={ZipTool} />} />
       <Route path="/utilities/markdown-viewer"    element={<L C={MarkdownViewer} />} />
+      <Route path="/utilities/url-shortener"      element={<L C={UrlShortener} />} />
       <Route path="/developer"                    element={<L C={Utilities} />} />
 
       {/* Instant Share */}
@@ -157,11 +160,12 @@ const AppRoutes = () => (
 
       {/* PDF Tools */}
       <Route path="/pdf"                element={<L C={Pdf} />} />
-      <Route path="/pdf/merge"          element={<L C={MergePdf} />} />
-      <Route path="/pdf/split"          element={<L C={SplitPdf} />} />
-      <Route path="/pdf/images-to-pdf"  element={<L C={ImagesToPdf} />} />
-      <Route path="/pdf/pdf-to-images"  element={<L C={PdfToImages} />} />
-      <Route path="/pdf/resize"         element={<L C={PdfResize} />} />
+      <Route path="/pdf/merge"            element={<L C={MergePdf} />} />
+      <Route path="/pdf/split"            element={<L C={SplitPdf} />} />
+      <Route path="/pdf/images-to-pdf"    element={<L C={ImagesToPdf} />} />
+      <Route path="/pdf/pdf-to-images"    element={<L C={PdfToImages} />} />
+      <Route path="/pdf/resize"           element={<L C={PdfResize} />} />
+      <Route path="/pdf/markdown-to-pdf"  element={<L C={MarkdownToPdf} />} />
 
       {/* Legal */}
       <Route path="/privacy-policy" element={<L C={PrivacyPolicy} />} />

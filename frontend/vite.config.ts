@@ -11,6 +11,11 @@ export default defineConfig({
         target: "http://localhost:5000",
         changeOrigin: true,
       },
+      // Forward /r/* (short-link redirects) to the backend
+      "/r": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+      },
     },
     allowedHosts: ["plots-knight-lady-duration.trycloudflare.com"],
   },
