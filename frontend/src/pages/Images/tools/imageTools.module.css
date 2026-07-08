@@ -228,6 +228,26 @@
 }
 
 /* ── Target size row ─────────────────────────────────────── */
+.targetGroup {
+  max-width: 22rem;
+}
+
+/* Cap the width of the width/height dimension inputs on wide screens. */
+.dimGrid {
+  max-width: 30rem;
+}
+
+/* Keep single-column form fields from stretching across wide cards. */
+.narrowField {
+  max-width: 22rem;
+}
+
+/* Fixed width copy button so the label swap (Copy Text ↔ Copied!) never shifts neighbours. */
+.copyFixed {
+  min-width: 8.5rem;
+  justify-content: center;
+}
+
 .sizeRow {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -477,6 +497,7 @@
 /* ── Status badges ───────────────────────────────────────── */
 .successMsg {
   display: inline-flex;
+  align-self: flex-start;
   align-items: center;
   gap: 0.375rem;
   font-size: 0.875rem;
@@ -661,7 +682,9 @@
   background: var(--color-surface);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-lg);
-  width: 100%;
+  align-self: flex-start;
+  width: fit-content;
+  max-width: 100%;
   box-sizing: border-box;
 }
 

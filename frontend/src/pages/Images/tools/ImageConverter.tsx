@@ -25,7 +25,7 @@ const Icon = () => (
   </svg>
 );
 
-type Format = "png" | "jpeg" | "webp" | "avif" | "svg";
+type Format = "png" | "jpeg" | "jpg" | "webp" | "avif" | "svg";
 
 interface FormatDef {
   value: Format;
@@ -39,7 +39,8 @@ interface FormatDef {
 
 const ALL_FORMATS: FormatDef[] = [
   { value: "png",  label: "PNG",  ext: "png",  mime: "image/png",     lossy: false },
-  { value: "jpeg", label: "JPG",  ext: "jpg",  mime: "image/jpeg",    lossy: true  },
+  { value: "jpg",  label: "JPG",  ext: "jpg",  mime: "image/jpeg",    lossy: true  },
+  { value: "jpeg", label: "JPEG", ext: "jpeg", mime: "image/jpeg",    lossy: true  },
   { value: "webp", label: "WebP", ext: "webp", mime: "image/webp",    lossy: true  },
   { value: "avif", label: "AVIF", ext: "avif", mime: "image/avif",    lossy: true  },
   { value: "svg",  label: "SVG",  ext: "svg",  mime: "image/svg+xml", lossy: false, svg: true },
@@ -142,7 +143,7 @@ const ImageConverter = () => {
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Canvas not supported");
       // JPEG has no transparency — fill white so it doesn't go black.
-      if (current.value === "jpeg") {
+      if (current.mime === "image/jpeg") {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
@@ -238,7 +239,7 @@ const ImageConverter = () => {
             </button>
           </div>
 
-          <div className={s.inputGroup}>
+          <div className={`${s.inputGroup} ${ls.narrowField}`}>
             <label className={s.label} htmlFor="convert-format">Convert to</label>
             <select
               id="convert-format"
@@ -253,7 +254,7 @@ const ImageConverter = () => {
           </div>
 
           {current.lossy && (
-            <div className={s.inputGroup}>
+            <div className={`${s.inputGroup} ${ls.narrowField}`}>
               <label className={s.label} htmlFor="convert-quality">Quality: {quality}%</label>
               <input
                 id="convert-quality"

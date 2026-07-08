@@ -13,6 +13,9 @@ const ToolSearch = ({ variant = "full", placeholder = "Search tools…" }: Props
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
+  // Only show the persistent "active" highlight while navigating with the
+  // keyboard. Mouse users get a hover-only highlight that clears on mouse-out.
+  const [keyboardNav, setKeyboardNav] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -28,7 +31,7 @@ const ToolSearch = ({ variant = "full", placeholder = "Search tools…" }: Props
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
-  useEffect(() => setActive(0), [query]);
+  useEffect(() => { setActive(0); setKeyboardNav(false); }, [query]);
 
   const go = (to: string) => {
     setQuery("");
@@ -38,8 +41,8 @@ const ToolSearch = ({ variant = "full", placeholder = "Search tools…" }: Props
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (!open || results.length === 0) return;
-    if (e.key === "ArrowDown") { e.preventDefault(); setActive((a) => (a + 1) % results.length); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); setActive((a) => (a - 1 + results.length) % results.length); }
+    if (e.key === "ArrowDown") { e.preventDefault(); setKeyboardNav(true); setActive((a) => (a + 1) % results.length); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setKeyboardNav(true); setActive((a) => (a - 1 + results.length) % results.length); }
     else if (e.key === "Enter") { e.preventDefault(); const r = results[active]; if (r) go(r.to); }
     else if (e.key === "Escape") { setOpen(false); }
   };
@@ -82,8 +85,8 @@ const ToolSearch = ({ variant = "full", placeholder = "Search tools…" }: Props
             results.map((r, i) => (
               <button
                 key={r.id}
-                className={`${s.result} ${i === active ? s.resultActive : ""}`}
-                onMouseEnter={() => setActive(i)}
+                className={`${s.result} ${keyboardNav && i === active ? s.resultActive : ""}`}
+                onMouseEnter={() => { setKeyboardNav(false); setActive(i); }}
                 onClick={() => go(r.to)}
                 role="option"
                 aria-selected={i === active}

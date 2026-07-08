@@ -235,7 +235,7 @@ const ImageToText = () => {
             <img src={src.url} alt="Source" className={ls.preview} />
           </div>
 
-          <div className={s.inputGroup}>
+          <div className={`${s.inputGroup} ${ls.narrowField}`}>
             <label className={s.label} htmlFor="ocr-language">Language</label>
             <select
               id="ocr-language"
@@ -287,7 +287,7 @@ const ImageToText = () => {
               <div className={ls.actionRow}>
                 <button
                   type="button"
-                  className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary}
+                  className={copied ? `${tp.btnSecondary} ${tp.btnCopied} ${ls.copyFixed}` : `${tp.btnSecondary} ${ls.copyFixed}`}
                   onClick={copyText}
                 >
                   {copied ? "Copied!" : "Copy Text"}

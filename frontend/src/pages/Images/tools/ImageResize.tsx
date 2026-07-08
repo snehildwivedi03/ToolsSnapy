@@ -176,7 +176,7 @@ const ImageResize = () => {
             </button>
           </div>
 
-          <div className={s.inputGroup}>
+          <div className={`${s.inputGroup} ${ls.targetGroup}`}>
             <label className={s.label} htmlFor="target-size">Target file size</label>
             <div className={ls.sizeRow}>
               <input

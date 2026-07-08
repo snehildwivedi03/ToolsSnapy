@@ -218,7 +218,7 @@ const ImageResizeDimensions = () => {
             </button>
           </div>
 
-          <div className={s.inputGrid2}>
+          <div className={`${s.inputGrid2} ${ls.dimGrid}`}>
             <div className={s.inputGroup}>
               <label className={s.label} htmlFor="resize-w">Width (px)</label>
               <input
