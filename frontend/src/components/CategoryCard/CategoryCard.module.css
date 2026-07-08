@@ -1,41 +1,89 @@
-﻿/* ── Category card link ──────────────────────────────────── */
+﻿/* ── Category card link — horizontal, colour-accented ──── */
 .card {
+  --card-accent: var(--color-accent);
+  --card-accent-bg: var(--color-accent-light);
+
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1.5rem;
-  background-color: var(--color-surface);
+  align-items: center;
+  gap: 1.125rem;
+  padding: 1.375rem 1.5rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.28)),
+    var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   text-decoration: none;
   color: inherit;
   height: 100%;
+  overflow: hidden;
+  isolation: isolate;
   transition: border-color var(--transition-base),
     box-shadow var(--transition-base),
     transform var(--transition-fast);
 }
 
+/* Colour bar that slides in on the left edge */
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--card-accent);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+/* Soft accent-coloured sheen revealed on hover */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 120% at 100% 0%,
+    color-mix(in srgb, var(--card-accent) 15%, transparent),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: -1;
+}
+
 .card:hover {
-  border-color: var(--color-accent-subtle);
-  box-shadow: var(--shadow-card-hover);
-  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--card-accent) 45%, var(--color-border));
+  box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--card-accent) 55%, transparent);
+  transform: translateY(-3px);
+}
+
+.card:hover::before,
+.card:hover::after {
+  opacity: 1;
 }
 
 .card:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--card-accent);
   outline-offset: 3px;
-  border-radius: var(--radius-lg);
 }
 
-/* ── Coloured icon wrapper (bg + color via inline style) ─── */
+/* ── Coloured icon tile ──────────────────────────────────── */
 .iconWrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  background: var(--card-accent-bg);
+  color: var(--card-accent);
   flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--card-accent) 16%, transparent);
+  transition: transform var(--transition-fast);
+}
+
+.card:hover .iconWrap {
+  transform: scale(1.06) rotate(-3deg);
 }
 
 /* ── Text block ──────────────────────────────────────────── */
@@ -43,64 +91,80 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
 }
 
 .title {
   font-size: 1.0625rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--color-text);
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-}
-
-.desc {
-  font-size: 0.875rem;
-  color: var(--color-text-secondary);
-  line-height: 1.55;
-}
-
-/* ── Footer row ──────────────────────────────────────────── */
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--color-border);
-  margin-top: auto;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
 }
 
 .count {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--card-accent);
+  background: var(--card-accent-bg);
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.desc {
   font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
 }
 
-.arrow {
-  color: var(--color-accent);
-  transition: transform var(--transition-fast);
+/* ── Arrow puck ──────────────────────────────────────────── */
+.arrowWrap {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--card-accent);
+  transition: background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
-.card:hover .arrow {
+.card:hover .arrowWrap {
+  background: var(--card-accent);
+  border-color: var(--card-accent);
+  color: #fff;
   transform: translateX(3px);
 }
 
-/* ── Mobile: compact cards so two fit per row with less scroll ── */
-@media (max-width: 540px) {
+/* ── Mobile: tighten spacing ─────────────────────────────── */
+@media (max-width: 560px) {
   .card {
-    gap: 0.625rem;
-    padding: 1rem;
-    border-radius: var(--radius-md);
+    gap: 0.875rem;
+    padding: 1rem 1.125rem;
+    border-radius: var(--radius-lg);
   }
 
   .iconWrap {
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
   }
 
   .iconWrap svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
   }
 
   .title {
@@ -111,28 +175,20 @@
     font-size: 0.78125rem;
     line-height: 1.45;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  .footer {
-    padding-top: 0.5rem;
-  }
-
-  .count {
-    font-size: 0.75rem;
+  .arrowWrap {
+    width: 30px;
+    height: 30px;
   }
 }
 
 @media (max-width: 380px) {
-  .card {
-    padding: 0.875rem;
-  }
-
-  .desc {
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+  .count {
+    display: none;
   }
 }

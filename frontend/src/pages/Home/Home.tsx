@@ -184,73 +184,126 @@ const Home = () => {
   return (
     <div className={styles.page}>
 
-      {/* ── Hero   centred, full-width ── */}
+      {/* ── Hero — split layout ── */}
       <section className={styles.hero} aria-labelledby="hero-title">
+        <div className={styles.heroInner}>
 
-        <div className={styles.heroBadge}>
-          <span className={styles.badgeItem}>Free forever</span>
-          <span className={styles.badgeSep} aria-hidden="true">&middot;</span>
-          <span className={styles.badgeItem}>In-browser</span>
-          <span className={styles.badgeSep} aria-hidden="true">&middot;</span>
-          <span className={styles.badgeItem}>No sign-up</span>
+          {/* Left — copy */}
+          <div className={styles.heroContent}>
+            <div className={styles.heroBadge}>
+              <span className={styles.badgeDot} aria-hidden="true" />
+              <span className={styles.badgeItem}>Free forever</span>
+              <span className={styles.badgeSep} aria-hidden="true">&middot;</span>
+              <span className={styles.badgeItem}>In-browser</span>
+              <span className={styles.badgeSep} aria-hidden="true">&middot;</span>
+              <span className={styles.badgeItem}>No sign-up</span>
+            </div>
+
+            <h1 id="hero-title" className={styles.heroTitle}>
+              Every tool you need.
+              <span className={styles.heroAccent}> Nothing you upload leaves.</span>
+            </h1>
+
+            <p className={styles.heroSub}>
+              PDFs, images, text, calculators and everyday utilities — processed
+              instantly and privately in your browser. No accounts, no uploads,
+              no tracking.
+            </p>
+
+            <div className={styles.heroActions}>
+              <button
+                className={styles.ctaPrimary}
+                onClick={() => toolsRef.current?.scrollIntoView({ behavior: "smooth" })}
+              >
+                Browse all tools
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" strokeWidth="2.5"
+                  strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+              <Link to="/share" className={styles.ctaSecondary}>
+                Try Instant Share
+              </Link>
+            </div>
+
+            <div className={styles.heroStats} role="list">
+              <div className={styles.statItem} role="listitem">
+                <span className={styles.statNum}>48+</span>
+                <span className={styles.statLabel}>Free tools</span>
+              </div>
+              <span className={styles.statDivider} aria-hidden="true" />
+              <div className={styles.statItem} role="listitem">
+                <span className={styles.statNum}>100%</span>
+                <span className={styles.statLabel}>In your browser</span>
+              </div>
+              <span className={styles.statDivider} aria-hidden="true" />
+              <div className={styles.statItem} role="listitem">
+                <span className={styles.statNum}>Zero</span>
+                <span className={styles.statLabel}>Data collected</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right — dynamic layered visual */}
+          <div className={styles.heroVisual} aria-hidden="true">
+            <div className={styles.visualStage}>
+
+              {/* Morphing organic blobs */}
+              <span className={`${styles.blobShape} ${styles.blobMain}`} />
+              <span className={`${styles.blobShape} ${styles.blobAccent}`} />
+              <span className={`${styles.blobShape} ${styles.blobLight}`} />
+
+              {/* Rotating rings */}
+              <span className={styles.ringOuter} />
+              <span className={styles.ringInner} />
+
+              {/* Center logo core */}
+              <div className={styles.logoCore}>
+                <img src="/favicon.png" alt="" className={styles.logoImg} draggable="false" />
+              </div>
+
+              {/* Orbiting tool chips */}
+              <img src="/pdf.png"        className={`${styles.orbImg} ${styles.orb1}`} alt="" loading="lazy" draggable="false" />
+              <img src="/image.png"      className={`${styles.orbImg} ${styles.orb2}`} alt="" loading="lazy" draggable="false" />
+              <img src="/calculator.png" className={`${styles.orbImg} ${styles.orb3}`} alt="" loading="lazy" draggable="false" />
+              <img src="/code.png"       className={`${styles.orbImg} ${styles.orb4}`} alt="" loading="lazy" draggable="false" />
+              <img src="/clock.png"      className={`${styles.orbImg} ${styles.orb5}`} alt="" loading="lazy" draggable="false" />
+
+              {/* Glass clock card */}
+              <div className={styles.floatClock}>
+                <span className={styles.floatClockTime}>{timeStr}</span>
+                <span className={styles.floatClockDate}>{dateStr} · IST</span>
+              </div>
+
+              {/* Glass privacy card */}
+              <div className={styles.floatPrivacy}>
+                <span className={styles.floatPrivacyIcon}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="3"
+                    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </span>
+                <span className={styles.floatPrivacyText}>
+                  <strong>Processed locally</strong>
+                  <span>Files never leave your device</span>
+                </span>
+              </div>
+
+              {/* Decorative accents */}
+              <span className={`${styles.deco} ${styles.dotGrid}`} />
+              <span className={`${styles.deco} ${styles.sparkle}`}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 0c.6 5.4 3.6 8.4 9 9-5.4.6-8.4 3.6-9 9-.6-5.4-3.6-8.4-9-9 5.4-.6 8.4-3.6 9-9z" />
+                </svg>
+              </span>
+
+            </div>
+          </div>
+
         </div>
-
-       
-      <h1 id="hero-title" className={styles.heroTitle}>
-      Designed For Privacy.{" "}
-       <span className={styles.heroAccent}>
-       Nothing You Upload Stays Here.
-       </span>
-      </h1>
-
-
-        <p className={styles.heroSub}>
-          PDFs, images, text, calculators, and everyday utilities processed
-          instantly in your browser. Private by design, free forever.
-        </p>
-
-        <div className={styles.heroActions}>
-          <button
-            className={styles.ctaPrimary}
-            onClick={() => toolsRef.current?.scrollIntoView({ behavior: "smooth" })}
-          >
-            Browse all tools
-          </button>
-          <span className={styles.ctaNoAccount}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2.5"
-              strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
-            No account required
-          </span>
-        </div>
-
-        <div className={styles.clockWidget} aria-live="polite">
-          <span className={styles.clockTime}>{timeStr}</span>
-          <span className={styles.clockSep} aria-hidden="true">&middot;</span>
-          <span className={styles.clockDate}>{dateStr}</span>
-          <Link to="/clock?tool=clock" className={styles.clockFull}>
-            Full clock
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-          </Link>
-        </div>
-
-        {/* ── Floating background images (mobile + tablet only) ── */}
-        <div className={styles.heroFloatBg} aria-hidden="true">
-          <img src="/laptop.png"     className={`${styles.heroFloatImg} ${styles.floatImg1}`} alt="" loading="lazy" draggable="false" />
-          <img src="/pen.png"        className={`${styles.heroFloatImg} ${styles.floatImg2}`} alt="" loading="lazy" draggable="false" />
-          <img src="/pdf.png"        className={`${styles.heroFloatImg} ${styles.floatImg3}`} alt="" loading="lazy" draggable="false" />
-          <img src="/calculator.png" className={`${styles.heroFloatImg} ${styles.floatImg4}`} alt="" loading="lazy" draggable="false" />
-          <img src="/clock.png"      className={`${styles.heroFloatImg} ${styles.floatImg5}`} alt="" loading="lazy" draggable="false" />
-          <img src="/code.png"       className={`${styles.heroFloatImg} ${styles.floatImg6}`} alt="" loading="lazy" draggable="false" />
-          <img src="/image.png"      className={`${styles.heroFloatImg} ${styles.floatImg7}`} alt="" loading="lazy" draggable="false" />
-        </div>
-
       </section>
 
       {/* ── USP: four big bold headings ── */}

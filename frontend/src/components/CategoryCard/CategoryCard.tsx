@@ -22,29 +22,33 @@ const CategoryCard = ({
   iconBg,
 }: Props) => {
   return (
-    <Link to={to} className={styles.card}>
-      <div
-        className={styles.iconWrap}
-        style={{ backgroundColor: iconBg, color: iconColor }}
-        aria-hidden="true"
-      >
+    <Link
+      to={to}
+      className={styles.card}
+      style={{
+        "--card-accent": iconColor,
+        "--card-accent-bg": iconBg,
+      } as React.CSSProperties}
+    >
+      <span className={styles.iconWrap} aria-hidden="true">
         {icon}
-      </div>
+      </span>
 
-      <div className={styles.body}>
-        <h3 className={styles.title}>{title}</h3>
+      <span className={styles.body}>
+        <span className={styles.titleRow}>
+          <h3 className={styles.title}>{title}</h3>
+          <span className={styles.count}>{toolCount} tools</span>
+        </span>
         <p className={styles.desc}>{description}</p>
-      </div>
+      </span>
 
-      <div className={styles.footer}>
-        <span className={styles.count}>{toolCount} tools</span>
+      <span className={styles.arrowWrap} aria-hidden="true">
         <svg
           className={styles.arrow}
           width="16"
           height="16"
           viewBox="0 0 16 16"
           fill="none"
-          aria-hidden="true"
         >
           <path
             d="M3 8h10M9 4l4 4-4 4"
@@ -54,7 +58,7 @@ const CategoryCard = ({
             strokeLinejoin="round"
           />
         </svg>
-      </div>
+      </span>
     </Link>
   );
 };
