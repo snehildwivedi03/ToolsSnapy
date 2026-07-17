@@ -115,6 +115,7 @@ const ReceiveContent = () => {
       if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
       setShare(null);
       setDeleted(true);
+      setDownload("Share deleted successfully.");
     } catch {
       /* ignore */
     } finally {
@@ -315,10 +316,8 @@ const ReceiveContent = () => {
       )}
 
       {deleted && (
-        <div className={s.card} style={{ textAlign: "center", color: "#059669", fontWeight: 700 }}>
-          Share deleted successfully.
-          <br />
-          <button className={tp.btnSecondary} style={{ marginTop: "0.875rem" }} onClick={reset}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <button className={tp.btnSecondary} onClick={reset}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <line x1="19" y1="12" x2="5" y2="12" />

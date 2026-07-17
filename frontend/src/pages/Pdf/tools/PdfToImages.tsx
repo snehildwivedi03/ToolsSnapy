@@ -246,6 +246,7 @@ const PdfToImages = () => {
       iconBg="#fef2f2"
       title="PDF to Images"
       description="Convert each page of a PDF into a high-resolution PNG or JPG image. Everything runs in your browser."
+      narrow
     >
       {downloadToast && (
         <Toast

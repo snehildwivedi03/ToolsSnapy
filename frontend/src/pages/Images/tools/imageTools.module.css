@@ -242,10 +242,13 @@
   max-width: 22rem;
 }
 
-/* Fixed width copy button so the label swap (Copy Text ↔ Copied!) never shifts neighbours. */
+/* Small, fixed-width copy button; the width holds steady through the Copy Text ↔ Copied! label swap. */
 .copyFixed {
-  min-width: 8.5rem;
+  flex: 0 0 auto;
+  min-width: 6.75rem;
   justify-content: center;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
 }
 
 .sizeRow {
@@ -334,7 +337,8 @@
   .dlBtn,
   .dlMenu,
   .uploadMoreBtn,
-  .shareBtn {
+  .shareBtn,
+  .copyFixed {
     flex: 1 1 100%;
     width: 100%;
   }

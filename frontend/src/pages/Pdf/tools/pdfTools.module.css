@@ -226,6 +226,27 @@
   align-items: end;
 }
 
+/* From → to page range boxes (split) */
+.rangeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.rangeInput {
+  width: 7rem;
+  min-width: 0;
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.rangeDash {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
 .hintText {
   font-size: 0.8125rem;
   color: var(--color-text-muted);

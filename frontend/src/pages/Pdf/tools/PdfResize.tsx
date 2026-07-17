@@ -154,7 +154,7 @@ const PdfResize = () => {
   const [progressPct, setProgressPct] = useState<number | undefined>(undefined);
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
-  const [downloadToast, setDownloadToast] = useState(false);
+  const [downloadToast, setDownloadToast] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -244,6 +244,12 @@ const PdfResize = () => {
       );
       const filename = `${baseName(src.file.name)}-${value}${unit.toLowerCase()}.pdf`;
       setResult({ blob, filename, scaled });
+      const hit = blob.size <= targetBytes;
+      setDownloadToast(
+        hit
+          ? `Done. Output is ${formatBytes(blob.size)}${scaled ? " (scale reduced to fit)" : ""}`
+          : `Best result: ${formatBytes(blob.size)} — target was too small to reach`,
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Compression failed. Try a larger target size.");
     } finally {
@@ -257,10 +263,6 @@ const PdfResize = () => {
     if (!result) throw new Error("No result");
     return new File([result.blob], result.filename, { type: "application/pdf" });
   };
-
-  const hitTarget = result
-    ? result.blob.size <= parseFloat(targetValue) * (unit === "MB" ? 1024 * 1024 : 1024)
-    : false;
 
   const enteredBytes = (() => {
     const tv = parseFloat(targetValue);
@@ -277,6 +279,7 @@ const PdfResize = () => {
       iconBg="#fef2f2"
       title="Resize PDF to Target Size"
       description="Compress a PDF to an exact file size. Pages are rasterised to images so text won't be selectable in the output."
+      narrow
     >
       {!src ? (
         <div className={s.card}>
@@ -380,22 +383,11 @@ const PdfResize = () => {
 
           {result && (
             <>
-              <span className={im.successMsg} role="status">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5"
-                  strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                {hitTarget
-                  ? `Done. Output is ${formatBytes(result.blob.size)}${result.scaled ? " (scale reduced to fit)" : ""}`
-                  : `Best result: ${formatBytes(result.blob.size)} — target was too small to reach`}
-              </span>
-
               <div className={im.actionRow}>
                 <button
                   type="button"
                   className={im.uploadMoreBtn}
-                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast(true); }}
+                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast("Downloaded successfully!"); }}
                 >
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
@@ -422,7 +414,7 @@ const PdfResize = () => {
           )}
         </div>
       )}
-      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
+      {downloadToast && <Toast message={downloadToast} onClose={() => setDownloadToast(null)} />}
     </ToolPageShell>
   );
 };

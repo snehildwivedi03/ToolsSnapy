@@ -9,10 +9,12 @@ interface Props {
   /** The text to share when the button is clicked. */
   getText: () => string | Promise<string>;
   disabled?: boolean;
+  /** Optional extra class applied to the trigger button (e.g. for equal-width layouts). */
+  className?: string;
 }
 
 /** "Share via ToolSnapy" button for sharing text content. */
-const ShareTextViaToolSnapy = ({ getText, disabled }: Props) => {
+const ShareTextViaToolSnapy = ({ getText, disabled, className }: Props) => {
   const [sharing, setSharing] = useState(false);
   const [code, setCode] = useState<string | null>(null);
   const [err, setErr] = useState("");
@@ -59,7 +61,7 @@ const ShareTextViaToolSnapy = ({ getText, disabled }: Props) => {
     <>
       <button
         type="button"
-        className={s.shareBtn}
+        className={className ? `${s.shareBtn} ${className}` : s.shareBtn}
         onClick={share}
         disabled={disabled || sharing}
       >

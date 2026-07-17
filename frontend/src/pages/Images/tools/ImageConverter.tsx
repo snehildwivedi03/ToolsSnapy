@@ -78,7 +78,7 @@ const ImageConverter = () => {
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [downloadToast, setDownloadToast] = useState(false);
+  const [downloadToast, setDownloadToast] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Only offer formats this browser can actually produce (SVG is always built manually).
@@ -171,6 +171,7 @@ const ImageConverter = () => {
       if (result) URL.revokeObjectURL(result.url);
       const filename = `${baseName(src.file.name)}.${current.ext}`;
       setResult({ blob, url: URL.createObjectURL(blob), filename });
+      setDownloadToast(`Converted to ${current.label} · ${formatBytes(blob.size)}`);
     } catch {
       setError("Could not convert the image. Try another format.");
     } finally {
@@ -193,7 +194,7 @@ const ImageConverter = () => {
       title="Image Converter"
       description="Convert images between PNG, JPG, WebP, AVIF and SVG. Everything stays in your browser."
     >
-      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
+      {downloadToast && <Toast message={downloadToast} onClose={() => setDownloadToast(null)} />}
       {!src ? (
         <div className={s.card}>
           <span className={s.cardTitle}>Upload Image</span>
@@ -278,15 +279,6 @@ const ImageConverter = () => {
 
           {result && (
             <>
-              <span className={ls.successMsg} role="status">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5"
-                  strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                Converted to {current.label} · {formatBytes(result.blob.size)}
-              </span>
-
               <div className={ls.previewWrap}>
                 <img src={result.url} alt="Converted result" className={ls.preview} />
               </div>
@@ -295,7 +287,7 @@ const ImageConverter = () => {
                 <button
                   type="button"
                   className={`${s.calcBtn} ${ls.dlBtn}`}
-                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast(true); }}
+                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast("Downloaded successfully!"); }}
                 >
                   Download {current.label}
                 </button>

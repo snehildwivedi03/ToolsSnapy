@@ -50,7 +50,7 @@ const ImageResizeDimensions = () => {
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [downloadToast, setDownloadToast] = useState(false);
+  const [downloadToast, setDownloadToast] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const ratio = src ? src.img.naturalWidth / src.img.naturalHeight : 1;
@@ -150,6 +150,7 @@ const ImageResizeDimensions = () => {
       const ext = isJpeg ? "jpg" : "png";
       const filename = `${baseName(src.file.name)}-${w}x${h}.${ext}`;
       setResult({ blob, url: URL.createObjectURL(blob), filename, width: w, height: h });
+      setDownloadToast(`Resized to ${w} × ${h} · ${formatBytes(blob.size)}`);
     } catch {
       setError("Could not resize the image. Try different dimensions.");
     } finally {
@@ -172,7 +173,7 @@ const ImageResizeDimensions = () => {
       title="Image Resizer"
       description="Resize an image to exact pixel dimensions, with optional aspect-ratio lock."
     >
-      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
+      {downloadToast && <Toast message={downloadToast} onClose={() => setDownloadToast(null)} />}
       {!src ? (
         <div className={s.card}>
           <span className={s.cardTitle}>Upload Image</span>
@@ -266,15 +267,6 @@ const ImageResizeDimensions = () => {
 
           {result && (
             <>
-              <span className={ls.successMsg} role="status">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5"
-                  strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                Resized to {result.width} × {result.height} · {formatBytes(result.blob.size)}
-              </span>
-
               <div className={ls.previewWrap}>
                 <img src={result.url} alt="Resized result" className={ls.preview} />
               </div>
@@ -283,7 +275,7 @@ const ImageResizeDimensions = () => {
                 <button
                   type="button"
                   className={`${s.calcBtn} ${ls.dlBtn}`}
-                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast(true); }}
+                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast("Downloaded successfully!"); }}
                 >
                   Download
                 </button>

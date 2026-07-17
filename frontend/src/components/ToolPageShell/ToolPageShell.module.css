@@ -2,6 +2,11 @@
   width: 100%;
 }
 
+/* Opt-in narrower column for simple single-column tools (keeps header + content aligned and centered). */
+.narrow {
+  --container-max: 60rem;
+}
+
 .topBar {
   display: flex;
   align-items: center;

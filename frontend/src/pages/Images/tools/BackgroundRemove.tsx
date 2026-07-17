@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import Toast from "../../../components/Toast/Toast";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import ls from "./imageTools.module.css";
@@ -63,6 +64,7 @@ const BackgroundRemove = () => {
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Refs for progress tracking
@@ -421,6 +423,7 @@ const BackgroundRemove = () => {
           .finally(() => {
             const filename = `${baseName(src.file.name)}-no-bg.png`;
             setResult({ blob: msg.blob, url, filename });
+            setToast("Background removed!");
             finish();
           });
       } else {
@@ -542,15 +545,6 @@ const BackgroundRemove = () => {
 
           {result && (
             <>
-              <span className={ls.successMsg} role="status">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5"
-                  strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                Background removed!
-              </span>
-
               {/* ── Canvas result with editing ── */}
               <div className={ls.canvasWrap}>
                 <canvas
@@ -647,6 +641,7 @@ const BackgroundRemove = () => {
           )}
         </div>
       )}
+      {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </ToolPageShell>
   );
 };

@@ -36,12 +36,11 @@ const QrGenerator = () => {
   const [fgColor, setFgColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [generated, setGenerated] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [shareCode, setShareCode] = useState<string | null>(null);
   const [shareErr, setShareErr] = useState("");
   const [copied, setCopied] = useState(false);
-  const [downloadToast, setDownloadToast] = useState(false);
+  const [downloadToast, setDownloadToast] = useState<string | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -50,8 +49,7 @@ const QrGenerator = () => {
     const val = text.trim();
     if (!val) return;
     setGenerated(val);
-    setSuccess(true);
-    setTimeout(() => setSuccess(false), 3000);
+    setDownloadToast("QR generated successfully!");
     setTimeout(() => {
       resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 50);
@@ -64,7 +62,7 @@ const QrGenerator = () => {
     link.download = "qrcode.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
-    setDownloadToast(true);
+    setDownloadToast("Downloaded successfully!");
   };
 
   const shareQR = async () => {
@@ -120,8 +118,8 @@ const QrGenerator = () => {
     >
       {downloadToast && (
         <Toast
-          message="Downloaded successfully!"
-          onClose={() => setDownloadToast(false)}
+          message={downloadToast}
+          onClose={() => setDownloadToast(null)}
         />
       )}
       <div className={s.card}>
@@ -137,7 +135,6 @@ const QrGenerator = () => {
             onChange={(e) => {
               setText(e.target.value);
               setGenerated(null);
-              setSuccess(false);
             }}
             placeholder="https://example.com"
             rows={3}
@@ -153,25 +150,6 @@ const QrGenerator = () => {
           >
             Generate QR Code
           </button>
-
-          {success && (
-            <span className={ls.successMsg} role="status">
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              QR generated successfully!
-            </span>
-          )}
         </div>
       </div>
 

@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createWorker, OEM } from "tesseract.js";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
+import Toast from "../../../components/Toast/Toast";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import s from "../../../styles/calc.module.css";
@@ -51,7 +52,12 @@ const ImageToText = () => {
   const [result, setResult] = useState("");
   const [dragOver, setDragOver] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (result) setToast("Text extracted successfully!");
+  }, [result]);
 
   const reset = () => {
     if (src) URL.revokeObjectURL(src.url);
@@ -264,15 +270,6 @@ const ImageToText = () => {
 
           {result && (
             <>
-              <span className={ls.successMsg} role="status">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5"
-                  strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                Text extracted successfully!
-              </span>
-
               <div className={s.inputGroup}>
                 <label className={s.label}>Extracted Text</label>
                 <textarea
@@ -316,12 +313,13 @@ const ImageToText = () => {
                   </svg>
                   Upload more
                 </button>
-                <ShareTextViaToolSnapy getText={() => result} />
+                <ShareTextViaToolSnapy getText={() => result} className={ls.shareBtn} />
               </div>
             </>
           )}
         </div>
       )}
+      {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </ToolPageShell>
   );
 };

@@ -57,7 +57,7 @@ const ImagesToPdf = () => {
   const [error, setError] = useState("");
   const [result, setResult] = useState<ResultState | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [downloadToast, setDownloadToast] = useState(false);
+  const [downloadToast, setDownloadToast] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const reset = () => {
@@ -144,12 +144,14 @@ const ImagesToPdf = () => {
       const outBytes = await pdf.save();
       const blob = new Blob([outBytes as BlobPart], { type: "application/pdf" });
       if (result) URL.revokeObjectURL(result.url);
+      const pageCount = pdf.getPageCount();
       setResult({
         blob,
         url: URL.createObjectURL(blob),
         filename: "images.pdf",
-        pages: pdf.getPageCount(),
+        pages: pageCount,
       });
+      setDownloadToast(`PDF ready: ${pageCount} page${pageCount > 1 ? "s" : ""} · ${formatBytes(blob.size)}`);
     } catch {
       setError("Could not build the PDF. One of the images may be unsupported.");
     } finally {
@@ -171,8 +173,9 @@ const ImagesToPdf = () => {
       iconBg="#fef2f2"
       title="Images to PDF"
       description="Turn JPG, PNG or WebP images into a single PDF, one image per page. Drag to reorder."
+      narrow
     >
-      {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
+      {downloadToast && <Toast message={downloadToast} onClose={() => setDownloadToast(null)} />}
       {items.length === 0 ? (
         <div className={s.card}>
           <span className={s.cardTitle}>Upload Images</span>
@@ -284,20 +287,11 @@ const ImagesToPdf = () => {
 
           {result && (
             <>
-              <span className={ls.successMsg} role="status">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5"
-                  strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                PDF ready: {result.pages} page{result.pages > 1 ? "s" : ""} · {formatBytes(result.blob.size)}
-              </span>
-
               <div className={ls.actionRow}>
                 <button
                   type="button"
                   className={`${s.calcBtn} ${ls.dlBtn}`}
-                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast(true); }}
+                  onClick={() => { downloadBlob(result.blob, result.filename); setDownloadToast("Downloaded successfully!"); }}
                 >
                   Download PDF
                 </button>

@@ -13,6 +13,8 @@ interface ToolPageShellProps {
   title: string;
   description: string;
   hideRelated?: boolean;
+  /** Constrain the page to a narrower single-column width for simple tools. */
+  narrow?: boolean;
   children: React.ReactNode;
 }
 
@@ -26,6 +28,7 @@ const ToolPageShell = ({
   title,
   description,
   hideRelated,
+  narrow,
   children,
 }: ToolPageShellProps) => {
   const { pathname } = useLocation();
@@ -54,7 +57,7 @@ const ToolPageShell = ({
   );
 
   return (
-    <div className={styles.shell}>
+    <div className={narrow ? `${styles.shell} ${styles.narrow}` : styles.shell}>
       <div className={styles.topBar}>
         {onBack ? (
           <button type="button" onClick={onBack} className={styles.backLink}>
