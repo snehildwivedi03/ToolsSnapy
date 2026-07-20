@@ -51,6 +51,7 @@ export const ALL_TOOLS: ToolEntry[] = [
   { id: "color-picker", title: "Color Picker", description: "Pick colours and copy HEX, RGB and HSL values.", to: "/utilities/color-picker", category: "Utilities", keywords: ["hex", "rgb", "hsl", "colour"] },
   { id: "qr-generator", title: "QR Code Generator", description: "Create QR codes from text or links.", to: "/utilities/qr-generator", category: "Utilities", keywords: ["qrcode", "barcode", "scan"] },
   { id: "barcode-generator", title: "Barcode Generator", description: "Generate barcodes in multiple formats.", to: "/utilities/barcode-generator", category: "Utilities", keywords: ["code128", "ean", "upc"] },
+  { id: "fake-update", title: "Fake Update Screen", description: "Full-screen prank update screens (Windows, Dell, Lenovo, HP BIOS) with a custom timer.", to: "/utilities/fake-update", category: "Utilities", keywords: ["prank", "fake", "update", "windows", "bios", "joke", "fullscreen"] },
   { id: "jwt-decoder", title: "JWT Decoder", description: "Decode and inspect JSON Web Tokens.", to: "/utilities/jwt-decoder", category: "Developer Tools", keywords: ["token", "auth", "json"] },
   { id: "base64-encoder", title: "Base64 Encoder / Decoder", description: "Encode and decode Base64 strings.", to: "/utilities/base64-encoder", category: "Developer Tools", keywords: ["base64", "encode", "decode"] },
   { id: "sha256", title: "SHA-256 Hash", description: "Generate SHA-256 hashes from text.", to: "/utilities/sha256", category: "Developer Tools", keywords: ["hash", "crypto", "checksum"] },

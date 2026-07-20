@@ -5,7 +5,6 @@ import s from "../../../styles/calc.module.css";
 import ls from "./FakeWindowsUpdate.module.css";
 import dellLogo from "../../../assets/dell.png";
 import hpLogo from "../../../assets/hp.png";
-import lenovoLogo from "../../../assets/lenovo.png";
 
 type ScreenKey = "windows" | "dell" | "lenovo" | "hp";
 
@@ -133,8 +132,9 @@ const FakeWindowsUpdate = () => {
       case "lenovo":
         return (
           <div className={ls.lenovoScreen}>
-            <img src={lenovoLogo} className={ls.lenovoLogo} alt="" />
+            <div className={ls.lenovoLogo}>Lenovo</div>
             <div className={ls.lenovoBar}><div className={ls.lenovoFill} style={{ width: `${pct}%` }} /></div>
+            <div className={ls.lenovoPct}>{pct}%</div>
             <div className={ls.lenovoText}>Please wait while we install a system update</div>
           </div>
         );
