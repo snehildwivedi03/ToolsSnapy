@@ -51,6 +51,13 @@ export const UTIL_TOOLS: ToolMeta[] = [
     description: "Generate CODE-128 barcodes for any text or number. Download as SVG.",
     section: "utilities",
   },
+  {
+    id: "fake-update",
+    to: "/utilities/fake-update",
+    title: "Fake Update Screen",
+    description: "Full-screen prank update screens (Windows, Dell, Lenovo, HP BIOS) with a timer from 5 minutes to 2 hours.",
+    section: "utilities",
+  },
 ];
 
 export const DEV_TOOLS: ToolMeta[] = [

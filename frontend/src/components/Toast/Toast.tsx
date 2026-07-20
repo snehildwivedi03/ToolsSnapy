@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import s from "./Toast.module.css";
 
 export type ToastVariant = "success" | "error";
@@ -12,11 +12,16 @@ interface ToastProps {
 }
 
 const Toast = ({ message, variant = "success", duration = 3000, onClose }: ToastProps) => {
+  // Keep the latest onClose without making it a timer dependency, so parent
+  // re-renders (e.g. a per-second countdown) don't restart the dismiss timer.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
   useEffect(() => {
     if (duration <= 0) return;
-    const id = setTimeout(onClose, duration);
+    const id = setTimeout(() => onCloseRef.current(), duration);
     return () => clearTimeout(id);
-  }, [duration, onClose]);
+  }, [duration, message]);
 
   return (
     <div className={s.wrap} role="status" aria-live="polite">

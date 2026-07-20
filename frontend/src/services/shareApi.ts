@@ -1,4 +1,9 @@
-const BASE = (import.meta.env.VITE_API_URL as string | undefined) ?? "http://localhost:5000";
+// Default to a relative base ("") so requests go to the same host that served
+// the page and are handled by the Vite dev proxy (/api → backend). Using an
+// absolute "localhost" URL breaks cross-device access (e.g. phone over port
+// forwarding), where "localhost" points at the device itself. Set VITE_API_URL
+// only when the API is hosted on a different origin.
+const BASE = (import.meta.env.VITE_API_URL as string | undefined) ?? "";
 
 /** Friendly message shown when the request never reached the server. */
 export const NETWORK_ERROR =

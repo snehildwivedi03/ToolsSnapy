@@ -37,7 +37,15 @@ function save(stats: ShareStats): void {
 export async function refreshShareStats(): Promise<void> {
   const real = await fetchShareStats();
   if (!real) return;
-  save({ files: real.files, texts: real.texts, kept: 0 });
+  // Never let the visible counters roll backwards. If the server value dips
+  // (e.g. after a restart that lost its file), keep the higher cached value so
+  // the count is maintained across refreshes and only ever grows.
+  const current = getStats();
+  save({
+    files: Math.max(current.files, real.files),
+    texts: Math.max(current.texts, real.texts),
+    kept: 0,
+  });
   window.dispatchEvent(new CustomEvent("sharestats"));
 }
 

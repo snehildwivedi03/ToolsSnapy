@@ -5,7 +5,10 @@ import s from "../../../styles/calc.module.css";
 import ls from "./DevTool.module.css";
 import st from "./UrlShortener.module.css";
 
-const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) ?? "http://localhost:5000";
+// Relative base ("") so the request goes through the Vite proxy (/api → backend)
+// and works across devices (e.g. phone over port forwarding). An absolute
+// "localhost" URL would resolve to the visiting device itself.
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) ?? "";
 
 interface ShortResult {
   code:        string;

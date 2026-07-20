@@ -145,12 +145,12 @@ const ReceiveContent = () => {
         <Toast message={download} onClose={() => setDownload(null)} />
       )}
       {/* Code input */}
-      <div className={s.card}>
-        <div className={s.fieldGroup}>
+      <div className={`${s.card} ${t.codeCard}`}>
+        <div className={`${s.fieldGroup} ${t.codeField}`}>
           <label className={s.label} htmlFor="receive-code-input">Share Code</label>
           <input
             id="receive-code-input"
-            className={s.input}
+            className={`${s.input} ${t.codeInput}`}
             type="text"
             maxLength={6}
             value={code}

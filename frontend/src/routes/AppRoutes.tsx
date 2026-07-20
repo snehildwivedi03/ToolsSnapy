@@ -52,6 +52,7 @@ const UuidGenerator     = lazy(() => import("../pages/Utilities/tools/UuidGenera
 const ColorPicker       = lazy(() => import("../pages/Utilities/tools/ColorPicker"));
 const QrGenerator       = lazy(() => import("../pages/Utilities/tools/QrGenerator"));
 const BarcodeGenerator  = lazy(() => import("../pages/Utilities/tools/BarcodeGenerator"));
+const FakeWindowsUpdate = lazy(() => import("../pages/Utilities/tools/FakeWindowsUpdate"));
 const JwtDecoder        = lazy(() => import("../pages/Utilities/tools/JwtDecoder"));
 const Base64Tool        = lazy(() => import("../pages/Utilities/tools/Base64Tool"));
 const Sha256            = lazy(() => import("../pages/Utilities/tools/Sha256"));
@@ -134,6 +135,7 @@ const AppRoutes = () => (
       <Route path="/utilities/color-picker"       element={<L C={ColorPicker} />} />
       <Route path="/utilities/qr-generator"       element={<L C={QrGenerator} />} />
       <Route path="/utilities/barcode-generator"  element={<L C={BarcodeGenerator} />} />
+      <Route path="/utilities/fake-update"         element={<L C={FakeWindowsUpdate} />} />
       <Route path="/utilities/jwt-decoder"        element={<L C={JwtDecoder} />} />
       <Route path="/utilities/base64-encoder"     element={<L C={Base64Tool} />} />
       <Route path="/utilities/base64-decoder"     element={<L C={Base64Tool} />} />

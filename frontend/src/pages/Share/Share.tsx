@@ -76,12 +76,18 @@ const SharePage = () => {
     {/* ── Live stats counter ─────────────────────────────── */}
     <div className={styles.statsRow}>
       <div className={styles.statItem}>
-        <span className={styles.statNumber}>{stats.files.toLocaleString()}</span>
+        <span className={styles.statNumberRow}>
+          <span className={styles.liveDot} aria-label="Counting live" title="Counting live" />
+          <span className={styles.statNumber}>{stats.files.toLocaleString()}</span>
+        </span>
         <span className={styles.statLabel}>files shared</span>
       </div>
       <div className={styles.statDivider} aria-hidden="true" />
       <div className={styles.statItem}>
-        <span className={styles.statNumber}>{stats.texts.toLocaleString()}</span>
+        <span className={styles.statNumberRow}>
+          <span className={styles.liveDot} aria-label="Counting live" title="Counting live" />
+          <span className={styles.statNumber}>{stats.texts.toLocaleString()}</span>
+        </span>
         <span className={styles.statLabel}>text shared</span>
       </div>
       <div className={styles.statDivider} aria-hidden="true" />

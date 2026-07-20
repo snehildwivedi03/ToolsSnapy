@@ -5,7 +5,7 @@ import ProgressBar from "../../../components/ProgressBar/ProgressBar";
 import s from "../../../styles/calc.module.css";
 import t from "./ShareTool.module.css";
 import tp from "../../../styles/toolpage.module.css";
-import { shareFiles } from "../../../services/shareApi";
+import { shareFiles, deleteShare } from "../../../services/shareApi";
 import { incrementFiles } from "../../../services/shareCounter";
 import { usePasteImage } from "../../../hooks/usePasteImage";
 
@@ -36,6 +36,7 @@ const ShareImages = () => {
   const [result,   setResult]   = useState<{ code: string; expiresAt: number; errors: string[] } | null>(null);
   const [copied,   setCopied]   = useState(false);
   const [toast,    setToast]    = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [,         setTick]     = useState(0);
   const fileInputRef  = useRef<HTMLInputElement>(null);
   const resultRef     = useRef<HTMLDivElement>(null);
@@ -107,6 +108,22 @@ const ShareImages = () => {
   };
 
   const reset = () => { setFiles([]); setResult(null); setErrors([]); if (timerRef.current) clearInterval(timerRef.current); };
+
+  const handleDelete = async () => {
+    if (!result) return;
+    setDeleting(true);
+    try {
+      await deleteShare(result.code);
+      if (timerRef.current) clearInterval(timerRef.current);
+      reset();
+      setAddedToast("Share deleted successfully.");
+    } catch {
+      setErrors(["We couldn't delete this share. Please try again."]);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const totalSize = files.reduce((a, f) => a + f.size, 0);
   const expired = result && Date.now() > result.expiresAt;
 
@@ -212,6 +229,7 @@ const ShareImages = () => {
             </div>
           )}
           {!expired && <button className={copied ? `${tp.btnSecondary} ${tp.btnCopied}` : tp.btnSecondary} onClick={copy}>{copied ? "Copied!" : "Copy Code"}</button>}
+          {!expired && <button className={tp.btnDanger} onClick={handleDelete} disabled={deleting}>{deleting ? "Deleting…" : "Delete now"}</button>}
           <button className={t.shareAgainBtn} onClick={reset}>Share more images</button>
         </div>
       )}

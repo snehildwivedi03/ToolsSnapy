@@ -280,3 +280,21 @@
     width: 100%;
   }
 }
+
+/* ── Share-code field — centered, constrained width, centered monospace text ── */
+.codeField.codeField {
+  max-width: 22rem;
+  width: 100%;
+  margin-inline: auto;
+  text-align: center;
+}
+.codeInput.codeInput {
+  text-align: center;
+}
+
+/* ── Code-entry card — constrained, centered so it doesn't span full width ── */
+.codeCard.codeCard {
+  max-width: 32rem;
+  width: 100%;
+  margin-inline: auto;
+}
