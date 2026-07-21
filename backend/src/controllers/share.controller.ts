@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { join } from "path";
+import { join, resolve, sep, extname } from "path";
 import { existsSync } from "fs";
 import { rm } from "fs/promises";
 import { createTextShare, getShareMetadata } from "../services/share/shareText.service.js";
@@ -20,6 +20,26 @@ function safeCode(raw: unknown): string | null {
   const value = Array.isArray(raw) ? raw[0] : raw;
   const code = (typeof value === "string" ? value : "").toUpperCase().replace(/[^A-Z0-9]/g, "");
   return code.length === 6 ? code : null;
+}
+
+// Content types that are safe to render inline in a browser. Anything not on
+// this list (SVG, HTML, scripts, unknown types) is force-downloaded so it can
+// never execute in the user's session (prevents stored XSS via shared files).
+const INLINE_SAFE_TYPES: Record<string, string> = {
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+  ".pdf": "application/pdf",
+};
+
+// Applied to every file we serve: stop MIME sniffing and neutralise any active
+// content (scripts, embedded objects) even if a byte-check was somehow bypassed.
+function applyDownloadSecurityHeaders(res: Response): void {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("Content-Security-Policy", "default-src 'none'; sandbox");
+  res.setHeader("X-Frame-Options", "DENY");
 }
 
 /* ── POST /api/share/text ───────────────────────────────── */
@@ -181,6 +201,7 @@ export async function downloadZip(req: Request, res: Response): Promise<void> {
     return;
   }
 
+  applyDownloadSecurityHeaders(res);
   res.setHeader("Content-Disposition", `attachment; filename="share-${code}.zip"`);
   res.setHeader("Content-Type", "application/zip");
   res.sendFile(zipPath);
@@ -207,19 +228,34 @@ export async function downloadFile(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  const filePath = join(SHARE_ROOT, code, "files", rawPath);
+  // Defense-in-depth: even though rawPath was matched against the stored,
+  // pre-sanitised file list, re-verify the resolved path stays inside the
+  // share's own files directory before touching the disk.
+  const filesRoot = resolve(join(SHARE_ROOT, code, "files"));
+  const filePath = resolve(join(filesRoot, rawPath));
+  if (filePath !== filesRoot && !filePath.startsWith(filesRoot + sep)) {
+    res.status(400).json({ success: false, message: "Invalid path." });
+    return;
+  }
 
-  // When ?inline=1 is passed, serve the file inline (for image/PDF previews)
-  // instead of forcing a download.
-  if (req.query["inline"] === "1") {
+  applyDownloadSecurityHeaders(res);
+
+  const ext = extname(match.name).toLowerCase();
+  const inlineType = INLINE_SAFE_TYPES[ext];
+
+  // Only serve inline for known-safe types; anything else is force-downloaded
+  // so it can never be rendered/executed in the browser.
+  if (req.query["inline"] === "1" && inlineType) {
+    res.setHeader("Content-Type", inlineType);
+    res.setHeader("Content-Disposition", `inline; filename="${match.name.replace(/[^\w.\-]/g, "_")}"`);
     res.sendFile(filePath, (err) => {
-      if (err) res.status(500).json({ success: false, message: "Could not load file." });
+      if (err && !res.headersSent) res.status(500).json({ success: false, message: "Could not load file." });
     });
     return;
   }
 
   res.download(filePath, match.name, (err) => {
-    if (err) res.status(500).json({ success: false, message: "Download failed." });
+    if (err && !res.headersSent) res.status(500).json({ success: false, message: "Download failed." });
   });
 }
 

@@ -44,6 +44,14 @@ export function isUrlSafe(raw: string): boolean {
   // IPv6 literals
   if (host.startsWith("[")) return false;
 
+  // Reject non-standard numeric host encodings that can smuggle a private IP
+  // past the dotted-quad checks below, e.g. http://2130706433 (127.0.0.1),
+  // http://0x7f.0.0.1 (hex) or http://0177.0.0.1 (octal).
+  if (/^[0-9]+$/.test(host)) return false;                 // pure decimal (e.g. 2130706433)
+  if (/^0x/i.test(host)) return false;                     // hex-encoded
+  if (/(^|\.)0\d/.test(host)) return false;                // octal-encoded octet
+  if (/^0x[0-9a-f.]+$/i.test(host)) return false;          // dotted-hex
+
   // Loopback
   if (/^127\./.test(host)) return false;
   if (host === "::1")       return false;

@@ -3,6 +3,7 @@ import type { Application, Request, Response, NextFunction } from "express";
 import helmet from "helmet";
 import compression from "compression";
 import cors from "cors";
+import rateLimit from "express-rate-limit";
 import textRouter from "./routes/text.routes.js";
 import shareRouter from "./routes/share.routes.js";
 import urlShortenerRouter from "./routes/urlShortener.routes.js";
@@ -34,7 +35,7 @@ app.use(
         styleSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", "data:", "blob:"],
         fontSrc: ["'self'"],
-        connectSrc: ["'self'", process.env.CLIENT_ORIGIN ?? "*"],
+        connectSrc: ["'self'", ...(process.env.CLIENT_ORIGIN ? process.env.CLIENT_ORIGIN.split(",").map((o) => o.trim()) : [])],
         frameSrc: ["'none'"],
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
@@ -75,6 +76,14 @@ const allowedOrigins = process.env.CLIENT_ORIGIN
   ? process.env.CLIENT_ORIGIN.split(",").map((o) => o.trim())
   : ["*"];
 
+// In production, refusing to run wide-open is safer than silently allowing "*".
+if (isProduction && allowedOrigins.includes("*")) {
+  console.warn(
+    "[security] CLIENT_ORIGIN is not set — CORS is running in wildcard mode. " +
+      "Set CLIENT_ORIGIN to your site's origin(s) in production.",
+  );
+}
+
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -94,6 +103,18 @@ app.use(
 // Request body size limits (prevent DoS)
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+
+// Global rate-limit backstop — a safety net beneath the tighter per-route
+// limiters, so any unforeseen endpoint (and abusive bursts) are still capped.
+app.use(
+  rateLimit({
+    windowMs: 60 * 1000,
+    max: Number(process.env.GLOBAL_RATE_LIMIT ?? 300), // 300 req/min/IP
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { success: false, error: "Too many requests. Please slow down." },
+  })
+);
 
 // Security: Block suspicious requests
 app.use((req: Request, res: Response, next: NextFunction) => {
