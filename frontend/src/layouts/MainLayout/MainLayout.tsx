@@ -167,8 +167,9 @@ const GeoBg = () => {
               height: "auto",
               transform: `rotate(${img.rotate}deg)`,
             }}
-            loading="eager"
-            fetchPriority="high"
+            loading="lazy"
+            fetchPriority="low"
+            decoding="async"
             draggable={false}
           />
         </div>

@@ -92,3 +92,21 @@
     opacity: 0.05;
   }
 }
+
+/* ── Mobile scroll performance ─────────────────────────────
+   On touch / coarse-pointer devices there is no parallax, so the
+   expensive blur() / drop-shadow filters and layer-promoting
+   will-change only cost paint time during scroll. Strip them so the
+   background is cheap to composite and scrolling stays smooth. */
+@media (hover: none), (pointer: coarse) {
+  .geoWrap,
+  .imgWrap {
+    will-change: auto;
+  }
+  .geoShape {
+    filter: none !important;
+  }
+  .toolImg {
+    filter: none;
+  }
+}

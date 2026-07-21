@@ -18,6 +18,14 @@
     border-color var(--transition-base);
 }
 
+/* On touch devices the frosted backdrop-filter is disabled globally for
+   scroll performance, so give cards a near-solid background to stay legible. */
+@media (hover: none), (pointer: coarse) {
+  .card {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
 /* Colored top accent bar — the editorial / magazine look */
 .card::before {
   content: "";

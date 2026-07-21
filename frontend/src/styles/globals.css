@@ -1197,3 +1197,20 @@ body > * {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ══════════════════════════════════════════════════
+   MOBILE SCROLL PERFORMANCE
+   backdrop-filter: blur() recomposites on every scroll frame and is
+   the #1 cause of jank on phones (sticky navbar, every card, footer,
+   toasts…). Disable it on touch / coarse-pointer devices — the glass
+   surfaces already have opaque-enough backgrounds to stay readable.
+   ══════════════════════════════════════════════════ */
+
+@media (hover: none), (pointer: coarse) {
+  *,
+  *::before,
+  *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
