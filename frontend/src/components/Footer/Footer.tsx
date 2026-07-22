@@ -38,7 +38,6 @@ const Footer = () => {
           <div className={styles.linkCol}>
             <p className={styles.colHeading}>Company</p>
             <nav className={styles.navList}>
-              <Link to="/share"          className={styles.navLink}>Instant Share</Link>
               <Link to="/privacy-policy" className={styles.navLink}>Privacy Policy</Link>
               <Link to="/terms"          className={styles.navLink}>Terms of Use</Link>
             </nav>
