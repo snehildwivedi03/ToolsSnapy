@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import type { ReactNode } from "react";
 import styles from "./Masonry.module.css";
 

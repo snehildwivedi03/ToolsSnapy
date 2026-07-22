@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import type { RandomParagraphResult } from "../../types/text.types.js";
 
 // Classic opening paragraph   always used when startWithClassic is true

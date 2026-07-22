@@ -1,4 +1,10 @@
-﻿import { lazy, Suspense, type ComponentType } from "react";
+﻿/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
+import { lazy, Suspense, type ComponentType } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout/MainLayout";
 

@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { beep } from "./sound";
 
 /* Free alarm tones sourced from Google's public sound library

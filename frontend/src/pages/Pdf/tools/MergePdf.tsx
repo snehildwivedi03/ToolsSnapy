@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
@@ -6,7 +12,7 @@ import s from "../../../styles/calc.module.css";
 import ls from "./pdfTools.module.css";
 import ShareViaToolSnapy from "../../Images/tools/ShareViaToolSnapy";
 import Toast from "../../../components/Toast/Toast";
-import { baseName, downloadBlob, formatBytes, readArrayBuffer } from "./pdfUtils";
+import { downloadBlob, formatBytes, readArrayBuffer } from "./pdfUtils";
 
 const Icon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none"

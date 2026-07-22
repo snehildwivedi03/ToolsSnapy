@@ -1,10 +1,16 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { MulterError } from "multer";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-// Catches any unhandled error and returns a consistent JSON error shape.
-// Never leaks internal error details (stack traces, file paths) to clients.
+// Central error handler: returns a consistent JSON shape and never leaks
+// internal detail (stack traces, paths) to clients.
 export const errorHandler = (
   err: unknown,
   _req: Request,

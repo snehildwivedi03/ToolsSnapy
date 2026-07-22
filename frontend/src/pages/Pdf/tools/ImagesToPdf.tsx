@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";

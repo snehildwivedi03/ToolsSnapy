@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { useEffect, useRef, useState } from "react";
 import { createWorker, OEM } from "tesseract.js";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";

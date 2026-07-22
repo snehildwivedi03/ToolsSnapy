@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import express from "express";
 import type { Application, Request, Response, NextFunction } from "express";
 import helmet from "helmet";

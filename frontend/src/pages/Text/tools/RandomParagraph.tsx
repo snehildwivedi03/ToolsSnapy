@@ -1,4 +1,10 @@
-﻿import { useState, useRef, useEffect } from "react";
+﻿/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
+import { useState, useRef, useEffect } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import {

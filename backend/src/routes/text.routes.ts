@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import * as textCtrl from "../controllers/text.controller.js";

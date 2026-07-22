@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { useEffect, useRef, useState } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import workerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
@@ -49,7 +55,7 @@ async function composePdf(canvases: HTMLCanvasElement[], quality: number): Promi
     page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
   }
   const bytes = await pdfOut.save();
-  return new Blob([bytes], { type: "application/pdf" });
+  return new Blob([bytes as BlobPart], { type: "application/pdf" });
 }
 
 /**

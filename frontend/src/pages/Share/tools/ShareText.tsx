@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { useState, useRef } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import Toast from "../../../components/Toast/Toast";
@@ -23,7 +29,7 @@ const ShareText = () => {
   const [result,     setResult]     = useState<{ code: string; expiresAt: number } | null>(null);
   const [copied,     setCopied]     = useState(false);
   const [toast,      setToast]      = useState(false);
-  const [tick,       setTick]       = useState(0);
+  const [, setTick]       = useState(0);
   const timerRef    = useRef<ReturnType<typeof setInterval> | null>(null);
   const resultRef   = useRef<HTMLDivElement>(null);
 

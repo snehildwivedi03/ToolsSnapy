@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 /* Shared timezone helpers for the Clock & Calendar tool.
    Everything is powered by the native Intl API — no external packages. */
 

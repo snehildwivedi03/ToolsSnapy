@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { useSearchParams } from "react-router-dom";
 import ToolPageShell from "../../components/ToolPageShell/ToolPageShell";
 import ClockTab from "./components/ClockTab";

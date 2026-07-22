@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import s from "./ConsentBanner.module.css";

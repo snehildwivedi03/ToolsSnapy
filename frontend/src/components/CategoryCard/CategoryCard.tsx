@@ -1,4 +1,10 @@
-﻿import { Link } from "react-router-dom";
+﻿/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
+import { Link } from "react-router-dom";
 import styles from "./CategoryCard.module.css";
 
 interface Props {

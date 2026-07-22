@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 export interface FileInfo {
   name: string;   // display name (sanitized base name)
   path: string;   // relative path inside the share directory

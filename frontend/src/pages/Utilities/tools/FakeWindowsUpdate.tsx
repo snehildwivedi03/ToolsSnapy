@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";

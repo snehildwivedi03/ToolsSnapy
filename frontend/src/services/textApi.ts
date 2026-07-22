@@ -1,7 +1,15 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import axios from "axios";
 
-// All requests use the Vite proxy (/api → http://localhost:5000)
-const api = axios.create({ baseURL: "/api" });
+// In dev, VITE_API_URL is empty so requests hit the Vite proxy (/api → :5000).
+// In production, set VITE_API_URL to the deployed backend origin.
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) ?? "";
+const api = axios.create({ baseURL: `${API_BASE}/api` });
 
 // ── Response shape types ─────────────────────────────────
 export interface WordCountData {

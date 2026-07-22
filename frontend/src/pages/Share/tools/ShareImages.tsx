@@ -1,4 +1,11 @@
-import { useState, useCallback, useRef, DragEvent, ChangeEvent } from "react";
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
+import { useState, useCallback, useRef } from "react";
+import type { DragEvent, ChangeEvent } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import Toast from "../../../components/Toast/Toast";
 import ProgressBar from "../../../components/ProgressBar/ProgressBar";

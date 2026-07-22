@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 /* Tiny Web-Audio beeper used by the Timer and Alarm tabs.
    No audio files needed — tones are synthesised on the fly. */
 

@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 // Magic-byte signatures for allowed file types.
 // Format: { mime, magicBytes, offset }
 interface Sig {

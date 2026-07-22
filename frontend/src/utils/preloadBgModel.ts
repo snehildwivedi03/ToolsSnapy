@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 // Best-effort, one-time prefetch of the AI background-removal model.
 //
 // Called once when the app loads (any page). It spins up a short-lived worker

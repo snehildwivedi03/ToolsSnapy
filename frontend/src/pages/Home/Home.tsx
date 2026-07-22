@@ -1,4 +1,10 @@
-﻿import { useState, useEffect, useRef } from "react";
+﻿/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import CategoryCard from "../../components/CategoryCard/CategoryCard";
 import ToolSearch from "../../components/ToolSearch/ToolSearch";

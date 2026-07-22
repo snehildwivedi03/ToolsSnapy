@@ -1,4 +1,10 @@
-﻿import { useEffect, useRef } from "react";
+﻿/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
+import { useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";

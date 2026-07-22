@@ -1,4 +1,10 @@
-﻿import { NavLink } from "react-router-dom";
+﻿/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
+import { NavLink } from "react-router-dom";
 import ToolSearch from "../ToolSearch/ToolSearch";
 import styles from "./Navbar.module.css";
 

@@ -1,9 +1,15 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { useState } from "react";
 import ToolPageShell from "../../../components/ToolPageShell/ToolPageShell";
 import ShareTextViaToolSnapy from "../../../components/ShareTextViaToolSnapy/ShareTextViaToolSnapy";
 import s from "../../../styles/calc.module.css";
 import ls from "./DevTool.module.css";
-import ts from "./UnixTimestamp.module.css";
+import us from "./UnixTimestamp.module.css";
 
 const Icon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -65,7 +71,7 @@ const UnixTimestamp = () => {
       <div className={s.card}>
         <span className={s.cardTitle}>Timestamp → Human Date</span>
 
-        <div className={ts.rowWrap}>
+        <div className={us.rowWrap}>
           <div className={s.inputGroup} style={{ flex: 1 }}>
             <label className={s.label} htmlFor="unix-ts">Unix Timestamp (seconds)</label>
             <input
@@ -73,20 +79,20 @@ const UnixTimestamp = () => {
               value={ts} onChange={e => setTs(e.target.value)}
             />
           </div>
-          <button type="button" className={ts.nowBtn} onClick={useNow}>Now</button>
+          <button type="button" className={us.nowBtn} onClick={useNow}>Now</button>
         </div>
 
         {isValidTs && tsDate && !isNaN(tsDate.getTime()) && (
-          <ul className={ts.resultList}>
+          <ul className={us.resultList}>
             {[
               { label: "ISO 8601 (UTC)",  value: toISO(tsNum),      key: "iso"   },
               { label: "Local DateTime",  value: toLocal(tsNum),     key: "local" },
               { label: "Readable",        value: toReadable(tsNum),  key: "read"  },
               { label: "Milliseconds",    value: String(tsNum * 1000), key: "ms"  },
             ].map(row => (
-              <li key={row.key} className={ts.resultRow}>
-                <span className={ts.resultLabel}>{row.label}</span>
-                <code className={ts.resultVal}>{row.value}</code>
+              <li key={row.key} className={us.resultRow}>
+                <span className={us.resultLabel}>{row.label}</span>
+                <code className={us.resultVal}>{row.value}</code>
                 <button type="button"
                   className={`${ls.copyBtn} ${copiedKey === row.key ? ls.copyDone : ""}`}
                   onClick={() => copy(row.value, row.key)}>
@@ -109,10 +115,10 @@ const UnixTimestamp = () => {
           />
         </div>
         {unixFromDate !== null && (
-          <div className={ts.unixResult}>
+          <div className={us.unixResult}>
             <span className={s.label}>Unix Timestamp</span>
-            <div className={ts.unixDisplay}>
-              <code className={ts.unixCode}>{unixFromDate}</code>
+            <div className={us.unixDisplay}>
+              <code className={us.unixCode}>{unixFromDate}</code>
               <button type="button"
                 className={`${ls.copyBtn} ${copiedKey === "unix" ? ls.copyDone : ""}`}
                 onClick={() => copy(String(unixFromDate), "unix")}>

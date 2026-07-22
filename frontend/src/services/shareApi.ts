@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 // Default to a relative base ("") so requests go to the same host that served
 // the page and are handled by the Vite dev proxy (/api → backend). Using an
 // absolute "localhost" URL breaks cross-device access (e.g. phone over port

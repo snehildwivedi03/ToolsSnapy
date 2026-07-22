@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 /** Shared helpers for the PDF Tools. */
 
 // Reuse the generic byte/name/download helpers from the image tools.

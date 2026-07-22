@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import type { Request, Response, NextFunction } from "express";
 import { CASE_TYPES, type CaseType } from "../types/text.types.js";
 import { countText } from "../services/text/wordCounter.service.js";

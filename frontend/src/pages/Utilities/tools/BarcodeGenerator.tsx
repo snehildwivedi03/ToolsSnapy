@@ -1,3 +1,9 @@
+/**
+ * ToolSnapy — Free, private online tools. No installs, no signup.
+ * https://toolsnapy.com
+ *
+ * © 2026 ToolSnapy. All rights reserved.
+ */
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Barcode from "react-barcode";
@@ -215,9 +221,6 @@ const BarcodeGenerator = () => {
                 width={2}
                 height={80}
                 margin={10}
-                onError={() =>
-                  setError(`"${text}" is not valid for ${format} format.`)
-                }
               />
             </div>
           )}
