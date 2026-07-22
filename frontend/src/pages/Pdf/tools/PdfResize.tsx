@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -77,7 +77,7 @@ async function compressPdfToTargetSize(
     const scale = scales[si]!;
     const scaled = scale < 1.0;
 
-    // Per-scale progress windows — bar travels 0→100% exactly once overall
+    // Per-scale progress windows  bar travels 0→100% exactly once overall
     const renderStart = Math.round((si * 2 / totalPhases) * 100);
     const renderEnd   = Math.round(((si * 2 + 1) / totalPhases) * 100);
     const qualStart   = renderEnd;
@@ -118,7 +118,7 @@ async function compressPdfToTargetSize(
     }
   }
 
-  // Nothing hit the target — return the smallest we achieved
+  // Nothing hit the target  return the smallest we achieved
   return fallback ?? { blob: await composePdf([], 0.05), scaled: true };
 }
 
@@ -232,7 +232,7 @@ const PdfResize = () => {
       return;
     }
     if (minSize !== null && targetBytes < minSize) {
-      setError(`Target too small — minimum achievable size for this PDF is ~${formatBytes(minSize)}.`);
+      setError(`Target too small  minimum achievable size for this PDF is ~${formatBytes(minSize)}.`);
       return;
     }
 
@@ -254,7 +254,7 @@ const PdfResize = () => {
       setDownloadToast(
         hit
           ? `Done. Output is ${formatBytes(blob.size)}${scaled ? " (scale reduced to fit)" : ""}`
-          : `Best result: ${formatBytes(blob.size)} — target was too small to reach`,
+          : `Best result: ${formatBytes(blob.size)}  target was too small to reach`,
       );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Compression failed. Try a larger target size.");
@@ -365,7 +365,7 @@ const PdfResize = () => {
             <p className={ls.hintText}>Minimum achievable: ~{formatBytes(minSize)}</p>
           )}
           {targetTooSmall && (
-            <p className={im.errorMsg}>Too small — minimum achievable is ~{formatBytes(minSize!)}</p>
+            <p className={im.errorMsg}>Too small  minimum achievable is ~{formatBytes(minSize!)}</p>
           )}
 
           {busy && (

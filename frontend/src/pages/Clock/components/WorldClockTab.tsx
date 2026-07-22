@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -97,7 +97,7 @@ const WorldClockTab = () => {
       </div>
 
       {cities.length === 0 ? (
-        <p className={c.emptyNote}>No cities yet — add one above to get started.</p>
+        <p className={c.emptyNote}>No cities yet  add one above to get started.</p>
       ) : (
         <div className={c.worldGrid}>
           {cities.map((z) => {

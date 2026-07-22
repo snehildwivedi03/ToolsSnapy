@@ -1,4 +1,4 @@
-# ToolSnapy Backend — Security & Cloudflare Deployment
+# ToolSnapy Backend  Security & Cloudflare Deployment
 
 This document covers (1) the security audit of the backend, (2) the hardening that
 was applied, (3) the environment variables you must set in production, and
@@ -11,7 +11,7 @@ the API and storing the temporary share files.
 
 The backend was reviewed end-to-end (Instant Share, URL shortener, text tools,
 middleware, upload handling, archive inspection). Overall the code was already in
-good shape — magic-byte validation, zip-bomb inspection, path sanitisation,
+good shape  magic-byte validation, zip-bomb inspection, path sanitisation,
 per-route rate limiting, Helmet CSP and an SSRF guard were all present.
 
 The following issues were found and **fixed** in this pass:
@@ -36,7 +36,7 @@ The following issues were found and **fixed** in this pass:
 - **Upload memory pressure**: Multer uses `memoryStorage`, so large uploads are
   buffered in RAM (up to the 500 MB / 100-file limits). This is bounded by the
   rate limiters, but for extra safety cap the request size **at the edge**
-  (Cloudflare — see §4) and/or move temp storage to R2. Steps are below.
+  (Cloudflare  see §4) and/or move temp storage to R2. Steps are below.
 
 ---
 
@@ -72,15 +72,15 @@ Shared files/text live under `backend/temp/share/<CODE>/` on the server's disk a
 are swept automatically when they expire (`cleanup.service.ts`). You have two
 supported ways to run this behind Cloudflare:
 
-- **A — Cloudflare Tunnel (`cloudflared`)**: keep files on the server's local disk
+- **A  Cloudflare Tunnel (`cloudflared`)**: keep files on the server's local disk
   and expose the API through a tunnel (no open ports, no public IP). Simplest.
-- **B — Cloudflare R2**: offload the temp files to Cloudflare's object storage so
+- **B  Cloudflare R2**: offload the temp files to Cloudflare's object storage so
   the app server stays stateless and disk can't fill up. Recommended if you run
   more than one instance or want durability.
 
 ---
 
-## 4. Cloudflare setup — step by step
+## 4. Cloudflare setup  step by step
 
 ### A. Expose the backend securely with `cloudflared` (Cloudflare Tunnel)
 
@@ -172,11 +172,11 @@ R2 is S3-compatible object storage. This keeps the app server stateless.
    npm install @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
    ```
 
-6. **Wire it up** — in the share services, replace the local `fs` writes/reads with
+6. **Wire it up**  in the share services, replace the local `fs` writes/reads with
    R2 `PutObject`/`GetObject` (key = `<CODE>/files/<path>`), and hand recipients a
    **short-lived presigned URL** instead of streaming through the API. Keep all the
    existing validation (magic bytes, zip-bomb inspection, extension allow-list)
-   **before** uploading to R2 — validate first, store second.
+   **before** uploading to R2  validate first, store second.
 
 > Keep the bucket **private**. Never make it public; always serve via presigned
 > URLs so links inherit the share's expiry.
@@ -186,7 +186,7 @@ R2 is S3-compatible object storage. This keeps the app server stateless.
 ## 5. Post-deploy checklist
 
 - [ ] `NODE_ENV=production` and `CLIENT_ORIGIN` set (no CORS wildcard warning in logs).
-- [ ] `TRUST_PROXY=1` (single Cloudflare hop) — verify rate limiting keys off real IPs.
+- [ ] `TRUST_PROXY=1` (single Cloudflare hop)  verify rate limiting keys off real IPs.
 - [ ] HTTPS enforced end-to-end; Cloudflare SSL mode = Full (strict).
 - [ ] WAF managed ruleset + Bot Fight Mode enabled.
 - [ ] Edge rate-limiting rule on `/api/share/*` and a max upload-size rule set.

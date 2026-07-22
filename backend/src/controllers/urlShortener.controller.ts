@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -15,7 +15,7 @@ import {
 const MAX_URL_LENGTH = 2048;
 const CODE_REGEX     = /^[A-Za-z0-9]{6}$/;
 
-/** POST /api/shorten — shorten a URL */
+/** POST /api/shorten  shorten a URL */
 export const shortenUrl = (req: Request, res: Response): void => {
   const { url } = req.body as { url?: unknown };
 
@@ -60,7 +60,7 @@ export const shortenUrl = (req: Request, res: Response): void => {
   });
 };
 
-/** GET /r/:code — redirect to the original URL */
+/** GET /r/:code  redirect to the original URL */
 export const redirectShortUrl = (req: Request, res: Response): void => {
   const { code } = req.params as { code: string };
 
@@ -84,7 +84,7 @@ export const redirectShortUrl = (req: Request, res: Response): void => {
   res.redirect(302, link.originalUrl);
 };
 
-/** GET /api/shorten/:code/info — return metadata (no redirect) */
+/** GET /api/shorten/:code/info  return metadata (no redirect) */
 export const getShortLinkInfo = (req: Request, res: Response): void => {
   const { code } = req.params as { code: string };
 

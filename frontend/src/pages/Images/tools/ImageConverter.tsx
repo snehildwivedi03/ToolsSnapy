@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -148,7 +148,7 @@ const ImageConverter = () => {
       canvas.height = src.img.naturalHeight;
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Canvas not supported");
-      // JPEG has no transparency — fill white so it doesn't go black.
+      // JPEG has no transparency  fill white so it doesn't go black.
       if (current.mime === "image/jpeg") {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);

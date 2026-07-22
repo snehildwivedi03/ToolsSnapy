@@ -1,5 +1,5 @@
 ﻿/**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -190,11 +190,11 @@ const Home = () => {
   return (
     <div className={styles.page}>
 
-      {/* ── Hero — split layout ── */}
+      {/* ── Hero  split layout ── */}
       <section className={styles.hero} aria-labelledby="hero-title">
         <div className={styles.heroInner}>
 
-          {/* Left — copy */}
+          {/* Left  copy */}
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
               <span className={styles.badgeDot} aria-hidden="true" />
@@ -211,7 +211,7 @@ const Home = () => {
             </h1>
 
             <p className={styles.heroSub}>
-              PDFs, images, text, calculators and everyday utilities — processed
+              PDFs, images, text, calculators and everyday utilities  processed
               instantly and privately in your browser. No accounts, no uploads,
               no tracking.
             </p>
@@ -252,7 +252,7 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Right — dynamic layered visual */}
+          {/* Right  dynamic layered visual */}
           <div className={styles.heroVisual} aria-hidden="true">
             <div className={styles.visualStage}>
 

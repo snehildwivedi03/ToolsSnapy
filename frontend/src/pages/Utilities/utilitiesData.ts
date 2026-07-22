@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -113,7 +113,7 @@ export const DEV_TOOLS: ToolMeta[] = [
     id: "zip-tool",
     to: "/utilities/zip-tool",
     title: "Zip / Unzip Files",
-    description: "Compress files and folders into a ZIP or safely extract one — with built-in zip-bomb and size protection.",
+    description: "Compress files and folders into a ZIP or safely extract one  with built-in zip-bomb and size protection.",
     section: "developer",
   },
   {

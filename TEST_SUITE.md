@@ -134,7 +134,7 @@ Run these tests before deployment to ensure everything works.
 
 - [ ] Paste valid JSON → shows "Valid JSON ✓", no issues listed
 
-**Analyze — fault detection:**
+**Analyze  fault detection:**
 
 - [ ] Paste JSON with trailing comma `{"a":1,}` → issue flagged: "Trailing comma before '}'"
 - [ ] Paste JSON with double comma `["a",,"b"]` → issue flagged: "Double comma (,,)"

@@ -97,7 +97,7 @@ ctx.fillText("100% Private", 90, l2y);
 const privW = ctx.measureText("100% Private").width;
 ctx.font = `500 44px "${FONT}"`;
 ctx.fillStyle = "#d7d9ef";
-ctx.fillText("— no installs, no signup", 90 + privW + 26, l2y);
+ctx.fillText(" no installs, no signup", 90 + privW + 26, l2y);
 
 // ── Tagline ────────────────────────────────────────────────
 ctx.font = `500 33px "${FONT}"`;

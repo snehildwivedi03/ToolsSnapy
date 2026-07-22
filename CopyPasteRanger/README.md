@@ -1,6 +1,6 @@
 # Copy Paste Ranger
 
-> A VS Code extension that tracks your copy/paste habits and promotes (or shames) you through a military rank system — complete with badge popups when you hit milestones.
+> A VS Code extension that tracks your copy/paste habits and promotes (or shames) you through a military rank system  complete with badge popups when you hit milestones.
 
 ![VS Code](https://img.shields.io/badge/VS%20Code-%5E1.85.0-blue?logo=visual-studio-code)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)
@@ -17,12 +17,12 @@ Copy Paste Ranger silently watches every `Ctrl+C` and `Ctrl+V` you make inside t
 
 ## Features
 
-- **Live status bar counter** — copies and pastes shown at a glance in the bottom-right corner
-- **Escalating rank system** — 6 tiers from Novice Scribe to God Level
-- **Animated badge popups** — slide-in panels with your badge image, a shame caption, and a countdown bar
-- **Status bar color escalation** — turns orange at Hall of Shame, red at God Level
-- **Persistent counters** — survives VS Code restarts via `globalState`
-- **One-click reset** — with a confirmation dialog so you can't reset by accident
+- **Live status bar counter**  copies and pastes shown at a glance in the bottom-right corner
+- **Escalating rank system**  6 tiers from Novice Scribe to God Level
+- **Animated badge popups**  slide-in panels with your badge image, a shame caption, and a countdown bar
+- **Status bar color escalation**  turns orange at Hall of Shame, red at God Level
+- **Persistent counters**  survives VS Code restarts via `globalState`
+- **One-click reset**  with a confirmation dialog so you can't reset by accident
 
 ---
 

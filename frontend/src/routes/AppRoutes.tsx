@@ -1,5 +1,5 @@
 ﻿/**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -127,7 +127,7 @@ const AppRoutes = () => (
       <Route path="/calculators/tip"         element={<L C={TipCalculator} />} />
       <Route path="/calculators/discount"    element={<L C={DiscountCalculator} />} />
 
-      {/* Legacy converter routes — served by Unit Converter */}
+      {/* Legacy converter routes  served by Unit Converter */}
       <Route path="/calculators/height"      element={<L C={UnitConverter} />} />
       <Route path="/calculators/weight"      element={<L C={UnitConverter} />} />
       <Route path="/calculators/temperature" element={<L C={UnitConverter} />} />

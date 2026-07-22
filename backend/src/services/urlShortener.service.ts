@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -30,7 +30,7 @@ function generateCode(): string {
 }
 
 /**
- * SSRF guard — rejects any URL whose host could reach internal infrastructure.
+ * SSRF guard  rejects any URL whose host could reach internal infrastructure.
  * Only public http / https URLs are allowed.
  */
 export function isUrlSafe(raw: string): boolean {

@@ -1,4 +1,4 @@
-# Deployment Guide — Copy Paste Ranger
+# Deployment Guide  Copy Paste Ranger
 
 This document covers how to package the extension as a `.vsix` file and publish it to the VS Code Marketplace on **Windows**, **Linux**, and **macOS**.
 
@@ -11,12 +11,12 @@ This document covers how to package the extension as a `.vsix` file and publish 
 | Node.js | 18.x+ | https://nodejs.org |
 | npm | 9.x+ | bundled with Node.js |
 | `@vscode/vsce` | latest | `npm install -g @vscode/vsce` |
-| VS Code Marketplace account | — | https://marketplace.visualstudio.com |
-| Azure DevOps Personal Access Token | — | see Step 3 |
+| VS Code Marketplace account |  | https://marketplace.visualstudio.com |
+| Azure DevOps Personal Access Token |  | see Step 3 |
 
 ---
 
-## Step 1 — Prepare `package.json`
+## Step 1  Prepare `package.json`
 
 Before packaging, make sure the following fields are filled in:
 
@@ -40,7 +40,7 @@ Before packaging, make sure the following fields are filled in:
 
 ---
 
-## Step 2 — Add a `.vscodeignore`
+## Step 2  Add a `.vscodeignore`
 
 Create `.vscodeignore` in the extension root to exclude dev files from the package:
 
@@ -59,7 +59,7 @@ DEPLOYMENT.md
 
 ---
 
-## Step 3 — Create a Publisher and Personal Access Token
+## Step 3  Create a Publisher and Personal Access Token
 
 1. Go to [marketplace.visualstudio.com/manage](https://marketplace.visualstudio.com/manage)
 2. Sign in with a Microsoft account
@@ -70,11 +70,11 @@ DEPLOYMENT.md
    - Organization: **All accessible organizations**
    - Expiration: 90 days (or custom)
    - Scopes: **Marketplace → Manage**
-6. Copy the token — you will only see it once
+6. Copy the token  you will only see it once
 
 ---
 
-## Step 4 — Log in with `vsce`
+## Step 4  Log in with `vsce`
 
 ### Windows (PowerShell)
 ```powershell
@@ -90,7 +90,7 @@ vsce login YOUR-PUBLISHER-ID
 
 ---
 
-## Step 5 — Build the `.vsix` Package
+## Step 5  Build the `.vsix` Package
 
 ### Windows
 ```powershell
@@ -110,7 +110,7 @@ Output: `copy-paste-ranger-0.0.1.vsix` in the project root.
 
 ---
 
-## Step 6 — Test the Package Locally
+## Step 6  Test the Package Locally
 
 Always install and verify the `.vsix` before publishing.
 
@@ -138,7 +138,7 @@ code --uninstall-extension YOUR-PUBLISHER-ID.copy-paste-ranger
 
 ---
 
-## Step 7 — Publish to the Marketplace
+## Step 7  Publish to the Marketplace
 
 ```bash
 vsce publish
@@ -176,12 +176,12 @@ https://marketplace.visualstudio.com/items?itemName=YOUR-PUBLISHER-ID.copy-paste
 ## Platform-Specific Notes
 
 ### Windows
-- Run PowerShell as a normal user — administrator is not needed
+- Run PowerShell as a normal user  administrator is not needed
 - If `vsce` is not recognized after `npm install -g`, add npm's global bin to your `PATH`:
   ```powershell
   $env:PATH += ";$(npm config get prefix)"
   ```
-- Windows Defender may scan the `.vsix` on creation — this is normal
+- Windows Defender may scan the `.vsix` on creation  this is normal
 
 ### Linux
 - If `vsce` is installed globally but not found, add the npm bin directory to PATH:

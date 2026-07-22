@@ -268,7 +268,7 @@
   background: var(--color-border);
 }
 
-/* ── Retrieve button — auto width on wider screens, full width on mobile ── */
+/* ── Retrieve button  auto width on wider screens, full width on mobile ── */
 /* Doubled class raises specificity to override the shared .primaryBtn width. */
 .retrieveBtn.retrieveBtn {
   width: auto;
@@ -281,7 +281,7 @@
   }
 }
 
-/* ── Share-code field — centered, constrained width, centered monospace text ── */
+/* ── Share-code field  centered, constrained width, centered monospace text ── */
 .codeField.codeField {
   max-width: 22rem;
   width: 100%;
@@ -292,7 +292,7 @@
   text-align: center;
 }
 
-/* ── Code-entry card — constrained, centered so it doesn't span full width ── */
+/* ── Code-entry card  constrained, centered so it doesn't span full width ── */
 .codeCard.codeCard {
   max-width: 32rem;
   width: 100%;

@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -213,7 +213,7 @@ const JsonValidator = () => {
       {downloadToast && <Toast message="Downloaded successfully!" onClose={() => setDownloadToast(false)} />}
       <div className={s.workspaceSingle}>
 
-        {/* ── Input Panel — always shows textarea with gutter highlighting ── */}
+        {/* ── Input Panel  always shows textarea with gutter highlighting ── */}
         <div className={s.panel}>
           <span className={s.panelLabel}>
             {showDiff && corrected !== null ? "Diff View" : "Input JSON"}
@@ -222,7 +222,7 @@ const JsonValidator = () => {
           {/* ── EDITOR: textarea normally, inline diff in diff mode ── */}
           <div className={s.lineNumContainer}>
             {showDiff && corrected !== null ? (
-              /* ── Inline diff — same container, colored lines ── */
+              /* ── Inline diff  same container, colored lines ── */
               <>
                 <div className={s.lineGutter} aria-hidden="true">
                   {diffEntries.map((_, i) => (
@@ -442,7 +442,7 @@ const JsonValidator = () => {
                       </p>
                       {!corrected.valid && (
                         <p style={{ fontSize: "0.8125rem", marginTop: "2px", color: "#92400e" }}>
-                          Some issues could not be auto-fixed — review manually.
+                          Some issues could not be auto-fixed  review manually.
                         </p>
                       )}
                     </div>

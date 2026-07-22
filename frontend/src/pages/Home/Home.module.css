@@ -10,7 +10,7 @@
   overflow-x: clip;
 }
 
-/* ── Hero — split layout ──────────────────────────────── */
+/* ── Hero  split layout ──────────────────────────────── */
 .hero {
   position: relative;
   max-width: var(--container-max);
@@ -582,7 +582,7 @@
   line-height: 1.15;
 }
 
-/* All four USPs in a clean grid — 2 columns on phones, 4 across on wider
+/* All four USPs in a clean grid  2 columns on phones, 4 across on wider
    screens. No horizontal scrolling. */
 .uspList {
   display: grid;

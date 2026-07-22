@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -179,7 +179,7 @@ const FakeWindowsUpdate = () => {
       iconColor="#2563eb"
       iconBg="#eff6ff"
       title="Fake Update Screen"
-      description="Full-screen prank update screens — Windows, Dell, Lenovo and HP BIOS — with a timer from 5 minutes up to 2 hours. Press Esc to exit."
+      description="Full-screen prank update screens  Windows, Dell, Lenovo and HP BIOS  with a timer from 5 minutes up to 2 hours. Press Esc to exit."
     >
       <div className={s.card}>
         <span className={s.cardTitle}>Choose a screen</span>

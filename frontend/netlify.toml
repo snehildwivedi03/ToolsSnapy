@@ -5,7 +5,7 @@
   command = "npm run build"
   publish = "dist"
 
-# SPA routing — send all paths to index.html so React Router handles them
+# SPA routing  send all paths to index.html so React Router handles them
 [[redirects]]
   from   = "/*"
   to     = "/index.html"
@@ -13,13 +13,13 @@
 
 # ── HTTP headers ────────────────────────────────────────────────────
 
-# Hashed JS/CSS bundles — immutable cache (1 year)
+# Hashed JS/CSS bundles  immutable cache (1 year)
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# HTML — revalidate every request (always fresh)
+# HTML  revalidate every request (always fresh)
 [[headers]]
   for = "/"
   [headers.values]

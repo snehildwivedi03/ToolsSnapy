@@ -5,9 +5,9 @@
 Copy Paste Ranger is a VS Code extension built in TypeScript that gamifies clipboard usage. It intercepts every copy and paste action made inside the editor, maintains persistent counters, and surfaces a ranked title and animated badge popup as the developer's paste count climbs through shame-themed milestones.
 
 The extension was designed to be:
-- **Zero-friction** — no configuration, activates on startup, invisible until you hit a milestone
-- **Non-destructive** — keybinding wrappers execute the real clipboard action first, then record the hit
-- **Persistent** — counters survive VS Code restarts through `ExtensionContext.globalState`
+- **Zero-friction**  no configuration, activates on startup, invisible until you hit a milestone
+- **Non-destructive**  keybinding wrappers execute the real clipboard action first, then record the hit
+- **Persistent**  counters survive VS Code restarts through `ExtensionContext.globalState`
 
 ---
 
@@ -32,7 +32,7 @@ A plain class wrapping `vscode.Memento` (globalState). Exposes `incrementCopies(
 A stateless module. `evaluateRank(pasteCount)` walks a sorted rank table and returns the matching label, its VS Code Codicon identifier, the next threshold, and the raw paste count. `getProgressHint()` formats the remaining paste count into a human-readable string.
 
 ### `memeView.ts`
-Holds the `MEME_MILESTONES` array, `getTriggeredMilestone()` (milestone detector), and `showMemeMilestone()` (Webview launcher). The webview HTML is built entirely in TypeScript — no external template engine — with CSS custom properties driven by the milestone's `accentColor` so each badge has a distinct color theme.
+Holds the `MEME_MILESTONES` array, `getTriggeredMilestone()` (milestone detector), and `showMemeMilestone()` (Webview launcher). The webview HTML is built entirely in TypeScript  no external template engine  with CSS custom properties driven by the milestone's `accentColor` so each badge has a distinct color theme.
 
 ---
 
@@ -42,7 +42,7 @@ VS Code does not expose a stable clipboard listener event. The extension uses **
 
 1. `package.json` declares keybindings that override `Ctrl+C` / `Ctrl+V` (and `Cmd+C` / `Cmd+V` on macOS) when `editorTextFocus` is true.
 2. The bound commands (`ctrlVChronicles.interceptCopy` / `interceptPaste`) call the original built-in action (`editor.action.clipboardCopyAction` / `clipboardPasteAction`) first via `executeCommand`, then increment the counter.
-3. This means the clipboard always works exactly as expected — the extension only adds counting on top.
+3. This means the clipboard always works exactly as expected  the extension only adds counting on top.
 
 ---
 

@@ -26,7 +26,7 @@
   }
 }
 
-/* Colored top accent bar — the editorial / magazine look */
+/* Colored top accent bar  the editorial / magazine look */
 .card::before {
   content: "";
   position: absolute;

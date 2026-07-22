@@ -58,7 +58,7 @@ exports.MEME_MILESTONES = [
     {
         milestone: 500,
         imageName: "captain500.png",
-        caption: "Captain on deck — of Stack Overflow.",
+        caption: "Captain on deck  of Stack Overflow.",
         shameLevel: "CAPTAIN",
         accentColor: "#fab387",
         displaySeconds: 8,
@@ -66,7 +66,7 @@ exports.MEME_MILESTONES = [
     {
         milestone: 1000,
         imageName: "cheif1000.png",
-        caption: "The Chief commands all — and writes none.",
+        caption: "The Chief commands all  and writes none.",
         shameLevel: "CHIEF",
         accentColor: "#f38ba8",
         displaySeconds: 10,
@@ -107,7 +107,7 @@ function getTriggeredMilestone(pasteCount, shownSet) {
  * @param config       Milestone configuration to render.
  */
 function showMemeMilestone(extensionUri, config) {
-    const panel = vscode.window.createWebviewPanel("copyPasteRangerMeme", `Copy Paste Ranger — ${config.shameLevel}`, vscode.ViewColumn.Beside, {
+    const panel = vscode.window.createWebviewPanel("copyPasteRangerMeme", `Copy Paste Ranger  ${config.shameLevel}`, vscode.ViewColumn.Beside, {
         enableScripts: false,
         localResourceRoots: [
             vscode.Uri.joinPath(extensionUri, "images", "memes"),

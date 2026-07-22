@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -26,7 +26,7 @@ export default defineConfig({
     allowedHosts: ["plots-knight-lady-duration.trycloudflare.com"],
   },
   build: {
-    // Target modern browsers — smaller, faster output
+    // Target modern browsers  smaller, faster output
     target: "es2020",
     // Split CSS per chunk so unused styles aren't loaded
     cssCodeSplit: true,
@@ -42,7 +42,7 @@ export default defineConfig({
         // change to your app doesn't bust the cached pdf-lib or tesseract chunk.
         manualChunks(id) {
           if (!id.includes("node_modules")) return;
-          // Heavy AI / WASM — keep isolated so other pages don't pay the cost
+          // Heavy AI / WASM  keep isolated so other pages don't pay the cost
           if (id.includes("@imgly/background-removal")) return "vendor-bgr";
           if (id.includes("tesseract"))                 return "vendor-ocr";
           // PDF processing
@@ -57,7 +57,7 @@ export default defineConfig({
           if (id.includes("marked") || id.includes("dompurify")) return "vendor-md";
           // QR / barcode rendering
           if (id.includes("qrcode") || id.includes("react-barcode")) return "vendor-qr";
-          // React core — changes rarely, long cache lifetime
+          // React core  changes rarely, long cache lifetime
           if (
             id.includes("react-dom") ||
             id.includes("react-router") ||

@@ -1,4 +1,4 @@
-# ToolSnapy — Deployment Guide
+# ToolSnapy  Deployment Guide
 
 How to take ToolSnapy from local dev to production:
 
@@ -7,7 +7,7 @@ How to take ToolSnapy from local dev to production:
   Workers. The 500 MB file‑share feature does **not** fit Vercel/Netlify serverless
   functions (see [§4](#4-why-not-the-backend-on-vercelnetlify)).
 - **File storage** → Cloudflare **R2** (cheapest object storage, no egress fees).
-  Two integration methods are given — you never expose your own machine.
+  Two integration methods are given  you never expose your own machine.
 
 Every "change these files" item below is a concrete, copy‑pasteable checklist.
 Deep Cloudflare security/tunnel steps live in [backend/SECURITY.md](backend/SECURITY.md);
@@ -51,24 +51,24 @@ VITE_CONTACT_EMAIL=support@toolsnapy.com
 
 > `shareApi.ts` and `UrlShortener.tsx` already read `VITE_API_URL`.
 > `textApi.ts` currently hardcodes `axios.create({ baseURL: "/api" })`, which only
-> works via the Vite dev proxy — it is switched to `VITE_API_URL` so text tools
+> works via the Vite dev proxy  it is switched to `VITE_API_URL` so text tools
 > also work in production.
 
-### Deploy — Vercel
+### Deploy  Vercel
 
 1. [vercel.com/new](https://vercel.com/new) → import the repo.
 2. **Root Directory** = `frontend` (build command & output come from `vercel.json`).
 3. Project → **Settings → Environment Variables** → add the `VITE_*` values above.
 4. Deploy. You get `https://<name>.vercel.app` (attach your domain later).
 
-### Deploy — Netlify
+### Deploy  Netlify
 
 1. [app.netlify.com](https://app.netlify.com) → *Add new site → Import*.
 2. `netlify.toml` already sets `base = "frontend"`, `command`, and `publish = dist`.
 3. **Site settings → Environment variables** → add the `VITE_*` values.
 4. Deploy.
 
-> Set the same env vars in the dashboard **and** rebuild — Vite inlines `VITE_*`
+> Set the same env vars in the dashboard **and** rebuild  Vite inlines `VITE_*`
 > at build time, so changing them requires a redeploy.
 
 ---
@@ -84,8 +84,8 @@ all have a usable free tier and deploy straight from GitHub.
 | File | Change |
 |------|--------|
 | `backend/.env` | Create from [.env.example](backend/.env.example); set prod values below. |
-| [backend/src/app.ts](backend/src/app.ts) | No edit — CORS already reads `CLIENT_ORIGIN`. |
-| [backend/src/server.ts](backend/src/server.ts) | No edit — `PORT` already read from env. |
+| [backend/src/app.ts](backend/src/app.ts) | No edit  CORS already reads `CLIENT_ORIGIN`. |
+| [backend/src/server.ts](backend/src/server.ts) | No edit  `PORT` already read from env. |
 | Storage services (only for R2) | See [§3](#3-file-storage--cloudflare-r2). |
 
 ### `backend/.env` (production)
@@ -121,21 +121,21 @@ R2_ENDPOINT=https://<R2_ACCOUNT_ID>.r2.cloudflarestorage.com
 6. Deploy → note the URL (e.g. `https://toolsnapy-api.onrender.com`), then either
    set `VITE_API_URL` to it, or map `api.toolsnapy.com` to it and use that.
 
-> Railway/Fly.io are equivalent — same root dir, build, start, and env vars.
+> Railway/Fly.io are equivalent  same root dir, build, start, and env vars.
 
 ---
 
 ## 3. File storage → Cloudflare R2
 
 R2 is S3‑compatible object storage with a generous free tier and **zero egress
-fees** — the cheapest safe way to store share files off your own machine. Uploads
+fees**  the cheapest safe way to store share files off your own machine. Uploads
 never touch a disk you own. Two methods, pick one:
 
-### Method A — R2 from the Node backend (S3 SDK) · simplest
+### Method A  R2 from the Node backend (S3 SDK) · simplest
 
 Keep the current Express backend on a host (§2); swap the local `fs` reads/writes
 for R2 calls. **Validate first (magic bytes, zip‑bomb, extension allow‑list), then
-upload** — never store unvalidated bytes.
+upload**  never store unvalidated bytes.
 
 **Files you change:**
 
@@ -153,7 +153,7 @@ upload** — never store unvalidated bytes.
 *Manage R2 API Tokens* → **Object Read & Write** token → copy Access Key/Secret into
 `backend/.env` → **Settings → Object lifecycle** → expire objects after 1 day.
 
-### Method B — Cloudflare Worker + R2 binding · no server at all
+### Method B  Cloudflare Worker + R2 binding · no server at all
 
 Run the share API on **Cloudflare Workers**, which bind R2 natively (no keys, no
 egress, cheapest, nothing of yours exposed). Use this if you'd rather not run any
@@ -210,4 +210,4 @@ uploads via presigned URLs** (§3‑B) for the share feature. The browser‑only
 - [ ] R2 bucket is **private**; downloads use presigned URLs; lifecycle rule expires objects.
 - [ ] Share‑preview image resolves: open `https://<domain>/og-image.png`, then run the
       [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) and *Scrape Again*.
-- [ ] Upload a `.svg` and confirm it downloads (never renders inline) — see SECURITY.md.
+- [ ] Upload a `.svg` and confirm it downloads (never renders inline)  see SECURITY.md.

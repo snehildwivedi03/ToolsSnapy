@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -11,7 +11,7 @@ const STORAGE_KEY = "toolsnapy_share_stats";
 export interface ShareStats {
   files: number;   // total file/image/PDF shares (real, server-side value)
   texts: number;   // total text shares (real, server-side value)
-  kept: number;    // permanently stored — always 0 (everything expires)
+  kept: number;    // permanently stored  always 0 (everything expires)
 }
 
 // Fallback used only until the first successful fetch from the server.
@@ -25,7 +25,7 @@ export function getStats(): ShareStats {
     return {
       files: parsed.files ?? DEFAULTS.files,
       texts: parsed.texts ?? DEFAULTS.texts,
-      kept:  0,   // always 0 — nothing is ever permanently stored
+      kept:  0,   // always 0  nothing is ever permanently stored
     };
   } catch {
     return { ...DEFAULTS };

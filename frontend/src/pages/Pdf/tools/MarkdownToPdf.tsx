@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -22,7 +22,7 @@ const EXAMPLE_MD = `# Project Report
 
 ## Summary
 
-Generated with **ToolsSnapy** Markdown → PDF converter. Everything runs in your browser — nothing is uploaded.
+Generated with **ToolsSnapy** Markdown → PDF converter. Everything runs in your browser  nothing is uploaded.
 
 ---
 

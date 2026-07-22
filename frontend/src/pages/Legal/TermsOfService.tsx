@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -50,7 +50,7 @@ const TermsOfService = () => {
           <h2 className={s.sectionTitle}>Description of Service</h2>
           <div className={s.body}>
             <p>
-              ToolSnapy provides free browser-based tools including — but not limited to — text
+              ToolSnapy provides free browser-based tools including  but not limited to  text
               processing, image editing, PDF manipulation, file format conversion, calculations,
               and Instant Share (temporary file sharing). Tools are provided free of charge for
               personal and commercial use.
@@ -115,8 +115,8 @@ const TermsOfService = () => {
               <strong>⚠ IMPORTANT:</strong> If you share <strong>confidential, proprietary, sensitive,
               or personally identifiable information</strong> through Instant Share or any other
               ToolSnapy feature, and that data is subsequently accessed, intercepted, copied, or
-              leaked by unauthorized parties — whether due to a security breach, technical failure,
-              or any other cause — <strong>ToolSnapy bears no responsibility whatsoever and shall
+              leaked by unauthorized parties  whether due to a security breach, technical failure,
+              or any other cause  <strong>ToolSnapy bears no responsibility whatsoever and shall
               not be held liable</strong> for any resulting losses, damages, or harms.
             </p>
           </div>
@@ -195,7 +195,7 @@ const TermsOfService = () => {
             <p>
               Our total liability to you for any claim arising from or related to these Terms or
               the Service shall not exceed the amount paid by you to us in the twelve (12) months
-              preceding the claim — which for a free service is zero (£0 / $0).
+              preceding the claim  which for a free service is zero (£0 / $0).
             </p>
           </div>
         </div>

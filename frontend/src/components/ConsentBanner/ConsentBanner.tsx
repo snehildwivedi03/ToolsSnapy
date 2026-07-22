@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -11,7 +11,7 @@ import s from "./ConsentBanner.module.css";
 // Pages where the consent popup should NOT appear
 const LEGAL_PATHS = ["/privacy-policy", "/terms"];
 
-// sessionStorage key — persists across reloads in the SAME tab,
+// sessionStorage key  persists across reloads in the SAME tab,
 // resets when the user opens a new tab (industry-standard per-session consent).
 const SESSION_KEY = "toolsnapy_consent_v1";
 
@@ -22,7 +22,7 @@ const ConsentBanner = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Already accepted in this tab session — never show again until new tab
+    // Already accepted in this tab session  never show again until new tab
     if (sessionStorage.getItem(SESSION_KEY) === "accepted") return;
     const t = setTimeout(() => setVisible(true), 400);
     return () => clearTimeout(t);
@@ -30,7 +30,7 @@ const ConsentBanner = () => {
 
   const canAccept = checkedPrivacy && checkedTerms;
 
-  // Hide on legal pages — user is reading the policy
+  // Hide on legal pages  user is reading the policy
   const onLegalPage = LEGAL_PATHS.includes(location.pathname);
   const isOpen = visible && !onLegalPage;
 
@@ -47,7 +47,7 @@ const ConsentBanner = () => {
 
   return (
     <div className={s.overlay} role="dialog" aria-modal="true" aria-label="Privacy &amp; Terms Agreement">
-      {/* Ambient glow orbs — the glass panel looks through these */}
+      {/* Ambient glow orbs  the glass panel looks through these */}
       <div className={s.orb1} aria-hidden="true" />
       <div className={s.orb2} aria-hidden="true" />
       <div className={s.orb3} aria-hidden="true" />
@@ -79,25 +79,25 @@ const ConsentBanner = () => {
                 <span className={s.pointIconGreen} aria-hidden="true">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 </span>
-                <span><strong>Browser-only processing</strong> — Most tools run entirely in your browser. Files you process are never uploaded to our servers and never leave your device.</span>
+                <span><strong>Browser-only processing</strong>  Most tools run entirely in your browser. Files you process are never uploaded to our servers and never leave your device.</span>
               </li>
               <li className={s.point}>
                 <span className={s.pointIconAmber} aria-hidden="true">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </span>
-                <span><strong>15-minute auto-delete</strong> — Files shared via Instant Share are temporarily stored on our servers and permanently deleted after 15 minutes.</span>
+                <span><strong>15-minute auto-delete</strong>  Files shared via Instant Share are temporarily stored on our servers and permanently deleted after 15 minutes.</span>
               </li>
               <li className={s.point}>
                 <span className={s.pointIconBlue} aria-hidden="true">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 </span>
-                <span><strong>Minimal data collection</strong> — We only collect standard web logs (IP, browser type) for security monitoring. No personal profiles are built. Your data is never sold.</span>
+                <span><strong>Minimal data collection</strong>  We only collect standard web logs (IP, browser type) for security monitoring. No personal profiles are built. Your data is never sold.</span>
               </li>
               <li className={s.point}>
                 <span className={s.pointIconPurple} aria-hidden="true">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </span>
-                <span><strong>Minimal cookies</strong> — We use cookies only to keep the site functional. Ads may be served by third-party networks (e.g. Google AdSense).</span>
+                <span><strong>Minimal cookies</strong>  We use cookies only to keep the site functional. Ads may be served by third-party networks (e.g. Google AdSense).</span>
               </li>
             </ul>
           </div>
@@ -115,25 +115,25 @@ const ConsentBanner = () => {
                 <span className={s.pointIconGreen} aria-hidden="true">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 </span>
-                <span><strong>Free to use</strong> — ToolSnapy is free for personal and commercial use.</span>
+                <span><strong>Free to use</strong>  ToolSnapy is free for personal and commercial use.</span>
               </li>
               <li className={s.point}>
                 <span className={s.pointIconRed} aria-hidden="true">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </span>
-                <span><strong>No illegal or harmful content</strong> — Do not upload, process, or share content that is illegal, harmful, or malicious.</span>
+                <span><strong>No illegal or harmful content</strong>  Do not upload, process, or share content that is illegal, harmful, or malicious.</span>
               </li>
               <li className={s.point}>
                 <span className={s.pointIconAmber} aria-hidden="true">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                 </span>
-                <span><strong>"As is" service</strong> — ToolSnapy is provided without warranties. We do not guarantee uptime, accuracy, or fitness for any particular purpose.</span>
+                <span><strong>"As is" service</strong>  ToolSnapy is provided without warranties. We do not guarantee uptime, accuracy, or fitness for any particular purpose.</span>
               </li>
               <li className={s.point}>
                 <span className={s.pointIconBlue} aria-hidden="true">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </span>
-                <span><strong>Limitation of liability</strong> — ToolSnapy is not liable for any loss of data, revenue, or damages arising from your use of the service.</span>
+                <span><strong>Limitation of liability</strong>  ToolSnapy is not liable for any loss of data, revenue, or damages arising from your use of the service.</span>
               </li>
             </ul>
           </div>

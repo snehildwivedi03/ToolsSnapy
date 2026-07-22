@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -105,7 +105,7 @@ const Clock = () => {
       description={
         activeTool
           ? activeTool.description
-          : "A complete time toolkit — analog & digital clocks, world clock, stopwatch, timer, alarms, countdown, converter and a calendar."
+          : "A complete time toolkit  analog & digital clocks, world clock, stopwatch, timer, alarms, countdown, converter and a calendar."
       }
       hideRelated
     >

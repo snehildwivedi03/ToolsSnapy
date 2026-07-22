@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -14,7 +14,7 @@ import z from "./ZipTool.module.css";
 /* ── Security limits ───────────────────────────────────────
    These bound memory use and stop decompression ("zip bomb")
    attacks, including archives that were compressed many times.
-   Everything runs in the browser — files never leave the device. */
+   Everything runs in the browser  files never leave the device. */
 const MiB = 1024 * 1024;
 
 /* Zipping (folder/files → .zip) */
@@ -265,7 +265,7 @@ const ZipTool = () => {
       iconColor="#6f4e37"
       iconBg="#faf6f1"
       title="Zip / Unzip Files"
-      description="Compress files and folders into a ZIP, or safely extract one. Protected against oversized inputs and decompression ('zip bomb') attacks. Everything runs in your browser — nothing is uploaded."
+      description="Compress files and folders into a ZIP, or safely extract one. Protected against oversized inputs and decompression ('zip bomb') attacks. Everything runs in your browser  nothing is uploaded."
     >
       {/* Mode switch */}
       <div className={s.card}>

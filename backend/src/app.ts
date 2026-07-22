@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -85,7 +85,7 @@ const allowedOrigins = process.env.CLIENT_ORIGIN
 // In production, refusing to run wide-open is safer than silently allowing "*".
 if (isProduction && allowedOrigins.includes("*")) {
   console.warn(
-    "[security] CLIENT_ORIGIN is not set — CORS is running in wildcard mode. " +
+    "[security] CLIENT_ORIGIN is not set  CORS is running in wildcard mode. " +
       "Set CLIENT_ORIGIN to your site's origin(s) in production.",
   );
 }
@@ -110,7 +110,7 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
-// Global rate-limit backstop — a safety net beneath the tighter per-route
+// Global rate-limit backstop  a safety net beneath the tighter per-route
 // limiters, so any unforeseen endpoint (and abusive bursts) are still capped.
 app.use(
   rateLimit({
@@ -150,7 +150,7 @@ app.use("/api/text",    textRouter);
 app.use("/api/share",   shareRouter);
 app.use("/api/shorten", urlShortenerRouter);
 
-// Short-link redirect — must be below /api routes to avoid conflicts
+// Short-link redirect  must be below /api routes to avoid conflicts
 app.get("/r/:code", redirectShortUrl);
 
 // 404 handler for unknown routes

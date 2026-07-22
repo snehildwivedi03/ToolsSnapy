@@ -1,4 +1,4 @@
-# ToolSnapy — Deployment Guide
+# ToolSnapy  Deployment Guide
 > Stack: **Netlify** (frontend) · **Vercel** (backend API) · **Cloudflare** (DNS + CDN + DDoS) · **Hostinger** (domain registrar)
 
 ---
@@ -40,10 +40,10 @@
 ```
 
 **Why Cloudflare in the middle?**
-- Global CDN — serves your static files from the nearest edge location
+- Global CDN  serves your static files from the nearest edge location
 - Free DDoS protection and Web Application Firewall (WAF)
 - Automatic HTTPS at the edge (no cert management)
-- Cache rules — browser assets cached for 1 year, HTML never
+- Cache rules  browser assets cached for 1 year, HTML never
 - Free analytics without any tracking scripts
 - Zero-downtime domain migration
 
@@ -73,11 +73,11 @@ Both Netlify and Vercel auto-deploy on every push to `main`.
 
 ## 3. Deploy Frontend to Netlify
 
-### Step 1 — Sign up
+### Step 1  Sign up
 1. Go to [app.netlify.com](https://app.netlify.com)
 2. Click **Sign up with GitHub**
 
-### Step 2 — Import project
+### Step 2  Import project
 1. Click **Add new site → Import an existing project**
 2. Select your GitHub repository
 3. Configure build settings:
@@ -88,14 +88,14 @@ Both Netlify and Vercel auto-deploy on every push to `main`.
 | Build command | `npm run build` |
 | Publish directory | `dist` |
 
-### Step 3 — Environment variables
+### Step 3  Environment variables
 In **Site settings → Environment variables**, add:
 
 | Key | Value |
 |-----|-------|
 | `VITE_API_URL` | `https://api.toolsnapy.com` (set after Step 7) |
 
-### Step 4 — Deploy
+### Step 4  Deploy
 Click **Deploy site**. Your site is live at `xxx.netlify.app` in ~2 minutes.
 
 > The `frontend/netlify.toml` file already in the repo handles SPA routing (`/*` → `index.html`) and sets aggressive caching headers for hashed assets (`/assets/*`).
@@ -104,11 +104,11 @@ Click **Deploy site**. Your site is live at `xxx.netlify.app` in ~2 minutes.
 
 ## 4. Deploy Backend to Vercel
 
-### Step 1 — Sign up
+### Step 1  Sign up
 1. Go to [vercel.com](https://vercel.com)
 2. Click **Sign up with GitHub**
 
-### Step 2 — Import project
+### Step 2  Import project
 1. Click **Add New → Project**
 2. Select your repository
 3. Configure:
@@ -117,10 +117,10 @@ Click **Deploy site**. Your site is live at `xxx.netlify.app` in ~2 minutes.
 |---------|-------|
 | Root directory | `backend` |
 | Framework | Other |
-| Build command | *(leave blank — tsx handles it)* |
+| Build command | *(leave blank  tsx handles it)* |
 | Output directory | *(leave blank)* |
 
-### Step 3 — Environment variables
+### Step 3  Environment variables
 In **Settings → Environment Variables**, add:
 
 | Key | Value |
@@ -132,7 +132,7 @@ In **Settings → Environment Variables**, add:
 | `CLEANUP_INTERVAL_MS` | `21600000` |
 | `TRUST_PROXY` | `1` |
 
-### Step 4 — Deploy
+### Step 4  Deploy
 Click **Deploy**. Your API is live at `toolsnapy-api.vercel.app`.
 
 > The `backend/vercel.json` in the repo routes all traffic to the Express server via `@vercel/node`.
@@ -147,13 +147,13 @@ Click **Deploy**. Your API is live at `toolsnapy-api.vercel.app`.
 2. Click **Add a site**
 3. Enter your domain: `toolsnapy.com`
 4. Select the **Free** plan
-5. Cloudflare scans your existing DNS records — review them (you can clear all and add fresh ones in Step 7)
+5. Cloudflare scans your existing DNS records  review them (you can clear all and add fresh ones in Step 7)
 6. Cloudflare gives you **two nameservers**, e.g.:
    ```
    vera.ns.cloudflare.com
    zod.ns.cloudflare.com
    ```
-   Copy these — you need them in Step 6.
+   Copy these  you need them in Step 6.
 
 ---
 
@@ -196,7 +196,7 @@ Once Cloudflare shows your domain as **Active**, go to **DNS → Records** and a
 
 ### Email (keep Hostinger email if you have it)
 
-If you use Hostinger email, add back the MX records Cloudflare scanned during setup — they should already be there. **Do not proxy MX records** (DNS-only, grey cloud).
+If you use Hostinger email, add back the MX records Cloudflare scanned during setup  they should already be there. **Do not proxy MX records** (DNS-only, grey cloud).
 
 ---
 
@@ -204,12 +204,12 @@ If you use Hostinger email, add back the MX records Cloudflare scanned during se
 
 In Cloudflare dashboard → **Caching → Cache Rules**, create:
 
-**Rule 1 — Cache hashed assets forever**
+**Rule 1  Cache hashed assets forever**
 - Expression: `http.request.uri.path matches "^/assets/.*"`
 - Cache TTL: `1 year`
 - Browser TTL: `1 year`
 
-**Rule 2 — Never cache HTML**
+**Rule 2  Never cache HTML**
 - Expression: `http.request.uri.path eq "/"`
 - Cache TTL: `Bypass`
 
@@ -276,7 +276,7 @@ Run `https://pagespeed.web.dev` on your URL. Target:
 
 ### Google Search Console
 1. [search.google.com/search-console](https://search.google.com/search-console) → Add property
-2. Verify via **DNS TXT record** — add it in Cloudflare DNS (Type: `TXT`, Name: `@`)
+2. Verify via **DNS TXT record**  add it in Cloudflare DNS (Type: `TXT`, Name: `@`)
 3. Submit sitemap: `https://toolsnapy.com/sitemap.xml`
 
 ### Bing Webmaster Tools

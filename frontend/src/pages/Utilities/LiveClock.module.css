@@ -307,7 +307,7 @@
   appearance: none;
   text-align: center;
   text-align-last: center;
-  min-width: 6.5rem; /* wide enough for "September" — prevents layout shift */
+  min-width: 6.5rem; /* wide enough for "September"  prevents layout shift */
 }
 
 .calMonthSelect:hover {
@@ -343,7 +343,7 @@
 .calGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  /* Explicit row heights: 1 weekday row + 6 date rows — height is a pure constant */
+  /* Explicit row heights: 1 weekday row + 6 date rows  height is a pure constant */
   grid-template-rows: 1.5rem repeat(6, 1.875rem);
   gap: 2px;
 }
@@ -391,7 +391,7 @@
 }
 
 .calCellEmpty {
-  /* height controlled by grid-template-rows — no extra rules needed */
+  /* height controlled by grid-template-rows  no extra rules needed */
 }
 
 .calTodayBtn {

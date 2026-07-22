@@ -1,4 +1,4 @@
-﻿/* ── Category card link — horizontal, colour-accented ──── */
+﻿/* ── Category card link  horizontal, colour-accented ──── */
 .card {
   --card-accent: var(--color-accent);
   --card-accent-bg: var(--color-accent-light);

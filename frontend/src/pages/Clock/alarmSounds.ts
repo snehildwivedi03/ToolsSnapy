@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -7,7 +7,7 @@
 import { beep } from "./sound";
 
 /* Free alarm tones sourced from Google's public sound library
-   (actions.google.com/sounds) — no API key, free to use.
+   (actions.google.com/sounds)  no API key, free to use.
    These stream directly and don't require CORS for <audio> playback. */
 export interface AlarmSound {
   id: string;

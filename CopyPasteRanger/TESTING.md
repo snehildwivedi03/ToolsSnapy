@@ -1,4 +1,4 @@
-# Testing Guide — Copy Paste Ranger
+# Testing Guide  Copy Paste Ranger
 
 This document covers how to run, test, and debug the extension on **Windows**, **Linux**, and **macOS**.
 
@@ -11,11 +11,11 @@ This document covers how to run, test, and debug the extension on **Windows**, *
 | Node.js | 18.x | `node --version` |
 | npm | 9.x | `npm --version` |
 | VS Code | 1.85.0 | Help → About |
-| TypeScript | installed via `npm install` | — |
+| TypeScript | installed via `npm install` |  |
 
 ---
 
-## Step 1 — Install and Compile
+## Step 1  Install and Compile
 
 ### Windows (PowerShell)
 ```powershell
@@ -35,7 +35,7 @@ If compilation succeeds, the `out/` folder is created with compiled `.js` files 
 
 ---
 
-## Step 2 — Open the Extension Folder in VS Code
+## Step 2  Open the Extension Folder in VS Code
 
 The extension folder must be the **workspace root** for F5 debugging to work.
 
@@ -55,7 +55,7 @@ code /path/to/CopyPasteRanger
 
 ---
 
-## Step 3 — Launch the Extension Development Host
+## Step 3  Launch the Extension Development Host
 
 Press **F5** (or **Run → Start Debugging**).
 
@@ -67,7 +67,7 @@ Press **F5** (or **Run → Start Debugging**).
 
 ---
 
-## Step 4 — Verify the Status Bar
+## Step 4  Verify the Status Bar
 
 In the Extension Development Host, look at the **bottom-right** of the window.
 
@@ -119,7 +119,7 @@ Hover it to see the tooltip with the progress bar.
 Badge popups normally trigger at 100 / 500 / 1 000 / 2 000 pastes. For quick testing, **temporarily lower the thresholds** in `memeView.ts`:
 
 ```typescript
-// Temporary test values — restore before publishing
+// Temporary test values  restore before publishing
 { milestone: 3,  imageName: "segent100.png",  shameLevel: "SERGEANT",  ... },
 { milestone: 6,  imageName: "captain500.png", shameLevel: "CAPTAIN",   ... },
 { milestone: 9,  imageName: "cheif1000.png",  shameLevel: "CHIEF",     ... },
@@ -163,7 +163,7 @@ Any `console.log`, `console.error`, or unhandled exceptions appear here.
 1. Open `extension.ts` in the **parent** VS Code window
 2. Click in the gutter next to any line to set a breakpoint
 3. The debugger maps through `.js.map` source maps automatically
-4. Trigger the action in the Extension Development Host — execution pauses in the parent window
+4. Trigger the action in the Extension Development Host  execution pauses in the parent window
 
 ### Reload the extension after a code change (without F5)
 
@@ -172,7 +172,7 @@ In the Extension Development Host:
 Ctrl+Shift+P → Developer: Reload Window
 ```
 
-Or just save any `.ts` file — the watch task recompiles and the new code is ready after a window reload.
+Or just save any `.ts` file  the watch task recompiles and the new code is ready after a window reload.
 
 ---
 
@@ -180,13 +180,13 @@ Or just save any `.ts` file — the watch task recompiles and the new code is re
 
 ### Windows
 - Use PowerShell or Command Prompt; both work
-- `Ctrl+C` in the **terminal** is not intercepted — only `editorTextFocus` triggers counting
+- `Ctrl+C` in the **terminal** is not intercepted  only `editorTextFocus` triggers counting
 - If Windows Defender or antivirus flags the `.vsix` during packaging, add the project folder to exclusions
 
 ### Linux
 - Ensure VS Code is installed as a `.deb`, `.rpm`, or snap package (not Flatpak, which can have keybinding issues)
 - `xclip` or `xsel` is required for clipboard support on X11 headless environments, but is not needed for standard desktop testing
-- The keyboard shortcut interceptor uses `ctrl+c` — same as Windows
+- The keyboard shortcut interceptor uses `ctrl+c`  same as Windows
 
 ### macOS
 - The keybindings use `cmd+c` and `cmd+v` (defined in `package.json` under `"mac"`)

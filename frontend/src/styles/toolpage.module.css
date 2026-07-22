@@ -596,7 +596,7 @@
   font-weight: 700;
 }
 
-/* ── JSON Validator — issue list ─────────────────────────── */
+/* ── JSON Validator  issue list ─────────────────────────── */
 .issueList {
   display: flex;
   flex-direction: column;
@@ -656,7 +656,7 @@
   font-weight: 500;
 }
 
-/* ── JSON Validator — corrected output ───────────────────── */
+/* ── JSON Validator  corrected output ───────────────────── */
 .resultCorrected {
   display: flex;
   flex-direction: column;
@@ -704,7 +704,7 @@
   box-sizing: border-box;
 }
 
-/* ── JSON Validator — inline diff view ───────────────────── */
+/* ── JSON Validator  inline diff view ───────────────────── */
 .diffNote {
   display: flex;
   align-items: flex-start;

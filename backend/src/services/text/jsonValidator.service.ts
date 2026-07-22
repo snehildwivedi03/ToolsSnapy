@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -154,7 +154,7 @@ export function analyzeJson(text: string): JsonValidatorResult {
     addIssue(m.index, "Number with leading zero (e.g. 0123 should be 123)"),
   );
 
-  // 9. Unclosed string literals — parser-based: track quote/escape state character by character
+  // 9. Unclosed string literals  parser-based: track quote/escape state character by character
   {
     let ci = 0, inStr = false, strStartLine = 1, curLine = 1;
     while (ci < text.length) {
@@ -165,7 +165,7 @@ export function analyzeJson(text: string): JsonValidatorResult {
         else if (ch === "\n") {
           issues.push({
             line: strStartLine,
-            message: "Unclosed string literal — missing closing quote before line break",
+            message: "Unclosed string literal  missing closing quote before line break",
             severity: "error",
           });
           inStr = false;
@@ -180,13 +180,13 @@ export function analyzeJson(text: string): JsonValidatorResult {
     if (inStr) {
       issues.push({
         line: strStartLine,
-        message: "Unclosed string literal — missing closing quote before end of input",
+        message: "Unclosed string literal  missing closing quote before end of input",
         severity: "error",
       });
     }
   }
 
-  // 10. Missing commas — closing value token followed by newline then a quoted key
+  // 10. Missing commas  closing value token followed by newline then a quoted key
   {
     const re = /(["\d}\]]|\btrue\b|\bfalse\b|\bnull\b)([ \t]*\n[ \t]*)(?="[^"]*"\s*:)/g;
     let mc: RegExpExecArray | null;
@@ -279,7 +279,7 @@ export function repairJson(text: string): JsonRepairResult {
     preprocessed,
   );
 
-  // Step 0c: remove double commas — jsonrepair throws "Colon expected" on ,, inside arrays
+  // Step 0c: remove double commas  jsonrepair throws "Colon expected" on ,, inside arrays
   preprocessed = preFix("Remove double commas", (t) => {
     let prev = "";
     while (prev !== t) { prev = t; t = t.replace(/,(\s*),/g, ",$1"); }
@@ -355,7 +355,7 @@ export function repairJson(text: string): JsonRepairResult {
     valid = true;
     s = JSON.stringify(parsed, null, 2);
     fixes.push("Formatted and pretty-printed");
-  } catch { /* partial repair — return as-is */ }
+  } catch { /* partial repair  return as-is */ }
 
   return { valid, repairedJson: s, fixes };
 }

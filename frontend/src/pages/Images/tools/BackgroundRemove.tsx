@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -93,7 +93,7 @@ const BackgroundRemove = () => {
   const [activeTool, setActiveTool] = useState<EditTool>("none");
   const [brushSize, setBrushSize] = useState(40);
 
-  // Refs for the painting hot path — no React re-renders during drag
+  // Refs for the painting hot path  no React re-renders during drag
   const activeToolRef = useRef<EditTool>("none");
   const brushSizeRef = useRef(20);
   const origImgRef = useRef<HTMLImageElement | null>(null);
@@ -182,7 +182,7 @@ const BackgroundRemove = () => {
     img.src = src.url;
   }, [src]);
 
-  // Core paint function — reads only refs, zero React overhead during drag
+  // Core paint function  reads only refs, zero React overhead during drag
   const paintAt = useCallback((
     x: number,
     y: number,
@@ -222,7 +222,7 @@ const BackgroundRemove = () => {
     } else {
       drawDot(x, y);
     }
-  }, []); // Empty deps — reads only stable refs
+  }, []); // Empty deps  reads only stable refs
 
   const onMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     if (activeToolRef.current === "none") return;
@@ -248,7 +248,7 @@ const BackgroundRemove = () => {
     lastPos.current = null;
   }, []);
 
-  // Native touch listeners — { passive: false } lets us call preventDefault()
+  // Native touch listeners  { passive: false } lets us call preventDefault()
   // to block page scroll while painting on mobile
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -321,7 +321,7 @@ const BackgroundRemove = () => {
       if (fallbackId !== null) { clearTimeout(fallbackId); fallbackId = null; }
     };
 
-    /** Start the elapsed counter — idempotent. */
+    /** Start the elapsed counter  idempotent. */
     const startComputeTimer = () => {
       if (inferenceStartedRef.current) return;
       inferenceStartedRef.current = true;
@@ -377,7 +377,7 @@ const BackgroundRemove = () => {
             setTimeDisplay("");
           }
         } else {
-          // Unknown content-length — indeterminate sweep
+          // Unknown content-length  indeterminate sweep
           setIsComputing(true);
           setTimeDisplay("");
         }
@@ -391,7 +391,7 @@ const BackgroundRemove = () => {
         setIsComputing(true);
         setStage("Removing background…");
       } else {
-        // Unknown event type — fall back to indeterminate
+        // Unknown event type  fall back to indeterminate
         clearFallback();
         startComputeTimer();
         setStage("Removing background…");
@@ -571,7 +571,7 @@ const BackgroundRemove = () => {
                   type="button"
                   className={`${ls.toolBtn} ${activeTool === "eraser" ? ls.toolBtnActive : ""}`}
                   onClick={() => setActiveTool(t => t === "eraser" ? "none" : "eraser")}
-                  title="Eraser — remove areas that should be transparent"
+                  title="Eraser  remove areas that should be transparent"
                 >
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -584,7 +584,7 @@ const BackgroundRemove = () => {
                   type="button"
                   className={`${ls.toolBtn} ${activeTool === "restore" ? ls.toolBtnActive : ""}`}
                   onClick={() => setActiveTool(t => t === "restore" ? "none" : "restore")}
-                  title="Restore pen — paint back original pixels"
+                  title="Restore pen  paint back original pixels"
                 >
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

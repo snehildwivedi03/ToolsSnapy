@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -10,8 +10,8 @@ import { useEffect, useRef } from "react";
  * Global "paste an image" support.
  *
  * On Ctrl/Cmd + V (anywhere except while typing in a field) this asks the
- * browser for clipboard access via the async Clipboard API — which shows the
- * native "wants to access the clipboard" permission prompt — and, when the
+ * browser for clipboard access via the async Clipboard API  which shows the
+ * native "wants to access the clipboard" permission prompt  and, when the
  * clipboard holds image(s), hands the resulting File(s) to `onImages`.
  *
  * Falls back to the classic `paste` event on browsers without `clipboard.read`.
@@ -75,7 +75,7 @@ export function usePasteImage(
           if (files.length > 0) cb.current(files);
         })
         .catch(() => {
-          /* permission denied or nothing usable — ignore */
+          /* permission denied or nothing usable  ignore */
         })
         .finally(() => {
           handling = false;

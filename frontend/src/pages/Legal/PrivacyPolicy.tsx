@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -36,7 +36,7 @@ const PrivacyPolicy = () => {
               ToolSnapy ("<strong>we</strong>", "<strong>our</strong>", "<strong>us</strong>") operates
               the website at <strong>toolsnapy.com</strong>. We provide free browser-based tools for
               text processing, image editing, PDF manipulation, calculations, and instant file sharing.
-              Your privacy is fundamental to what we do — this policy explains clearly what data we
+              Your privacy is fundamental to what we do  this policy explains clearly what data we
               handle, why, and how we protect it.
             </p>
           </div>
@@ -49,7 +49,7 @@ const PrivacyPolicy = () => {
           <h2 className={s.sectionTitle}>Browser-Only Processing</h2>
           <div className={s.calloutGreen}>
             <p>
-              <strong>✓ Your files never leave your device</strong> — the vast majority of ToolSnapy
+              <strong>✓ Your files never leave your device</strong>  the vast majority of ToolSnapy
               tools (image resizing, background removal, PDF compression, text tools, calculators,
               etc.) run entirely inside your browser using JavaScript. No data is uploaded to our
               servers when you use these tools.
@@ -57,7 +57,7 @@ const PrivacyPolicy = () => {
           </div>
           <div className={s.body}>
             <p>
-              Only features that explicitly require a server — such as <strong>Instant Share</strong> —
+              Only features that explicitly require a server  such as <strong>Instant Share</strong> 
               involve any data transmission to our infrastructure. All other tools are completely
               client-side.
             </p>
@@ -73,17 +73,17 @@ const PrivacyPolicy = () => {
             <p>We collect the absolute minimum necessary to operate the service:</p>
             <ul>
               <li>
-                <strong>Standard web logs</strong> — IP address, browser type, operating system,
+                <strong>Standard web logs</strong>  IP address, browser type, operating system,
                 pages visited, and timestamps. Used only for security monitoring and aggregate
                 analytics. Never tied to a personal profile.
               </li>
               <li>
-                <strong>Files uploaded via Instant Share</strong> — images, PDFs, and other files
+                <strong>Files uploaded via Instant Share</strong>  images, PDFs, and other files
                 shared through ToolSnapy are temporarily stored on our servers to generate a share
                 code. See the section below for full details.
               </li>
               <li>
-                <strong>Consent preference</strong> — a local storage flag that records whether you
+                <strong>Consent preference</strong>  a local storage flag that records whether you
                 have acknowledged this policy. Contains no personal information.
               </li>
             </ul>
@@ -149,9 +149,9 @@ const PrivacyPolicy = () => {
           <div className={s.body}>
             <p>ToolSnapy may integrate with the following third-party services:</p>
             <ul>
-              <li><strong>Google AdSense</strong> — serves display advertisements. Google's privacy policy applies to its use of cookies for ad personalization.</li>
-              <li><strong>Google Analytics (if enabled)</strong> — provides anonymised traffic analytics.</li>
-              <li><strong>CDN providers</strong> — fonts and static assets may be loaded from third-party CDNs (e.g. Google Fonts).</li>
+              <li><strong>Google AdSense</strong>  serves display advertisements. Google's privacy policy applies to its use of cookies for ad personalization.</li>
+              <li><strong>Google Analytics (if enabled)</strong>  provides anonymised traffic analytics.</li>
+              <li><strong>CDN providers</strong>  fonts and static assets may be loaded from third-party CDNs (e.g. Google Fonts).</li>
             </ul>
             <p>
               We are not responsible for the privacy practices of these third-party services.

@@ -1,6 +1,6 @@
 # ToolSnapy
 
-**Your privacy, guaranteed.** A collection of fast, free, privacy-first online tools that run entirely in your browser. No tracking, no cloud uploads, no data collection — ever.
+**Your privacy, guaranteed.** A collection of fast, free, privacy-first online tools that run entirely in your browser. No tracking, no cloud uploads, no data collection  ever.
 
 <p align="center">
   <img src="frontend/public/favicon.png" alt="ToolSnapy Logo" width="80" height="80">
@@ -17,24 +17,24 @@ In an era where every online service tracks, stores, and monetizes user data, To
 ## Features
 
 ### Image Tools
-- **Resize to Target Size** — Compress images to an exact file size (e.g., 200 KB)
-- **Background Remover** — AI-powered background removal, runs entirely in-browser
-- **Image Resizer** — Resize to exact pixel dimensions with aspect ratio lock
-- **Image Converter** — Convert between PNG, JPG, WebP, AVIF, and SVG
-- **Image to Text (OCR)** — Extract text from images using optical character recognition
+- **Resize to Target Size**  Compress images to an exact file size (e.g., 200 KB)
+- **Background Remover**  AI-powered background removal, runs entirely in-browser
+- **Image Resizer**  Resize to exact pixel dimensions with aspect ratio lock
+- **Image Converter**  Convert between PNG, JPG, WebP, AVIF, and SVG
+- **Image to Text (OCR)**  Extract text from images using optical character recognition
 
 ### PDF Tools
-- **Merge PDF** — Combine multiple PDFs into one document
-- **Split & Extract PDF** — Pull specific pages from a PDF
-- **Images to PDF** — Convert images into a single PDF document
-- **PDF to Images** — Export PDF pages as PNG or JPG images
+- **Merge PDF**  Combine multiple PDFs into one document
+- **Split & Extract PDF**  Pull specific pages from a PDF
+- **Images to PDF**  Convert images into a single PDF document
+- **PDF to Images**  Export PDF pages as PNG or JPG images
 
 ### Instant Share
-- **Share Text** — Share text snippets with a 6-character code
-- **Share Files** — Upload and share files (up to 500 MB)
-- **Share Images** — Share images instantly
-- **Share PDFs** — Share PDF documents
-- **Receive Content** — Retrieve shared content using a code
+- **Share Text**  Share text snippets with a 6-character code
+- **Share Files**  Upload and share files (up to 500 MB)
+- **Share Images**  Share images instantly
+- **Share PDFs**  Share PDF documents
+- **Receive Content**  Retrieve shared content using a code
 
 *All shared content auto-deletes after 15 minutes.*
 

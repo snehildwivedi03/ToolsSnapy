@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -73,7 +73,7 @@ Learn more about [Markdown](https://commonmark.org).
 
 ---
 
-*Everything is rendered locally — nothing is uploaded.*
+*Everything is rendered locally  nothing is uploaded.*
 `;
 
 const Icon = () => (
@@ -296,7 +296,7 @@ const MarkdownViewer = () => {
       const pageHpx = Math.floor((usableH / mmPerPx) * 2); // one full page, in canvas pixels
 
       // Read the rendered pixels so we can choose page breaks that fall in the
-      // blank gaps between lines/blocks — never slicing through text.
+      // blank gaps between lines/blocks  never slicing through text.
       const readCtx = canvas.getContext("2d", { willReadFrequently: true });
       const rowIsBlank = (band: Uint8ClampedArray, rowWidth: number, row: number): boolean => {
         const base = row * rowWidth * 4;
@@ -327,7 +327,7 @@ const MarkdownViewer = () => {
               if (rowIsBlank(band, canvas.width, y - minH)) { sliceH = y; break; }
             }
           } catch {
-            /* tainted canvas (e.g. cross-origin image) — fall back to the hard cut */
+            /* tainted canvas (e.g. cross-origin image)  fall back to the hard cut */
           }
         }
 
@@ -353,7 +353,7 @@ const MarkdownViewer = () => {
       setPdfDone(true);
       setTimeout(() => setPdfDone(false), 2000);
     } catch {
-      /* silent — leave UI ready to retry */
+      /* silent  leave UI ready to retry */
     } finally {
       document.head.removeChild(styleEl);
       document.body.removeChild(container);
@@ -372,7 +372,7 @@ const MarkdownViewer = () => {
       iconColor="#6f4e37"
       iconBg="#faf6f1"
       title="Markdown Viewer"
-      description="Write or paste Markdown and see a clean, live preview. Supports GitHub-flavored tables, task lists and code blocks. Rendered locally and sanitized — nothing is uploaded."
+      description="Write or paste Markdown and see a clean, live preview. Supports GitHub-flavored tables, task lists and code blocks. Rendered locally and sanitized  nothing is uploaded."
     >
       <div className={s.card}>
         <div className={md.toolbar}>

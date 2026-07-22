@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -53,7 +53,7 @@ const PDF_TOOLS = [
     to: "/pdf/markdown-to-pdf",
     title: "Markdown to PDF",
     description:
-      "Write or upload a Markdown file and export it as a clean, print-ready PDF — with styled headings, code blocks, tables, and task lists.",
+      "Write or upload a Markdown file and export it as a clean, print-ready PDF  with styled headings, code blocks, tables, and task lists.",
   },
 ] as const;
 

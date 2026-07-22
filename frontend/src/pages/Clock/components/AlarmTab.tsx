@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -67,7 +67,7 @@ const AlarmTab = () => {
   // Stop any playing tone when leaving the tab.
   useEffect(() => () => stopAlarmSound(), []);
 
-  // Alarm matcher — fires once when the clock hits an enabled alarm's minute.
+  // Alarm matcher  fires once when the clock hits an enabled alarm's minute.
   useEffect(() => {
     const hh = String(now.getHours()).padStart(2, "0");
     const mm = String(now.getMinutes()).padStart(2, "0");
@@ -131,7 +131,7 @@ const AlarmTab = () => {
         <div className={`${c.alarmBanner} ${c.splitFull}`} role="alert">
           <div>
             <strong>⏰ {to12h(ringing.time)}</strong>
-            {ringing.label && <span> — {ringing.label}</span>}
+            {ringing.label && <span>  {ringing.label}</span>}
           </div>
           <button className={`${c.btn} ${c.btnPrimary}`} onClick={dismiss}>
             Dismiss
@@ -197,7 +197,7 @@ const AlarmTab = () => {
       <div className={c.splitMain}>
         {alarms.length === 0 ? (
           <p className={c.emptyNote}>
-            No alarms set. Add one — keep this tab open for it to ring.
+            No alarms set. Add one  keep this tab open for it to ring.
           </p>
         ) : (
           <div className={c.alarmList}>

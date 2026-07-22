@@ -87,7 +87,7 @@
   padding: 0;
 }
 
-/* Floating "Minimize" button — only visible while in full screen */
+/* Floating "Minimize" button  only visible while in full screen */
 .fsExit {
   display: none;
 }

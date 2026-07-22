@@ -1,12 +1,12 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
  */
 import { useEffect, useState } from "react";
 
-/** Ticking clock hook — re-renders on an interval so time displays stay live. */
+/** Ticking clock hook  re-renders on an interval so time displays stay live. */
 export function useNow(intervalMs = 1000): Date {
   const [now, setNow] = useState<Date>(() => new Date());
   useEffect(() => {

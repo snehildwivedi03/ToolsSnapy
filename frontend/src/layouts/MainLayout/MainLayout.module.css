@@ -55,7 +55,7 @@
   will-change: transform;
 }
 
-/* Purple-tinted, visible but non-distracting icons —
+/* Purple-tinted, visible but non-distracting icons 
    natural colors preserved at 40% saturation, slight purple hue shift,
    with a strong glow to make them pop against the soft background. */
 .toolImg {
@@ -72,7 +72,7 @@
     drop-shadow(0 0 22px rgba(111, 78, 55, 0.6));
 }
 
-/* On touch devices keep images fully static (no parallax, no extra rules needed —
+/* On touch devices keep images fully static (no parallax, no extra rules needed 
    the JS already skips on non-hover devices) */
 /* ── Responsive image sizing ─────────────────────────────── */
 @media (max-width: 768px) {

@@ -167,7 +167,7 @@
   background: var(--color-accent-light);
 }
 
-/* Active state locked — hover must not override it */
+/* Active state locked  hover must not override it */
 .radioBtnActive,
 .radioBtnActive:hover {
   border-color: var(--color-accent);
@@ -182,7 +182,7 @@
   flex-wrap: wrap;
 }
 
-/* Generic chip group — responsive flex container for any chip set */
+/* Generic chip group  responsive flex container for any chip set */
 .chipGroup {
   display: flex;
   gap: 0.5rem;
@@ -215,7 +215,7 @@
   background: var(--color-accent-light);
 }
 
-/* Active chip locked — keeps solid fill on hover */
+/* Active chip locked  keeps solid fill on hover */
 .chipActive,
 .chipActive:hover {
   border-color: var(--color-accent);
@@ -245,7 +245,7 @@
 
 .calcBtn:active { transform: translateY(0); }
 
-/* ── Result block — vertical stack of result cards ──────── */
+/* ── Result block  vertical stack of result cards ──────── */
 .resultBlock {
   display: flex;
   flex-direction: column;

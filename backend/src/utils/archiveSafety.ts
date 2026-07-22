@@ -1,5 +1,5 @@
 /**
- * ToolSnapy — Free, private online tools. No installs, no signup.
+ * ToolSnapy  Free, private online tools. No installs, no signup.
  * https://toolsnapy.com
  *
  * © 2026 ToolSnapy. All rights reserved.
@@ -11,7 +11,7 @@ import { extname } from "path";
  *
  * A "zip bomb" is a tiny archive (e.g. 42 KB) that expands to gigabytes/petabytes,
  * often by nesting archives inside archives ("compressed multiple times"). If such a
- * file were stored and later opened by a recipient — or ever extracted server-side —
+ * file were stored and later opened by a recipient  or ever extracted server-side 
  * it could exhaust disk/RAM/CPU.
  *
  * This inspector reads only the archive *metadata* (the ZIP central directory and the
@@ -71,7 +71,7 @@ function readZip64Extra(
     const size = extra.readUInt16LE(offset + 2);
     const dataStart = offset + 4;
     if (id === 0x0001) {
-      // Order: uncompressed(8), compressed(8), then others — only present if maxed.
+      // Order: uncompressed(8), compressed(8), then others  only present if maxed.
       let p = dataStart;
       const out: { uncompressed?: number; compressed?: number } = {};
       if (needUncompressed && p + 8 <= extra.length) {
